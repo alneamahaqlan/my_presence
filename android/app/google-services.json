@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1079234781338",
+    "project_id": "my-presence-89c4b",
+    "storage_bucket": "my-presence-89c4b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1079234781338:android:dd78bec5ddb1a462747f23",
+        "android_client_info": {
+          "package_name": "com.app.my_presence"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBOCWVZPem-agzUXgjYh5rzxXCn9dZBek"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
