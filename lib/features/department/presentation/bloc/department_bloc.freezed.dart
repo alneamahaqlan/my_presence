@@ -20,20 +20,31 @@ mixin _$DepartmentEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() fetchDepartments,
-    required TResult Function(String facultyId, Department department)
+    required TResult Function(
+      String facultyId,
+      DepartmentCreateBody departmentCreateBody,
+    )
     addDepartment,
     required TResult Function(Department department) updateDepartment,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? fetchDepartments,
-    TResult? Function(String facultyId, Department department)? addDepartment,
+    TResult? Function(
+      String facultyId,
+      DepartmentCreateBody departmentCreateBody,
+    )?
+    addDepartment,
     TResult? Function(Department department)? updateDepartment,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? fetchDepartments,
-    TResult Function(String facultyId, Department department)? addDepartment,
+    TResult Function(
+      String facultyId,
+      DepartmentCreateBody departmentCreateBody,
+    )?
+    addDepartment,
     TResult Function(Department department)? updateDepartment,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
@@ -124,7 +135,10 @@ class _$FetchDepartmentsImpl implements FetchDepartments {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() fetchDepartments,
-    required TResult Function(String facultyId, Department department)
+    required TResult Function(
+      String facultyId,
+      DepartmentCreateBody departmentCreateBody,
+    )
     addDepartment,
     required TResult Function(Department department) updateDepartment,
   }) {
@@ -135,7 +149,11 @@ class _$FetchDepartmentsImpl implements FetchDepartments {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? fetchDepartments,
-    TResult? Function(String facultyId, Department department)? addDepartment,
+    TResult? Function(
+      String facultyId,
+      DepartmentCreateBody departmentCreateBody,
+    )?
+    addDepartment,
     TResult? Function(Department department)? updateDepartment,
   }) {
     return fetchDepartments?.call();
@@ -145,7 +163,11 @@ class _$FetchDepartmentsImpl implements FetchDepartments {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? fetchDepartments,
-    TResult Function(String facultyId, Department department)? addDepartment,
+    TResult Function(
+      String facultyId,
+      DepartmentCreateBody departmentCreateBody,
+    )?
+    addDepartment,
     TResult Function(Department department)? updateDepartment,
     required TResult orElse(),
   }) {
@@ -201,9 +223,9 @@ abstract class _$$AddDepartmentImplCopyWith<$Res> {
     $Res Function(_$AddDepartmentImpl) then,
   ) = __$$AddDepartmentImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String facultyId, Department department});
+  $Res call({String facultyId, DepartmentCreateBody departmentCreateBody});
 
-  $DepartmentCopyWith<$Res> get department;
+  $DepartmentCreateBodyCopyWith<$Res> get departmentCreateBody;
 }
 
 /// @nodoc
@@ -219,7 +241,7 @@ class __$$AddDepartmentImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? facultyId = null, Object? department = null}) {
+  $Res call({Object? facultyId = null, Object? departmentCreateBody = null}) {
     return _then(
       _$AddDepartmentImpl(
         facultyId:
@@ -227,11 +249,11 @@ class __$$AddDepartmentImplCopyWithImpl<$Res>
                 ? _value.facultyId
                 : facultyId // ignore: cast_nullable_to_non_nullable
                     as String,
-        department:
-            null == department
-                ? _value.department
-                : department // ignore: cast_nullable_to_non_nullable
-                    as Department,
+        departmentCreateBody:
+            null == departmentCreateBody
+                ? _value.departmentCreateBody
+                : departmentCreateBody // ignore: cast_nullable_to_non_nullable
+                    as DepartmentCreateBody,
       ),
     );
   }
@@ -240,9 +262,11 @@ class __$$AddDepartmentImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $DepartmentCopyWith<$Res> get department {
-    return $DepartmentCopyWith<$Res>(_value.department, (value) {
-      return _then(_value.copyWith(department: value));
+  $DepartmentCreateBodyCopyWith<$Res> get departmentCreateBody {
+    return $DepartmentCreateBodyCopyWith<$Res>(_value.departmentCreateBody, (
+      value,
+    ) {
+      return _then(_value.copyWith(departmentCreateBody: value));
     });
   }
 }
@@ -252,17 +276,17 @@ class __$$AddDepartmentImplCopyWithImpl<$Res>
 class _$AddDepartmentImpl implements AddDepartment {
   const _$AddDepartmentImpl({
     required this.facultyId,
-    required this.department,
+    required this.departmentCreateBody,
   });
 
   @override
   final String facultyId;
   @override
-  final Department department;
+  final DepartmentCreateBody departmentCreateBody;
 
   @override
   String toString() {
-    return 'DepartmentEvent.addDepartment(facultyId: $facultyId, department: $department)';
+    return 'DepartmentEvent.addDepartment(facultyId: $facultyId, departmentCreateBody: $departmentCreateBody)';
   }
 
   @override
@@ -272,12 +296,12 @@ class _$AddDepartmentImpl implements AddDepartment {
             other is _$AddDepartmentImpl &&
             (identical(other.facultyId, facultyId) ||
                 other.facultyId == facultyId) &&
-            (identical(other.department, department) ||
-                other.department == department));
+            (identical(other.departmentCreateBody, departmentCreateBody) ||
+                other.departmentCreateBody == departmentCreateBody));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, facultyId, department);
+  int get hashCode => Object.hash(runtimeType, facultyId, departmentCreateBody);
 
   /// Create a copy of DepartmentEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -291,33 +315,44 @@ class _$AddDepartmentImpl implements AddDepartment {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() fetchDepartments,
-    required TResult Function(String facultyId, Department department)
+    required TResult Function(
+      String facultyId,
+      DepartmentCreateBody departmentCreateBody,
+    )
     addDepartment,
     required TResult Function(Department department) updateDepartment,
   }) {
-    return addDepartment(facultyId, department);
+    return addDepartment(facultyId, departmentCreateBody);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? fetchDepartments,
-    TResult? Function(String facultyId, Department department)? addDepartment,
+    TResult? Function(
+      String facultyId,
+      DepartmentCreateBody departmentCreateBody,
+    )?
+    addDepartment,
     TResult? Function(Department department)? updateDepartment,
   }) {
-    return addDepartment?.call(facultyId, department);
+    return addDepartment?.call(facultyId, departmentCreateBody);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? fetchDepartments,
-    TResult Function(String facultyId, Department department)? addDepartment,
+    TResult Function(
+      String facultyId,
+      DepartmentCreateBody departmentCreateBody,
+    )?
+    addDepartment,
     TResult Function(Department department)? updateDepartment,
     required TResult orElse(),
   }) {
     if (addDepartment != null) {
-      return addDepartment(facultyId, department);
+      return addDepartment(facultyId, departmentCreateBody);
     }
     return orElse();
   }
@@ -360,11 +395,11 @@ class _$AddDepartmentImpl implements AddDepartment {
 abstract class AddDepartment implements DepartmentEvent {
   const factory AddDepartment({
     required final String facultyId,
-    required final Department department,
+    required final DepartmentCreateBody departmentCreateBody,
   }) = _$AddDepartmentImpl;
 
   String get facultyId;
-  Department get department;
+  DepartmentCreateBody get departmentCreateBody;
 
   /// Create a copy of DepartmentEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -460,7 +495,10 @@ class _$UpdateDepartmentImpl implements UpdateDepartment {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() fetchDepartments,
-    required TResult Function(String facultyId, Department department)
+    required TResult Function(
+      String facultyId,
+      DepartmentCreateBody departmentCreateBody,
+    )
     addDepartment,
     required TResult Function(Department department) updateDepartment,
   }) {
@@ -471,7 +509,11 @@ class _$UpdateDepartmentImpl implements UpdateDepartment {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? fetchDepartments,
-    TResult? Function(String facultyId, Department department)? addDepartment,
+    TResult? Function(
+      String facultyId,
+      DepartmentCreateBody departmentCreateBody,
+    )?
+    addDepartment,
     TResult? Function(Department department)? updateDepartment,
   }) {
     return updateDepartment?.call(department);
@@ -481,7 +523,11 @@ class _$UpdateDepartmentImpl implements UpdateDepartment {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? fetchDepartments,
-    TResult Function(String facultyId, Department department)? addDepartment,
+    TResult Function(
+      String facultyId,
+      DepartmentCreateBody departmentCreateBody,
+    )?
+    addDepartment,
     TResult Function(Department department)? updateDepartment,
     required TResult orElse(),
   }) {

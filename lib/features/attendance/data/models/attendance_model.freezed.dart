@@ -15,12 +15,12 @@ final _privateConstructorUsedError = UnsupportedError(
   'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
 );
 
-AttendanceModel _$AttendanceModelFromJson(Map<String, dynamic> json) {
-  return _AttendanceModel.fromJson(json);
+Attendance _$AttendanceFromJson(Map<String, dynamic> json) {
+  return _Attendance.fromJson(json);
 }
 
 /// @nodoc
-mixin _$AttendanceModel {
+mixin _$Attendance {
   @JsonKey(name: 'id')
   dynamic get id => throw _privateConstructorUsedError;
   @JsonKey(name: 'byUser')
@@ -31,22 +31,22 @@ mixin _$AttendanceModel {
   @JsonKey(name: 'status')
   String get status => throw _privateConstructorUsedError;
 
-  /// Serializes this AttendanceModel to a JSON map.
+  /// Serializes this Attendance to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  /// Create a copy of AttendanceModel
+  /// Create a copy of Attendance
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $AttendanceModelCopyWith<AttendanceModel> get copyWith =>
+  $AttendanceCopyWith<Attendance> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $AttendanceModelCopyWith<$Res> {
-  factory $AttendanceModelCopyWith(
-    AttendanceModel value,
-    $Res Function(AttendanceModel) then,
-  ) = _$AttendanceModelCopyWithImpl<$Res, AttendanceModel>;
+abstract class $AttendanceCopyWith<$Res> {
+  factory $AttendanceCopyWith(
+    Attendance value,
+    $Res Function(Attendance) then,
+  ) = _$AttendanceCopyWithImpl<$Res, Attendance>;
   @useResult
   $Res call({
     @JsonKey(name: 'id') dynamic id,
@@ -59,16 +59,16 @@ abstract class $AttendanceModelCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$AttendanceModelCopyWithImpl<$Res, $Val extends AttendanceModel>
-    implements $AttendanceModelCopyWith<$Res> {
-  _$AttendanceModelCopyWithImpl(this._value, this._then);
+class _$AttendanceCopyWithImpl<$Res, $Val extends Attendance>
+    implements $AttendanceCopyWith<$Res> {
+  _$AttendanceCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of AttendanceModel
+  /// Create a copy of Attendance
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -105,7 +105,7 @@ class _$AttendanceModelCopyWithImpl<$Res, $Val extends AttendanceModel>
     );
   }
 
-  /// Create a copy of AttendanceModel
+  /// Create a copy of Attendance
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -117,12 +117,12 @@ class _$AttendanceModelCopyWithImpl<$Res, $Val extends AttendanceModel>
 }
 
 /// @nodoc
-abstract class _$$AttendanceModelImplCopyWith<$Res>
-    implements $AttendanceModelCopyWith<$Res> {
-  factory _$$AttendanceModelImplCopyWith(
-    _$AttendanceModelImpl value,
-    $Res Function(_$AttendanceModelImpl) then,
-  ) = __$$AttendanceModelImplCopyWithImpl<$Res>;
+abstract class _$$AttendanceImplCopyWith<$Res>
+    implements $AttendanceCopyWith<$Res> {
+  factory _$$AttendanceImplCopyWith(
+    _$AttendanceImpl value,
+    $Res Function(_$AttendanceImpl) then,
+  ) = __$$AttendanceImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({
@@ -137,15 +137,15 @@ abstract class _$$AttendanceModelImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$AttendanceModelImplCopyWithImpl<$Res>
-    extends _$AttendanceModelCopyWithImpl<$Res, _$AttendanceModelImpl>
-    implements _$$AttendanceModelImplCopyWith<$Res> {
-  __$$AttendanceModelImplCopyWithImpl(
-    _$AttendanceModelImpl _value,
-    $Res Function(_$AttendanceModelImpl) _then,
+class __$$AttendanceImplCopyWithImpl<$Res>
+    extends _$AttendanceCopyWithImpl<$Res, _$AttendanceImpl>
+    implements _$$AttendanceImplCopyWith<$Res> {
+  __$$AttendanceImplCopyWithImpl(
+    _$AttendanceImpl _value,
+    $Res Function(_$AttendanceImpl) _then,
   ) : super(_value, _then);
 
-  /// Create a copy of AttendanceModel
+  /// Create a copy of Attendance
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -156,7 +156,7 @@ class __$$AttendanceModelImplCopyWithImpl<$Res>
     Object? status = null,
   }) {
     return _then(
-      _$AttendanceModelImpl(
+      _$AttendanceImpl(
         id:
             freezed == id
                 ? _value.id
@@ -184,16 +184,16 @@ class __$$AttendanceModelImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$AttendanceModelImpl implements _AttendanceModel {
-  _$AttendanceModelImpl({
+class _$AttendanceImpl implements _Attendance {
+  _$AttendanceImpl({
     @JsonKey(name: 'id') this.id,
     @JsonKey(name: 'byUser') required this.byUser,
     @TimestampConverter() @JsonKey(name: 'arrivalDate') this.arrivalDate,
     @JsonKey(name: 'status') required this.status,
   });
 
-  factory _$AttendanceModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$AttendanceModelImplFromJson(json);
+  factory _$AttendanceImpl.fromJson(Map<String, dynamic> json) =>
+      _$$AttendanceImplFromJson(json);
 
   @override
   @JsonKey(name: 'id')
@@ -211,14 +211,14 @@ class _$AttendanceModelImpl implements _AttendanceModel {
 
   @override
   String toString() {
-    return 'AttendanceModel(id: $id, byUser: $byUser, arrivalDate: $arrivalDate, status: $status)';
+    return 'Attendance(id: $id, byUser: $byUser, arrivalDate: $arrivalDate, status: $status)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AttendanceModelImpl &&
+            other is _$AttendanceImpl &&
             const DeepCollectionEquality().equals(other.id, id) &&
             (identical(other.byUser, byUser) || other.byUser == byUser) &&
             (identical(other.arrivalDate, arrivalDate) ||
@@ -236,35 +236,32 @@ class _$AttendanceModelImpl implements _AttendanceModel {
     status,
   );
 
-  /// Create a copy of AttendanceModel
+  /// Create a copy of Attendance
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$AttendanceModelImplCopyWith<_$AttendanceModelImpl> get copyWith =>
-      __$$AttendanceModelImplCopyWithImpl<_$AttendanceModelImpl>(
-        this,
-        _$identity,
-      );
+  _$$AttendanceImplCopyWith<_$AttendanceImpl> get copyWith =>
+      __$$AttendanceImplCopyWithImpl<_$AttendanceImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AttendanceModelImplToJson(this);
+    return _$$AttendanceImplToJson(this);
   }
 }
 
-abstract class _AttendanceModel implements AttendanceModel {
-  factory _AttendanceModel({
+abstract class _Attendance implements Attendance {
+  factory _Attendance({
     @JsonKey(name: 'id') final dynamic id,
     @JsonKey(name: 'byUser') required final UserModel byUser,
     @TimestampConverter()
     @JsonKey(name: 'arrivalDate')
     final Timestamp? arrivalDate,
     @JsonKey(name: 'status') required final String status,
-  }) = _$AttendanceModelImpl;
+  }) = _$AttendanceImpl;
 
-  factory _AttendanceModel.fromJson(Map<String, dynamic> json) =
-      _$AttendanceModelImpl.fromJson;
+  factory _Attendance.fromJson(Map<String, dynamic> json) =
+      _$AttendanceImpl.fromJson;
 
   @override
   @JsonKey(name: 'id')
@@ -280,10 +277,10 @@ abstract class _AttendanceModel implements AttendanceModel {
   @JsonKey(name: 'status')
   String get status;
 
-  /// Create a copy of AttendanceModel
+  /// Create a copy of Attendance
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$AttendanceModelImplCopyWith<_$AttendanceModelImpl> get copyWith =>
+  _$$AttendanceImplCopyWith<_$AttendanceImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

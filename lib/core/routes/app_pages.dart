@@ -14,10 +14,9 @@ import '../../features/dashBoard/presentation/pages/dash_board_page.dart';
 import '../../features/department/data/models/department_model.dart';
 import '../../features/department/presentation/pages/add_department_page.dart';
 import '../../features/department/presentation/pages/department_page.dart';
-import '../../features/faculty/data/models/faculty_model.dart';
 import '../../features/faculty/presentation/pages/add_faculty_page.dart';
 import '../../features/faculty/presentation/pages/faculties_page.dart';
-import '../../features/lectureSchedule/data/models/lecture_schedule.dart';
+import '../../features/lectureSchedule/data/models/schedule_model.dart';
 import '../../features/lectureSchedule/presentation/pages/create_lecture_schedule_page.dart';
 import '../../features/lectureSchedule/presentation/pages/edit_lecture_schedule_page.dart';
 import '../../features/lectureSchedule/presentation/pages/lecture_schedule_detail_page.dart';
@@ -33,7 +32,6 @@ import '../../features/reports/presentation/screens/add_income_screen.dart';
 import '../../features/reports/presentation/screens/edit_income_screen.dart';
 import '../../features/reports/presentation/screens/reports_page.dart';
 import '../../features/root/presentation/pages/root_page.dart';
-
 import '../../features/settings/screens/settings_page.dart';
 import '../../features/subject/presentation/pages/add_subject_page.dart';
 import '../../features/subject/presentation/pages/subjects_page.dart';
@@ -109,8 +107,10 @@ class AppPages {
           path: AppRoutes.lectureScheduleList,
           name: AppRoutes.lectureScheduleList,
           builder: (context, state) {
-            final department = state.extra as Department;
-            return LectureScheduleListPage(department: department);
+            // final department = state.extra as Department;
+            return LectureScheduleListPage(
+              // department:department 
+              );
           },
           routes: [
             //DepartmentPage
@@ -118,7 +118,6 @@ class AppPages {
               path: AppRoutes.departments,
               name: AppRoutes.departments,
               builder: (context, state) {
-
                 return DepartmentPage();
               },
               routes: [
@@ -136,7 +135,6 @@ class AppPages {
                       path: AppRoutes.addSubject,
                       name: AppRoutes.addSubject,
                       builder: (context, state) {
-                      
                         return AddSubjectPage();
                       },
                     ),
@@ -146,7 +144,6 @@ class AppPages {
                       path: AppRoutes.subjects,
                       name: AppRoutes.subjects,
                       builder: (context, state) {
-               
                         return SubjectsPage();
                       },
                     ),
@@ -154,9 +151,9 @@ class AppPages {
                     GoRoute(
                       path: AppRoutes.addLectureSchedule,
                       name: AppRoutes.addLectureSchedule,
-                      builder: (context, state){
+                      builder: (context, state) {
                         final department = state.extra as Department;
-                        return CreateLectureSchedulePage(department: department);
+                        return CreateLectureSchedulePage(department:department ,);
                       },
                     ),
 
@@ -165,7 +162,7 @@ class AppPages {
                       path: AppRoutes.editLectureSchedule,
                       name: AppRoutes.editLectureSchedule,
                       builder: (context, state) {
-                        final schedule = state.extra as LectureSchedule;
+                        final schedule = state.extra as Schedule;
                         return EditLectureSchedulePage(schedule: schedule);
                       },
                     ),
@@ -175,7 +172,7 @@ class AppPages {
                       path: AppRoutes.viewLectureSchedule,
                       name: AppRoutes.viewLectureSchedule,
                       builder: (context, state) {
-                        final schedule = state.extra as LectureSchedule;
+                        final schedule = state.extra as Schedule;
                         return LectureScheduleDetailPage(schedule: schedule);
                       },
                     ),
@@ -278,7 +275,6 @@ class AppPages {
           name: AppRoutes.dashboard,
           builder: (context, state) => const DashBoardPage(),
         ),
-
       ],
     ),
   ];

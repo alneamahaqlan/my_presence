@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../../../../core/error/api_error_handler.dart';
 import '../../../../core/models/api_result.dart';
 import '../../../../core/services/firestore_service.dart';
+import '../models/department_create_body.dart';
 import '../models/department_model.dart';
 
 class DepartmentRepository {
@@ -30,14 +33,19 @@ class DepartmentRepository {
   //create department
   Future<ApiResult<String>> createDepartment({
     required String facultyId,
-    required Department department,
+    required DepartmentCreateBody departmentCreateBody,
   }) async {
     try {
+        final departmentData = {
+      ...departmentCreateBody.toJson(),
+      'createdAt': Timestamp.now(),
+      'updatedAt': Timestamp.now(),
+    };
       final docRef = await _firestoreService.firestore
           .collection('faculties')
           .doc(facultyId)
           .collection('departments')
-          .add(department.toJson());
+          .add(departmentData);
       return ApiResult.success(docRef.id);
     } catch (e) {
       return ApiResult.failure(ApiErrorHandler.handle(e));
@@ -57,4 +65,27 @@ class DepartmentRepository {
       return ApiResult.failure(ApiErrorHandler.handle(e));
     }
   }
+
+  
+  Future<ApiResult<List<Department>>> getAllDepartments() async {
+  try {
+    // Perform a collection group query on the "departments" subcollection
+    final querySnapshot = await _firestoreService.firestore
+        .collectionGroup('departments')
+        .get();
+
+    // Convert Firestore documents to a list of Department objects
+    final departments = querySnapshot.docs.map((doc) {
+   
+      return Department(
+        id: doc.id, 
+        name: doc['name'], 
+      );
+    }).toList();
+
+    return ApiResult.success(departments);
+  } catch (e) {
+    return ApiResult.failure(ApiErrorHandler.handle(e));
+  }
+}
 }

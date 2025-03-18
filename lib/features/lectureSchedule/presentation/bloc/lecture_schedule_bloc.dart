@@ -1,8 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:go_router/go_router.dart';
+import 'package:my_presence/dependency_injection.dart';
 
 import '../../../attendance/data/models/attendance_model.dart';
-import '../../data/models/lecture_schedule.dart';
+import '../../../department/data/models/department_model.dart';
+import '../../data/models/schedule_create_body.dart';
+import '../../data/models/schedule_model.dart';
 import '../../data/repositories/lecture_schedule_repository.dart';
 
 part 'lecture_schedule_bloc.freezed.dart';
@@ -12,6 +18,7 @@ part 'lecture_schedule_state.dart';
 class LectureScheduleBloc
     extends Bloc<LectureScheduleEvent, LectureScheduleState> {
   final LectureScheduleRepository _repository;
+  Department? department;
 
   LectureScheduleBloc(this._repository)
     : super(const LectureScheduleState.initial()) {
@@ -20,7 +27,11 @@ class LectureScheduleBloc
     on<UpdateLectureSchedule>(_onUpdateSchedule);
     on<DeleteLectureSchedule>(_onDeleteSchedule);
     on<UpdateAttendance>(_onUpdateAttendance);
-    add(const FetchLectureSchedules());
+
+    final router = getIt.call<GoRouter>;
+    log(router.call().state.extra.toString());
+    department = router.call().state.extra as Department;
+    add(FetchLectureSchedules(departmentId: department!.id));
   }
 
   Future<void> _onUpdateAttendance(
@@ -54,7 +65,9 @@ class LectureScheduleBloc
     Emitter<LectureScheduleState> emit,
   ) async {
     emit(const LectureScheduleState.loading());
-    final result = await _repository.fetchLectureSchedules();
+    final result = await _repository.fetchLectureSchedules(
+      departmentId: event.departmentId,
+    );
     result.when(
       success: (schedules) {
         emit(LectureScheduleState.loaded(schedules));
@@ -67,11 +80,15 @@ class LectureScheduleBloc
     AddLectureSchedule event,
     Emitter<LectureScheduleState> emit,
   ) async {
-    final result = await _repository.addLectureSchedule(
-      schedule: event.schedule,
+    final result = await _repository.createSchedule(
+      departmentId: event.departmentId,
+      scheduleCreateBody: event.scheduleCreateBody,
     );
     result.when(
-      success: (_) => add(const FetchLectureSchedules()), // Refresh data
+      success:
+          (_) => add(
+            FetchLectureSchedules(departmentId: department!.id),
+          ), // Refresh data
       failure: (error) => emit(LectureScheduleState.error(error.message)),
     );
   }
@@ -85,7 +102,10 @@ class LectureScheduleBloc
       event.schedule,
     );
     result.when(
-      success: (_) => add(const FetchLectureSchedules()), // Refresh data
+      success:
+          (_) => add(
+            FetchLectureSchedules(departmentId: department!.id),
+          ), // Refresh data
       failure: (error) => emit(LectureScheduleState.error(error.message)),
     );
   }
@@ -96,7 +116,10 @@ class LectureScheduleBloc
   ) async {
     final result = await _repository.deleteLectureSchedule(event.id);
     result.when(
-      success: (_) => add(const FetchLectureSchedules()), // Refresh data
+      success:
+          (_) => add(
+            FetchLectureSchedules(departmentId: department!.id),
+          ), // Refresh data
       failure: (error) => emit(LectureScheduleState.error(error.message)),
     );
   }

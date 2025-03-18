@@ -20,44 +20,42 @@ class FacultyBloc extends Bloc<FacultyEvent, FacultyState> {
     add(const FetchFaculties());
   }
 
-  Future<void> _onFetchFaculties(
-    FetchFaculties event,
-    Emitter<FacultyState> emit,
-  ) async {
-    emit(state.copyWith(status: const Status.loading()));
-    final result = repository.getFaculties();
-    await emit.onEach<ApiResult<List<Faculty>>>(
-      result,
-      onData: (result) {
-        result.when(
-          success: (faculties) {
-            emit(state.copyWith(
-              status: const Status.success(),
-              faculties: faculties,
-            ));
-          },
-          failure: (error) {
-            emit(state.copyWith(
-              status: const Status.failed(),
-              message: error.toString(),
-            ));
-          },
-        );
+Future<void> _onFetchFaculties(
+  FetchFaculties event,
+  Emitter<FacultyState> emit,
+) async {
+  emit(state.copyWith(status: const Status.loading())); // Set loading state
+
+  try {
+    final result = await repository.getAllFaculties(); // Await the result
+
+    result.when(
+      success: (faculties) {
+        emit(state.copyWith(
+          status: const Status.success(),
+          faculties: faculties, // Update faculties in the state
+        ));
       },
-      onError: (error, stackTrace) {
+      failure: (error) {
         emit(state.copyWith(
           status: const Status.failed(),
-          message: 'Failed to fetch faculties. Please try again.',
+          message: error.toString(), // Set error message
         ));
       },
     );
+  } catch (e) {
+    emit(state.copyWith(
+      status: const Status.failed(),
+      message: e.toString(), // Handle unexpected errors
+    ));
   }
+}
 
   Future<void> _onAddFaculty(
     AddFaculty event,
     Emitter<FacultyState> emit,
   ) async {
-    final result = await repository.createFaculty(event.faculty);
+    final result = await repository.createFaculty(event.name);
     result.when(
       success: (id) {
         // Refresh the list of faculties

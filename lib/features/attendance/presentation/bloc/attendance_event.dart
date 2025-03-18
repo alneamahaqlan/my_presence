@@ -6,10 +6,11 @@ class AttendanceEvent with _$AttendanceEvent {
   const factory AttendanceEvent.fetchAll() = FetchAllAttendance;
 
   // Add a new attendance record
-  const factory AttendanceEvent.add(AttendanceModel attendance) = AddAttendance;
+  const factory AttendanceEvent.add(Attendance attendance) = AddAttendance;
 
   // Update an existing attendance record
-  const factory AttendanceEvent.update(AttendanceModel attendance) = UpdateAttendance;
+  const factory AttendanceEvent.update(Attendance attendance) =
+      UpdateAttendance;
 
   // Delete an attendance record
   const factory AttendanceEvent.delete(String id) = DeleteAttendance;

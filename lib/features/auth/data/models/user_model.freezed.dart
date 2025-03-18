@@ -45,7 +45,7 @@ mixin _$UserModel {
   List<NotificationModel> get notifications =>
       throw _privateConstructorUsedError;
   @JsonKey(name: 'attendances')
-  List<AttendanceModel> get attendances => throw _privateConstructorUsedError;
+  List<Attendance> get attendances => throw _privateConstructorUsedError;
   @TimestampConverter()
   @JsonKey(name: 'createdAt')
   Timestamp? get createdAt => throw _privateConstructorUsedError;
@@ -82,7 +82,7 @@ abstract class $UserModelCopyWith<$Res> {
     @JsonKey(name: 'evaluations') List<Evaluation> evaluations,
     @JsonKey(name: 'researches') List<Research> researches,
     @JsonKey(name: 'notifications') List<NotificationModel> notifications,
-    @JsonKey(name: 'attendances') List<AttendanceModel> attendances,
+    @JsonKey(name: 'attendances') List<Attendance> attendances,
     @TimestampConverter() @JsonKey(name: 'createdAt') Timestamp? createdAt,
     @TimestampConverter() @JsonKey(name: 'updatedAt') Timestamp? updatedAt,
   });
@@ -191,7 +191,7 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
                 null == attendances
                     ? _value.attendances
                     : attendances // ignore: cast_nullable_to_non_nullable
-                        as List<AttendanceModel>,
+                        as List<Attendance>,
             createdAt:
                 freezed == createdAt
                     ? _value.createdAt
@@ -231,7 +231,7 @@ abstract class _$$UserModelImplCopyWith<$Res>
     @JsonKey(name: 'evaluations') List<Evaluation> evaluations,
     @JsonKey(name: 'researches') List<Research> researches,
     @JsonKey(name: 'notifications') List<NotificationModel> notifications,
-    @JsonKey(name: 'attendances') List<AttendanceModel> attendances,
+    @JsonKey(name: 'attendances') List<Attendance> attendances,
     @TimestampConverter() @JsonKey(name: 'createdAt') Timestamp? createdAt,
     @TimestampConverter() @JsonKey(name: 'updatedAt') Timestamp? updatedAt,
   });
@@ -339,7 +339,7 @@ class __$$UserModelImplCopyWithImpl<$Res>
             null == attendances
                 ? _value._attendances
                 : attendances // ignore: cast_nullable_to_non_nullable
-                    as List<AttendanceModel>,
+                    as List<Attendance>,
         createdAt:
             freezed == createdAt
                 ? _value.createdAt
@@ -373,8 +373,7 @@ class _$UserModelImpl implements _UserModel {
     @JsonKey(name: 'researches') final List<Research> researches = const [],
     @JsonKey(name: 'notifications')
     final List<NotificationModel> notifications = const [],
-    @JsonKey(name: 'attendances')
-    final List<AttendanceModel> attendances = const [],
+    @JsonKey(name: 'attendances') final List<Attendance> attendances = const [],
     @TimestampConverter() @JsonKey(name: 'createdAt') this.createdAt,
     @TimestampConverter() @JsonKey(name: 'updatedAt') this.updatedAt,
   }) : _subjects = subjects,
@@ -445,10 +444,10 @@ class _$UserModelImpl implements _UserModel {
     return EqualUnmodifiableListView(_notifications);
   }
 
-  final List<AttendanceModel> _attendances;
+  final List<Attendance> _attendances;
   @override
   @JsonKey(name: 'attendances')
-  List<AttendanceModel> get attendances {
+  List<Attendance> get attendances {
     if (_attendances is EqualUnmodifiableListView) return _attendances;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_attendances);
@@ -561,7 +560,7 @@ abstract class _UserModel implements UserModel {
     @JsonKey(name: 'evaluations') final List<Evaluation> evaluations,
     @JsonKey(name: 'researches') final List<Research> researches,
     @JsonKey(name: 'notifications') final List<NotificationModel> notifications,
-    @JsonKey(name: 'attendances') final List<AttendanceModel> attendances,
+    @JsonKey(name: 'attendances') final List<Attendance> attendances,
     @TimestampConverter()
     @JsonKey(name: 'createdAt')
     final Timestamp? createdAt,
@@ -610,7 +609,7 @@ abstract class _UserModel implements UserModel {
   List<NotificationModel> get notifications;
   @override
   @JsonKey(name: 'attendances')
-  List<AttendanceModel> get attendances;
+  List<Attendance> get attendances;
   @override
   @TimestampConverter()
   @JsonKey(name: 'createdAt')

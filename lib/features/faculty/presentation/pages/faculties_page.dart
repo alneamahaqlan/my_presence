@@ -87,15 +87,15 @@ class FacultiesPage extends StatelessWidget {
                               height: 8.0,
                             ), // Add spacing between text and icon
                             // Additional Details (e.g., description or stats)
-                            // Text(
-                            //   '${faculty.departments.length} Departments',
-                            //   style: theme.textTheme.bodyMedium?.copyWith(
-                            //     color: colorScheme.onSurface.withOpacity(0.7),
-                            //   ),
-                            // ),
-                            // const SizedBox(
-                            //   height: 16.0,
-                            // ), // Add spacing between text and icon
+                            Text(
+                              '${faculty.departments.length} Departments',
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: colorScheme.onSurface.withOpacity(0.7),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 16.0,
+                            ), // Add spacing between text and icon
                             // Icon or Action Button
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,

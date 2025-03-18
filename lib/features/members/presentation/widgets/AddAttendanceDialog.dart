@@ -107,7 +107,7 @@ class _AddAttendanceDialogState extends State<AddAttendanceDialog> {
                       onPressed: () {
                         if (_formKey.currentState!.validate() &&
                             _selectedDate != null) {
-                          final attendance = AttendanceModel(
+                          final attendance = Attendance(
                             byUser: widget.member,
                             arrivalDate: Timestamp.fromDate(_selectedDate!),
                             status: _statusController.text,

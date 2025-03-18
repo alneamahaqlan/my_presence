@@ -9,7 +9,8 @@ class AttendanceState with _$AttendanceState {
   const factory AttendanceState.loading() = _Loading;
 
   // Loaded state with a list of attendance records
-  const factory AttendanceState.loaded(List<AttendanceModel> attendanceList) = _Loaded;
+  const factory AttendanceState.loaded(List<Attendance> attendanceList) =
+      _Loaded;
 
   // Error state
   const factory AttendanceState.error(String message) = _Error;

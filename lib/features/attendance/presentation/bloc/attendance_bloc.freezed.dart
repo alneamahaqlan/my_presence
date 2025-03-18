@@ -20,22 +20,22 @@ mixin _$AttendanceEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() fetchAll,
-    required TResult Function(AttendanceModel attendance) add,
-    required TResult Function(AttendanceModel attendance) update,
+    required TResult Function(Attendance attendance) add,
+    required TResult Function(Attendance attendance) update,
     required TResult Function(String id) delete,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? fetchAll,
-    TResult? Function(AttendanceModel attendance)? add,
-    TResult? Function(AttendanceModel attendance)? update,
+    TResult? Function(Attendance attendance)? add,
+    TResult? Function(Attendance attendance)? update,
     TResult? Function(String id)? delete,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? fetchAll,
-    TResult Function(AttendanceModel attendance)? add,
-    TResult Function(AttendanceModel attendance)? update,
+    TResult Function(Attendance attendance)? add,
+    TResult Function(Attendance attendance)? update,
     TResult Function(String id)? delete,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
@@ -129,8 +129,8 @@ class _$FetchAllAttendanceImpl implements FetchAllAttendance {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() fetchAll,
-    required TResult Function(AttendanceModel attendance) add,
-    required TResult Function(AttendanceModel attendance) update,
+    required TResult Function(Attendance attendance) add,
+    required TResult Function(Attendance attendance) update,
     required TResult Function(String id) delete,
   }) {
     return fetchAll();
@@ -140,8 +140,8 @@ class _$FetchAllAttendanceImpl implements FetchAllAttendance {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? fetchAll,
-    TResult? Function(AttendanceModel attendance)? add,
-    TResult? Function(AttendanceModel attendance)? update,
+    TResult? Function(Attendance attendance)? add,
+    TResult? Function(Attendance attendance)? update,
     TResult? Function(String id)? delete,
   }) {
     return fetchAll?.call();
@@ -151,8 +151,8 @@ class _$FetchAllAttendanceImpl implements FetchAllAttendance {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? fetchAll,
-    TResult Function(AttendanceModel attendance)? add,
-    TResult Function(AttendanceModel attendance)? update,
+    TResult Function(Attendance attendance)? add,
+    TResult Function(Attendance attendance)? update,
     TResult Function(String id)? delete,
     required TResult orElse(),
   }) {
@@ -211,9 +211,9 @@ abstract class _$$AddAttendanceImplCopyWith<$Res> {
     $Res Function(_$AddAttendanceImpl) then,
   ) = __$$AddAttendanceImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({AttendanceModel attendance});
+  $Res call({Attendance attendance});
 
-  $AttendanceModelCopyWith<$Res> get attendance;
+  $AttendanceCopyWith<$Res> get attendance;
 }
 
 /// @nodoc
@@ -235,7 +235,7 @@ class __$$AddAttendanceImplCopyWithImpl<$Res>
         null == attendance
             ? _value.attendance
             : attendance // ignore: cast_nullable_to_non_nullable
-                as AttendanceModel,
+                as Attendance,
       ),
     );
   }
@@ -244,8 +244,8 @@ class __$$AddAttendanceImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $AttendanceModelCopyWith<$Res> get attendance {
-    return $AttendanceModelCopyWith<$Res>(_value.attendance, (value) {
+  $AttendanceCopyWith<$Res> get attendance {
+    return $AttendanceCopyWith<$Res>(_value.attendance, (value) {
       return _then(_value.copyWith(attendance: value));
     });
   }
@@ -257,7 +257,7 @@ class _$AddAttendanceImpl implements AddAttendance {
   const _$AddAttendanceImpl(this.attendance);
 
   @override
-  final AttendanceModel attendance;
+  final Attendance attendance;
 
   @override
   String toString() {
@@ -288,8 +288,8 @@ class _$AddAttendanceImpl implements AddAttendance {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() fetchAll,
-    required TResult Function(AttendanceModel attendance) add,
-    required TResult Function(AttendanceModel attendance) update,
+    required TResult Function(Attendance attendance) add,
+    required TResult Function(Attendance attendance) update,
     required TResult Function(String id) delete,
   }) {
     return add(attendance);
@@ -299,8 +299,8 @@ class _$AddAttendanceImpl implements AddAttendance {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? fetchAll,
-    TResult? Function(AttendanceModel attendance)? add,
-    TResult? Function(AttendanceModel attendance)? update,
+    TResult? Function(Attendance attendance)? add,
+    TResult? Function(Attendance attendance)? update,
     TResult? Function(String id)? delete,
   }) {
     return add?.call(attendance);
@@ -310,8 +310,8 @@ class _$AddAttendanceImpl implements AddAttendance {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? fetchAll,
-    TResult Function(AttendanceModel attendance)? add,
-    TResult Function(AttendanceModel attendance)? update,
+    TResult Function(Attendance attendance)? add,
+    TResult Function(Attendance attendance)? update,
     TResult Function(String id)? delete,
     required TResult orElse(),
   }) {
@@ -360,10 +360,10 @@ class _$AddAttendanceImpl implements AddAttendance {
 }
 
 abstract class AddAttendance implements AttendanceEvent {
-  const factory AddAttendance(final AttendanceModel attendance) =
+  const factory AddAttendance(final Attendance attendance) =
       _$AddAttendanceImpl;
 
-  AttendanceModel get attendance;
+  Attendance get attendance;
 
   /// Create a copy of AttendanceEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -379,9 +379,9 @@ abstract class _$$UpdateAttendanceImplCopyWith<$Res> {
     $Res Function(_$UpdateAttendanceImpl) then,
   ) = __$$UpdateAttendanceImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({AttendanceModel attendance});
+  $Res call({Attendance attendance});
 
-  $AttendanceModelCopyWith<$Res> get attendance;
+  $AttendanceCopyWith<$Res> get attendance;
 }
 
 /// @nodoc
@@ -403,7 +403,7 @@ class __$$UpdateAttendanceImplCopyWithImpl<$Res>
         null == attendance
             ? _value.attendance
             : attendance // ignore: cast_nullable_to_non_nullable
-                as AttendanceModel,
+                as Attendance,
       ),
     );
   }
@@ -412,8 +412,8 @@ class __$$UpdateAttendanceImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $AttendanceModelCopyWith<$Res> get attendance {
-    return $AttendanceModelCopyWith<$Res>(_value.attendance, (value) {
+  $AttendanceCopyWith<$Res> get attendance {
+    return $AttendanceCopyWith<$Res>(_value.attendance, (value) {
       return _then(_value.copyWith(attendance: value));
     });
   }
@@ -425,7 +425,7 @@ class _$UpdateAttendanceImpl implements UpdateAttendance {
   const _$UpdateAttendanceImpl(this.attendance);
 
   @override
-  final AttendanceModel attendance;
+  final Attendance attendance;
 
   @override
   String toString() {
@@ -459,8 +459,8 @@ class _$UpdateAttendanceImpl implements UpdateAttendance {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() fetchAll,
-    required TResult Function(AttendanceModel attendance) add,
-    required TResult Function(AttendanceModel attendance) update,
+    required TResult Function(Attendance attendance) add,
+    required TResult Function(Attendance attendance) update,
     required TResult Function(String id) delete,
   }) {
     return update(attendance);
@@ -470,8 +470,8 @@ class _$UpdateAttendanceImpl implements UpdateAttendance {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? fetchAll,
-    TResult? Function(AttendanceModel attendance)? add,
-    TResult? Function(AttendanceModel attendance)? update,
+    TResult? Function(Attendance attendance)? add,
+    TResult? Function(Attendance attendance)? update,
     TResult? Function(String id)? delete,
   }) {
     return update?.call(attendance);
@@ -481,8 +481,8 @@ class _$UpdateAttendanceImpl implements UpdateAttendance {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? fetchAll,
-    TResult Function(AttendanceModel attendance)? add,
-    TResult Function(AttendanceModel attendance)? update,
+    TResult Function(Attendance attendance)? add,
+    TResult Function(Attendance attendance)? update,
     TResult Function(String id)? delete,
     required TResult orElse(),
   }) {
@@ -531,10 +531,10 @@ class _$UpdateAttendanceImpl implements UpdateAttendance {
 }
 
 abstract class UpdateAttendance implements AttendanceEvent {
-  const factory UpdateAttendance(final AttendanceModel attendance) =
+  const factory UpdateAttendance(final Attendance attendance) =
       _$UpdateAttendanceImpl;
 
-  AttendanceModel get attendance;
+  Attendance get attendance;
 
   /// Create a copy of AttendanceEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -617,8 +617,8 @@ class _$DeleteAttendanceImpl implements DeleteAttendance {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() fetchAll,
-    required TResult Function(AttendanceModel attendance) add,
-    required TResult Function(AttendanceModel attendance) update,
+    required TResult Function(Attendance attendance) add,
+    required TResult Function(Attendance attendance) update,
     required TResult Function(String id) delete,
   }) {
     return delete(id);
@@ -628,8 +628,8 @@ class _$DeleteAttendanceImpl implements DeleteAttendance {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? fetchAll,
-    TResult? Function(AttendanceModel attendance)? add,
-    TResult? Function(AttendanceModel attendance)? update,
+    TResult? Function(Attendance attendance)? add,
+    TResult? Function(Attendance attendance)? update,
     TResult? Function(String id)? delete,
   }) {
     return delete?.call(id);
@@ -639,8 +639,8 @@ class _$DeleteAttendanceImpl implements DeleteAttendance {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? fetchAll,
-    TResult Function(AttendanceModel attendance)? add,
-    TResult Function(AttendanceModel attendance)? update,
+    TResult Function(Attendance attendance)? add,
+    TResult Function(Attendance attendance)? update,
     TResult Function(String id)? delete,
     required TResult orElse(),
   }) {
@@ -706,7 +706,7 @@ mixin _$AttendanceState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<AttendanceModel> attendanceList) loaded,
+    required TResult Function(List<Attendance> attendanceList) loaded,
     required TResult Function(String message) error,
     required TResult Function(String message) success,
   }) => throw _privateConstructorUsedError;
@@ -714,7 +714,7 @@ mixin _$AttendanceState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<AttendanceModel> attendanceList)? loaded,
+    TResult? Function(List<Attendance> attendanceList)? loaded,
     TResult? Function(String message)? error,
     TResult? Function(String message)? success,
   }) => throw _privateConstructorUsedError;
@@ -722,7 +722,7 @@ mixin _$AttendanceState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<AttendanceModel> attendanceList)? loaded,
+    TResult Function(List<Attendance> attendanceList)? loaded,
     TResult Function(String message)? error,
     TResult Function(String message)? success,
     required TResult orElse(),
@@ -821,7 +821,7 @@ class _$InitialImpl implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<AttendanceModel> attendanceList) loaded,
+    required TResult Function(List<Attendance> attendanceList) loaded,
     required TResult Function(String message) error,
     required TResult Function(String message) success,
   }) {
@@ -833,7 +833,7 @@ class _$InitialImpl implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<AttendanceModel> attendanceList)? loaded,
+    TResult? Function(List<Attendance> attendanceList)? loaded,
     TResult? Function(String message)? error,
     TResult? Function(String message)? success,
   }) {
@@ -845,7 +845,7 @@ class _$InitialImpl implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<AttendanceModel> attendanceList)? loaded,
+    TResult Function(List<Attendance> attendanceList)? loaded,
     TResult Function(String message)? error,
     TResult Function(String message)? success,
     required TResult orElse(),
@@ -946,7 +946,7 @@ class _$LoadingImpl implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<AttendanceModel> attendanceList) loaded,
+    required TResult Function(List<Attendance> attendanceList) loaded,
     required TResult Function(String message) error,
     required TResult Function(String message) success,
   }) {
@@ -958,7 +958,7 @@ class _$LoadingImpl implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<AttendanceModel> attendanceList)? loaded,
+    TResult? Function(List<Attendance> attendanceList)? loaded,
     TResult? Function(String message)? error,
     TResult? Function(String message)? success,
   }) {
@@ -970,7 +970,7 @@ class _$LoadingImpl implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<AttendanceModel> attendanceList)? loaded,
+    TResult Function(List<Attendance> attendanceList)? loaded,
     TResult Function(String message)? error,
     TResult Function(String message)? success,
     required TResult orElse(),
@@ -1033,7 +1033,7 @@ abstract class _$$LoadedImplCopyWith<$Res> {
     $Res Function(_$LoadedImpl) then,
   ) = __$$LoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<AttendanceModel> attendanceList});
+  $Res call({List<Attendance> attendanceList});
 }
 
 /// @nodoc
@@ -1055,7 +1055,7 @@ class __$$LoadedImplCopyWithImpl<$Res>
         null == attendanceList
             ? _value._attendanceList
             : attendanceList // ignore: cast_nullable_to_non_nullable
-                as List<AttendanceModel>,
+                as List<Attendance>,
       ),
     );
   }
@@ -1064,12 +1064,12 @@ class __$$LoadedImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$LoadedImpl implements _Loaded {
-  const _$LoadedImpl(final List<AttendanceModel> attendanceList)
+  const _$LoadedImpl(final List<Attendance> attendanceList)
     : _attendanceList = attendanceList;
 
-  final List<AttendanceModel> _attendanceList;
+  final List<Attendance> _attendanceList;
   @override
-  List<AttendanceModel> get attendanceList {
+  List<Attendance> get attendanceList {
     if (_attendanceList is EqualUnmodifiableListView) return _attendanceList;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_attendanceList);
@@ -1110,7 +1110,7 @@ class _$LoadedImpl implements _Loaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<AttendanceModel> attendanceList) loaded,
+    required TResult Function(List<Attendance> attendanceList) loaded,
     required TResult Function(String message) error,
     required TResult Function(String message) success,
   }) {
@@ -1122,7 +1122,7 @@ class _$LoadedImpl implements _Loaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<AttendanceModel> attendanceList)? loaded,
+    TResult? Function(List<Attendance> attendanceList)? loaded,
     TResult? Function(String message)? error,
     TResult? Function(String message)? success,
   }) {
@@ -1134,7 +1134,7 @@ class _$LoadedImpl implements _Loaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<AttendanceModel> attendanceList)? loaded,
+    TResult Function(List<Attendance> attendanceList)? loaded,
     TResult Function(String message)? error,
     TResult Function(String message)? success,
     required TResult orElse(),
@@ -1187,10 +1187,9 @@ class _$LoadedImpl implements _Loaded {
 }
 
 abstract class _Loaded implements AttendanceState {
-  const factory _Loaded(final List<AttendanceModel> attendanceList) =
-      _$LoadedImpl;
+  const factory _Loaded(final List<Attendance> attendanceList) = _$LoadedImpl;
 
-  List<AttendanceModel> get attendanceList;
+  List<Attendance> get attendanceList;
 
   /// Create a copy of AttendanceState
   /// with the given fields replaced by the non-null parameter values.
@@ -1271,7 +1270,7 @@ class _$ErrorImpl implements _Error {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<AttendanceModel> attendanceList) loaded,
+    required TResult Function(List<Attendance> attendanceList) loaded,
     required TResult Function(String message) error,
     required TResult Function(String message) success,
   }) {
@@ -1283,7 +1282,7 @@ class _$ErrorImpl implements _Error {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<AttendanceModel> attendanceList)? loaded,
+    TResult? Function(List<Attendance> attendanceList)? loaded,
     TResult? Function(String message)? error,
     TResult? Function(String message)? success,
   }) {
@@ -1295,7 +1294,7 @@ class _$ErrorImpl implements _Error {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<AttendanceModel> attendanceList)? loaded,
+    TResult Function(List<Attendance> attendanceList)? loaded,
     TResult Function(String message)? error,
     TResult Function(String message)? success,
     required TResult orElse(),
@@ -1431,7 +1430,7 @@ class _$SuccessImpl implements _Success {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<AttendanceModel> attendanceList) loaded,
+    required TResult Function(List<Attendance> attendanceList) loaded,
     required TResult Function(String message) error,
     required TResult Function(String message) success,
   }) {
@@ -1443,7 +1442,7 @@ class _$SuccessImpl implements _Success {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<AttendanceModel> attendanceList)? loaded,
+    TResult? Function(List<Attendance> attendanceList)? loaded,
     TResult? Function(String message)? error,
     TResult? Function(String message)? success,
   }) {
@@ -1455,7 +1454,7 @@ class _$SuccessImpl implements _Success {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<AttendanceModel> attendanceList)? loaded,
+    TResult Function(List<Attendance> attendanceList)? loaded,
     TResult Function(String message)? error,
     TResult Function(String message)? success,
     required TResult orElse(),

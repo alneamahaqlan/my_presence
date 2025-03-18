@@ -5,6 +5,7 @@ import '../../../../core/models/status.dart';
 import '../../../../core/widgets/drop_down_widget.dart';
 import '../../../faculty/data/models/faculty_model.dart';
 import '../../../faculty/presentation/bloc/faculty_bloc.dart';
+import '../../data/models/department_create_body.dart';
 import '../../data/models/department_model.dart';
 import '../bloc/department_bloc.dart';
 
@@ -87,13 +88,13 @@ class _AddDepartmentPageState extends State<AddDepartmentPage> {
                       onPressed: () {
                         if (_formKey.currentState!.validate() &&
                             selectedFaculty != null) {
-                          final department = Department(
+                          final department = DepartmentCreateBody(
                             name: _nameController.text,
                           );
                           context.read<DepartmentBloc>().add(
                             AddDepartment(
                               facultyId: selectedFaculty!.id,
-                              department: department,
+                              departmentCreateBody: department,
                             ),
                           );
                         }

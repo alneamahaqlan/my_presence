@@ -130,13 +130,50 @@ class Ui {
         break;
     }
   }
+static Future<DateTime?> selectDate(
+  BuildContext context, {
+  DateTime? initialDate,
+  DateTime? firstDate,
+  DateTime? lastDate,
+}) async {
+  firstDate ??= DateTime.now(); // Default to today
+  lastDate ??= DateTime(2100); // Default to a far future date
 
+  // Ensure initialDate is not before firstDate
+  initialDate ??= DateTime.now();
+  if (initialDate.isBefore(firstDate)) {
+    initialDate = firstDate;
+  }
+
+  final DateTime? pickedDate = await showDatePicker(
+    context: context,
+    initialDate: initialDate,
+    firstDate: firstDate,
+    lastDate: lastDate,
+  );
+
+  if (pickedDate == null || !context.mounted) return null;
+
+  // Optional: Add a check for Fridays (if needed)
+  if (pickedDate.weekday == DateTime.friday) {
+    showSnackBar(
+      context: context,
+      message: 'Friday is a holiday',
+      type: SnackBarType.warning,
+    );
+    return null;
+  }
+
+  return pickedDate;
+}
   static Future<DateTime?> selectDateTime(
     BuildContext context, {
     DateTime? initialDate,
-    required DateTime firstDate,
-    required DateTime lastDate,
+     DateTime? firstDate,
+     DateTime? lastDate,
   }) async {
+    firstDate ??= DateTime.now().add(Duration(days: 1));
+     lastDate ??= DateTime(2100);
     // Ensure initialDate is not before firstDate
     initialDate ??= DateTime.now();
     if (initialDate.isBefore(firstDate)) {

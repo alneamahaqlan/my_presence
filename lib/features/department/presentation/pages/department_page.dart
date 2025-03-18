@@ -4,11 +4,9 @@ import 'package:my_presence/core/extensions/context_extensions.dart';
 
 import '../../../../core/models/status.dart';
 import '../../../../core/routes/app_pages.dart';
-import '../../../faculty/data/models/faculty_model.dart';
 import '../bloc/department_bloc.dart';
 
 class DepartmentPage extends StatelessWidget {
- 
   const DepartmentPage({super.key});
 
   @override
@@ -79,8 +77,8 @@ class DepartmentPage extends StatelessWidget {
                                 ),
                                 onPressed: () {
                                   context.pushNamed(
-                                    AppRoutes.subjects,
-                             
+                                    AppRoutes.lectureScheduleList,
+                                    extra: department,
                                   );
                                 },
                               ),
@@ -101,8 +99,7 @@ class DepartmentPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed:
-            () => context.pushNamed(AppRoutes.addDepartment),
+        onPressed: () => context.pushNamed(AppRoutes.addDepartment),
       ),
     );
   }

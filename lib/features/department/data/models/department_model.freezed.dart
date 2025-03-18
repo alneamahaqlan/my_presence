@@ -25,9 +25,14 @@ mixin _$Department {
   dynamic get id => throw _privateConstructorUsedError;
   @JsonKey(name: 'name')
   String get name => throw _privateConstructorUsedError;
-  @JsonKey(includeIfNull: false)
-  List<LectureSchedule> get lecturesSchedule =>
-      throw _privateConstructorUsedError;
+  @JsonKey(name: 'schedules')
+  List<Schedule> get lecturesSchedule => throw _privateConstructorUsedError;
+  @TimestampConverter()
+  @JsonKey(name: 'createdAt')
+  Timestamp? get createdAt => throw _privateConstructorUsedError;
+  @TimestampConverter()
+  @JsonKey(name: 'updatedAt')
+  Timestamp? get updatedAt => throw _privateConstructorUsedError;
 
   /// Serializes this Department to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -49,7 +54,9 @@ abstract class $DepartmentCopyWith<$Res> {
   $Res call({
     @JsonKey(name: 'id') dynamic id,
     @JsonKey(name: 'name') String name,
-    @JsonKey(includeIfNull: false) List<LectureSchedule> lecturesSchedule,
+    @JsonKey(name: 'schedules') List<Schedule> lecturesSchedule,
+    @TimestampConverter() @JsonKey(name: 'createdAt') Timestamp? createdAt,
+    @TimestampConverter() @JsonKey(name: 'updatedAt') Timestamp? updatedAt,
   });
 }
 
@@ -71,6 +78,8 @@ class _$DepartmentCopyWithImpl<$Res, $Val extends Department>
     Object? id = freezed,
     Object? name = null,
     Object? lecturesSchedule = null,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -88,7 +97,17 @@ class _$DepartmentCopyWithImpl<$Res, $Val extends Department>
                 null == lecturesSchedule
                     ? _value.lecturesSchedule
                     : lecturesSchedule // ignore: cast_nullable_to_non_nullable
-                        as List<LectureSchedule>,
+                        as List<Schedule>,
+            createdAt:
+                freezed == createdAt
+                    ? _value.createdAt
+                    : createdAt // ignore: cast_nullable_to_non_nullable
+                        as Timestamp?,
+            updatedAt:
+                freezed == updatedAt
+                    ? _value.updatedAt
+                    : updatedAt // ignore: cast_nullable_to_non_nullable
+                        as Timestamp?,
           )
           as $Val,
     );
@@ -107,7 +126,9 @@ abstract class _$$DepartmentImplCopyWith<$Res>
   $Res call({
     @JsonKey(name: 'id') dynamic id,
     @JsonKey(name: 'name') String name,
-    @JsonKey(includeIfNull: false) List<LectureSchedule> lecturesSchedule,
+    @JsonKey(name: 'schedules') List<Schedule> lecturesSchedule,
+    @TimestampConverter() @JsonKey(name: 'createdAt') Timestamp? createdAt,
+    @TimestampConverter() @JsonKey(name: 'updatedAt') Timestamp? updatedAt,
   });
 }
 
@@ -128,6 +149,8 @@ class __$$DepartmentImplCopyWithImpl<$Res>
     Object? id = freezed,
     Object? name = null,
     Object? lecturesSchedule = null,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
   }) {
     return _then(
       _$DepartmentImpl(
@@ -145,7 +168,17 @@ class __$$DepartmentImplCopyWithImpl<$Res>
             null == lecturesSchedule
                 ? _value._lecturesSchedule
                 : lecturesSchedule // ignore: cast_nullable_to_non_nullable
-                    as List<LectureSchedule>,
+                    as List<Schedule>,
+        createdAt:
+            freezed == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                    as Timestamp?,
+        updatedAt:
+            freezed == updatedAt
+                ? _value.updatedAt
+                : updatedAt // ignore: cast_nullable_to_non_nullable
+                    as Timestamp?,
       ),
     );
   }
@@ -157,8 +190,10 @@ class _$DepartmentImpl implements _Department {
   const _$DepartmentImpl({
     @JsonKey(name: 'id') this.id,
     @JsonKey(name: 'name') required this.name,
-    @JsonKey(includeIfNull: false)
-    final List<LectureSchedule> lecturesSchedule = const [],
+    @JsonKey(name: 'schedules')
+    final List<Schedule> lecturesSchedule = const [],
+    @TimestampConverter() @JsonKey(name: 'createdAt') this.createdAt,
+    @TimestampConverter() @JsonKey(name: 'updatedAt') this.updatedAt,
   }) : _lecturesSchedule = lecturesSchedule;
 
   factory _$DepartmentImpl.fromJson(Map<String, dynamic> json) =>
@@ -170,10 +205,10 @@ class _$DepartmentImpl implements _Department {
   @override
   @JsonKey(name: 'name')
   final String name;
-  final List<LectureSchedule> _lecturesSchedule;
+  final List<Schedule> _lecturesSchedule;
   @override
-  @JsonKey(includeIfNull: false)
-  List<LectureSchedule> get lecturesSchedule {
+  @JsonKey(name: 'schedules')
+  List<Schedule> get lecturesSchedule {
     if (_lecturesSchedule is EqualUnmodifiableListView)
       return _lecturesSchedule;
     // ignore: implicit_dynamic_type
@@ -181,8 +216,17 @@ class _$DepartmentImpl implements _Department {
   }
 
   @override
+  @TimestampConverter()
+  @JsonKey(name: 'createdAt')
+  final Timestamp? createdAt;
+  @override
+  @TimestampConverter()
+  @JsonKey(name: 'updatedAt')
+  final Timestamp? updatedAt;
+
+  @override
   String toString() {
-    return 'Department(id: $id, name: $name, lecturesSchedule: $lecturesSchedule)';
+    return 'Department(id: $id, name: $name, lecturesSchedule: $lecturesSchedule, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -195,7 +239,11 @@ class _$DepartmentImpl implements _Department {
             const DeepCollectionEquality().equals(
               other._lecturesSchedule,
               _lecturesSchedule,
-            ));
+            ) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -205,6 +253,8 @@ class _$DepartmentImpl implements _Department {
     const DeepCollectionEquality().hash(id),
     name,
     const DeepCollectionEquality().hash(_lecturesSchedule),
+    createdAt,
+    updatedAt,
   );
 
   /// Create a copy of Department
@@ -225,7 +275,13 @@ abstract class _Department implements Department {
   const factory _Department({
     @JsonKey(name: 'id') final dynamic id,
     @JsonKey(name: 'name') required final String name,
-    @JsonKey(includeIfNull: false) final List<LectureSchedule> lecturesSchedule,
+    @JsonKey(name: 'schedules') final List<Schedule> lecturesSchedule,
+    @TimestampConverter()
+    @JsonKey(name: 'createdAt')
+    final Timestamp? createdAt,
+    @TimestampConverter()
+    @JsonKey(name: 'updatedAt')
+    final Timestamp? updatedAt,
   }) = _$DepartmentImpl;
 
   factory _Department.fromJson(Map<String, dynamic> json) =
@@ -238,8 +294,16 @@ abstract class _Department implements Department {
   @JsonKey(name: 'name')
   String get name;
   @override
-  @JsonKey(includeIfNull: false)
-  List<LectureSchedule> get lecturesSchedule;
+  @JsonKey(name: 'schedules')
+  List<Schedule> get lecturesSchedule;
+  @override
+  @TimestampConverter()
+  @JsonKey(name: 'createdAt')
+  Timestamp? get createdAt;
+  @override
+  @TimestampConverter()
+  @JsonKey(name: 'updatedAt')
+  Timestamp? get updatedAt;
 
   /// Create a copy of Department
   /// with the given fields replaced by the non-null parameter values.

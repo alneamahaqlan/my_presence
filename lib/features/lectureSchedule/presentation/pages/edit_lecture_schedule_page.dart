@@ -1,20 +1,16 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_presence/features/lectureSchedule/presentation/bloc/lecture_schedule_bloc.dart';
 
 import '../../../../core/widgets/drop_down_widget.dart';
 import '../../../../core/widgets/text_field_widget.dart'; // Import the TextFieldWidget
 import '../../../auth/data/models/user_model.dart';
-import '../../../faculty/presentation/bloc/faculty_bloc.dart';
-import '../../../faculty/data/models/faculty_model.dart';
-import '../../../subject/data/models/subject_model.dart';
 import '../../../members/presentation/bloc/member_bloc.dart';
+import '../../../subject/data/models/subject_model.dart';
 import '../../../subject/presentation/bloc/subject_bloc.dart';
-import '../../data/models/lecture_schedule.dart';
+import '../../data/models/schedule_model.dart';
 
 class EditLectureSchedulePage extends StatefulWidget {
-  final LectureSchedule schedule;
+  final Schedule schedule;
 
   const EditLectureSchedulePage({super.key, required this.schedule});
 
@@ -29,7 +25,6 @@ class _EditLectureSchedulePageState extends State<EditLectureSchedulePage> {
 
   Subject? _selectedSubject;
   UserModel? _selectedUser;
-
 
   // @override
   // void initState() {
@@ -89,7 +84,6 @@ class _EditLectureSchedulePageState extends State<EditLectureSchedulePage> {
               ),
               SizedBox(height: 16),
 
-
               // User Dropdown
               BlocBuilder<MemberBloc, MemberState>(
                 builder: (context, state) {
@@ -138,7 +132,7 @@ class _EditLectureSchedulePageState extends State<EditLectureSchedulePage> {
                   //     subject: _selectedSubject!,
                   //     user: _selectedUser!,
                   //     date: Timestamp.fromDate(DateTime.parse(_dateController.text)),
-                   
+
                   //   );
 
                   //   context.read<LectureScheduleBloc>().add(

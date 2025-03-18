@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart' ;
 
-import '../../../../core/extensions/context_extensions.dart';
+// import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/routes/app_pages.dart';
+import '../../../../dependency_injection.dart';
 import '../../../department/data/models/department_model.dart';
 import '../bloc/lecture_schedule_bloc.dart';
-import '../widgets/generate_and_print_pdf.dart';
-import '../widgets/schedule_card.dart';
+
 
 class LectureScheduleListPage extends StatelessWidget {
-  final Department department;
+    // final Department department;
+ 
 
-  const LectureScheduleListPage({super.key, required this.department});
+  const LectureScheduleListPage({super.key,
+  //  required this.department
+   });
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +33,7 @@ class LectureScheduleListPage extends StatelessWidget {
                     state.schedules
                        
                         .toList();
-                generateAndPrintPdf(schedules, department);
+                // generateAndPrintPdf(schedules, department);
               }
             },
           ),
@@ -54,7 +58,8 @@ class LectureScheduleListPage extends StatelessWidget {
               itemCount: schedules.length,
               itemBuilder: (context, index) {
                 final schedule = schedules[index];
-                return ScheduleCard(schedule: schedule, department: department);
+                return Text(schedule.id ?? 'not found');    
+                //  return ScheduleCard(schedule: schedule);
               },
             );
           } else {
@@ -64,7 +69,8 @@ class LectureScheduleListPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          context.pushNamed(AppRoutes.addLectureSchedule, extra: department);
+             final router = getIt.call<GoRouter>;
+          context.pushNamed(AppRoutes.addLectureSchedule,extra: router.call().state.extra as Department);
         },
         child: const Icon(Icons.add),
       ),

@@ -6,7 +6,7 @@ import '../../../../core/error/api_error_handler.dart';
 import '../../../../core/models/api_result.dart';
 import '../../../../core/services/firestore_service.dart';
 import '../../../auth/data/models/user_model.dart';
-import '../../../lectureSchedule/data/models/lecture_schedule.dart';
+import '../../../lectureSchedule/data/models/schedule_model.dart';
 import '../../../reports/data/models/evaluation_model.dart';
 import '../../../reports/data/models/research_model.dart';
 import '../../../subject/data/models/subject_model.dart';
@@ -57,8 +57,7 @@ class MemberRepository {
         final schedules =
             schedulesSnapshot.docs
                 .map(
-                  (doc) =>
-                      LectureSchedule.fromJson(doc.data()).copyWith(id: doc.id),
+                  (doc) => Schedule.fromJson(doc.data()).copyWith(id: doc.id),
                 )
                 .toList()
                 // .where((s) => s.user.id == user.id)
@@ -66,9 +65,7 @@ class MemberRepository {
         final subjects = <Subject>[];
         // schedules.map((schedule) => schedule).toList();
 
-        usersWithSchedules.add(
-          user.copyWith(subjects: subjects, id: user.id),
-        );
+        usersWithSchedules.add(user.copyWith(subjects: subjects, id: user.id));
       }
 
       return ApiResult.success(usersWithSchedules);

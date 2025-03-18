@@ -20,19 +20,19 @@ mixin _$FacultyEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() fetchFaculties,
-    required TResult Function(Faculty faculty) addFaculty,
+    required TResult Function(String name) addFaculty,
     required TResult Function(Faculty faculty) updateFaculty,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? fetchFaculties,
-    TResult? Function(Faculty faculty)? addFaculty,
+    TResult? Function(String name)? addFaculty,
     TResult? Function(Faculty faculty)? updateFaculty,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? fetchFaculties,
-    TResult Function(Faculty faculty)? addFaculty,
+    TResult Function(String name)? addFaculty,
     TResult Function(Faculty faculty)? updateFaculty,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
@@ -123,7 +123,7 @@ class _$FetchFacultiesImpl implements FetchFaculties {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() fetchFaculties,
-    required TResult Function(Faculty faculty) addFaculty,
+    required TResult Function(String name) addFaculty,
     required TResult Function(Faculty faculty) updateFaculty,
   }) {
     return fetchFaculties();
@@ -133,7 +133,7 @@ class _$FetchFacultiesImpl implements FetchFaculties {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? fetchFaculties,
-    TResult? Function(Faculty faculty)? addFaculty,
+    TResult? Function(String name)? addFaculty,
     TResult? Function(Faculty faculty)? updateFaculty,
   }) {
     return fetchFaculties?.call();
@@ -143,7 +143,7 @@ class _$FetchFacultiesImpl implements FetchFaculties {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? fetchFaculties,
-    TResult Function(Faculty faculty)? addFaculty,
+    TResult Function(String name)? addFaculty,
     TResult Function(Faculty faculty)? updateFaculty,
     required TResult orElse(),
   }) {
@@ -199,9 +199,7 @@ abstract class _$$AddFacultyImplCopyWith<$Res> {
     $Res Function(_$AddFacultyImpl) then,
   ) = __$$AddFacultyImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({Faculty faculty});
-
-  $FacultyCopyWith<$Res> get faculty;
+  $Res call({String name});
 }
 
 /// @nodoc
@@ -217,39 +215,29 @@ class __$$AddFacultyImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? faculty = null}) {
+  $Res call({Object? name = null}) {
     return _then(
       _$AddFacultyImpl(
-        null == faculty
-            ? _value.faculty
-            : faculty // ignore: cast_nullable_to_non_nullable
-                as Faculty,
+        null == name
+            ? _value.name
+            : name // ignore: cast_nullable_to_non_nullable
+                as String,
       ),
     );
-  }
-
-  /// Create a copy of FacultyEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $FacultyCopyWith<$Res> get faculty {
-    return $FacultyCopyWith<$Res>(_value.faculty, (value) {
-      return _then(_value.copyWith(faculty: value));
-    });
   }
 }
 
 /// @nodoc
 
 class _$AddFacultyImpl implements AddFaculty {
-  const _$AddFacultyImpl(this.faculty);
+  const _$AddFacultyImpl(this.name);
 
   @override
-  final Faculty faculty;
+  final String name;
 
   @override
   String toString() {
-    return 'FacultyEvent.addFaculty(faculty: $faculty)';
+    return 'FacultyEvent.addFaculty(name: $name)';
   }
 
   @override
@@ -257,11 +245,11 @@ class _$AddFacultyImpl implements AddFaculty {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AddFacultyImpl &&
-            (identical(other.faculty, faculty) || other.faculty == faculty));
+            (identical(other.name, name) || other.name == name));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, faculty);
+  int get hashCode => Object.hash(runtimeType, name);
 
   /// Create a copy of FacultyEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -275,32 +263,32 @@ class _$AddFacultyImpl implements AddFaculty {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() fetchFaculties,
-    required TResult Function(Faculty faculty) addFaculty,
+    required TResult Function(String name) addFaculty,
     required TResult Function(Faculty faculty) updateFaculty,
   }) {
-    return addFaculty(faculty);
+    return addFaculty(name);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? fetchFaculties,
-    TResult? Function(Faculty faculty)? addFaculty,
+    TResult? Function(String name)? addFaculty,
     TResult? Function(Faculty faculty)? updateFaculty,
   }) {
-    return addFaculty?.call(faculty);
+    return addFaculty?.call(name);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? fetchFaculties,
-    TResult Function(Faculty faculty)? addFaculty,
+    TResult Function(String name)? addFaculty,
     TResult Function(Faculty faculty)? updateFaculty,
     required TResult orElse(),
   }) {
     if (addFaculty != null) {
-      return addFaculty(faculty);
+      return addFaculty(name);
     }
     return orElse();
   }
@@ -341,9 +329,9 @@ class _$AddFacultyImpl implements AddFaculty {
 }
 
 abstract class AddFaculty implements FacultyEvent {
-  const factory AddFaculty(final Faculty faculty) = _$AddFacultyImpl;
+  const factory AddFaculty(final String name) = _$AddFacultyImpl;
 
-  Faculty get faculty;
+  String get name;
 
   /// Create a copy of FacultyEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -435,7 +423,7 @@ class _$UpdateFacultyImpl implements UpdateFaculty {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() fetchFaculties,
-    required TResult Function(Faculty faculty) addFaculty,
+    required TResult Function(String name) addFaculty,
     required TResult Function(Faculty faculty) updateFaculty,
   }) {
     return updateFaculty(faculty);
@@ -445,7 +433,7 @@ class _$UpdateFacultyImpl implements UpdateFaculty {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? fetchFaculties,
-    TResult? Function(Faculty faculty)? addFaculty,
+    TResult? Function(String name)? addFaculty,
     TResult? Function(Faculty faculty)? updateFaculty,
   }) {
     return updateFaculty?.call(faculty);
@@ -455,7 +443,7 @@ class _$UpdateFacultyImpl implements UpdateFaculty {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? fetchFaculties,
-    TResult Function(Faculty faculty)? addFaculty,
+    TResult Function(String name)? addFaculty,
     TResult Function(Faculty faculty)? updateFaculty,
     required TResult orElse(),
   }) {

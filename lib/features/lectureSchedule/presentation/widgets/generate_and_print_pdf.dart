@@ -1,4 +1,3 @@
-
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
@@ -6,10 +5,10 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
 import '../../../department/data/models/department_model.dart';
-import '../../data/models/lecture_schedule.dart';
+import '../../data/models/schedule_model.dart';
 
 Future<void> generateAndPrintPdf(
-  List<LectureSchedule> schedules,
+  List<Schedule> schedules,
   Department department,
 ) async {
   final pdf = pw.Document();
@@ -67,10 +66,7 @@ Future<void> generateAndPrintPdf(
 
             // Table Headers & Data with Arabic Fixes
             pw.TableHelper.fromTextArray(
-              data: schedules.map((schedule) => [
-
-                
-              ]).toList(),
+              data: schedules.map((schedule) => []).toList(),
               context: context,
               cellAlignment:
                   pw.Alignment.centerRight, // ✅ Right-align for Arabic

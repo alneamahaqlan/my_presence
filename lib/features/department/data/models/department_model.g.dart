@@ -11,15 +11,30 @@ _$DepartmentImpl _$$DepartmentImplFromJson(Map<String, dynamic> json) =>
       id: json['id'],
       name: json['name'] as String,
       lecturesSchedule:
-          (json['lecturesSchedule'] as List<dynamic>?)
-              ?.map((e) => LectureSchedule.fromJson(e as Map<String, dynamic>))
+          (json['schedules'] as List<dynamic>?)
+              ?.map((e) => Schedule.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
+      createdAt: const TimestampConverter().fromJson(json['createdAt']),
+      updatedAt: const TimestampConverter().fromJson(json['updatedAt']),
     );
 
 Map<String, dynamic> _$$DepartmentImplToJson(_$DepartmentImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'lecturesSchedule': instance.lecturesSchedule,
+      'schedules': instance.lecturesSchedule,
+      'createdAt': _$JsonConverterToJson<dynamic, Timestamp>(
+        instance.createdAt,
+        const TimestampConverter().toJson,
+      ),
+      'updatedAt': _$JsonConverterToJson<dynamic, Timestamp>(
+        instance.updatedAt,
+        const TimestampConverter().toJson,
+      ),
     };
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) => value == null ? null : toJson(value);

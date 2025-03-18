@@ -3,16 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_presence/features/lectureSchedule/presentation/bloc/lecture_schedule_bloc.dart';
 
-import '../../../../core/utils/enums/role.dart';
 import '../../../../core/utils/ui.dart';
 import '../../../../core/widgets/drop_down_widget.dart';
-import '../../../auth/data/models/user_model.dart';
 import '../../../department/data/models/department_model.dart';
-import '../../../members/presentation/bloc/member_bloc.dart';
-import '../../../subject/data/models/subject_model.dart';
-import '../../../subject/presentation/bloc/subject_bloc.dart';
-import '../../data/models/lecture.dart';
-import '../../data/models/lecture_schedule.dart';
+import '../../data/models/schedule_create_body.dart';
 
 class CreateLectureSchedulePage extends StatefulWidget {
   final Department department;
@@ -28,40 +22,32 @@ class _CreateLectureSchedulePageState extends State<CreateLectureSchedulePage> {
   final _formKey = GlobalKey<FormState>();
   final _startDateController = TextEditingController();
   final _endDateController = TextEditingController();
-  final _hallController = TextEditingController();
 
-  Subject? _selectedSubject;
-  UserModel? _selectedUser;
-  // Future<void> _selectStartDate(BuildContext context) async {
-  //   final DateTime? dateTime = await Ui.selectDateTime(
-  //     context,
-  //     firstDate: widget.department.termStart.toDate(),
-  //     lastDate: widget.department.termEnd.toDate(),
-  //   );
+  // Department? selectedDepartment;
 
-  //   if (dateTime != null) {
-  //     setState(() {
-  //       _startDateController.text = dateTime.toString();
-  //     });
-  //   }
-  // }
+  Future<void> _selectStartDate(BuildContext context) async {
+    final DateTime? date = await Ui.selectDate(context);
 
-  // Future<void> _selectEndDate(BuildContext context) async {
-  //   final DateTime? dateTime = await Ui.selectDateTime(
-  //     context,
-  //     firstDate:
-  //         _startDateController.text.isNotEmpty
-  //             ? DateTime.parse(_startDateController.text)
-  //             : widget.department.termStart.toDate(),
-  //     lastDate: widget.department.termEnd.toDate(),
-  //   );
+    if (date != null) {
+      setState(() {
+        _startDateController.text = _formatDate(date); // Format the date
+      });
+    }
+  }
 
-  //   if (dateTime != null) {
-  //     setState(() {
-  //       _endDateController.text = dateTime.toString();
-  //     });
-  //   }
-  // }
+  Future<void> _selectEndDate(BuildContext context) async {
+    final DateTime? date = await Ui.selectDate(context);
+
+    if (date != null) {
+      setState(() {
+        _endDateController.text = _formatDate(date); // Format the date
+      });
+    }
+  }
+
+  String _formatDate(DateTime date) {
+    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+  }
 
   // bool _isScheduleOverlapping(
   //   List<LectureSchedule> schedules,
@@ -90,6 +76,22 @@ class _CreateLectureSchedulePageState extends State<CreateLectureSchedulePage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
+                //   BlocBuilder<DepartmentBloc, DepartmentState>(
+                //   builder: (context, state) {
+                //     return _buildDropdown<Department>(
+                //       context,
+                //       hint: 'department',
+                //       items: state.departments,
+                //       selectedValue: selectedDepartment,
+                //       onChanged: (department) {
+                //         setState(() {
+                //           selectedDepartment = department;
+                //         });
+                //       },
+                //       displayTex: (faculty) => faculty.name,
+                //     );
+                //   },
+                // ),
                 // // Subject Dropdown
                 // BlocBuilder<SubjectBloc, SubjectState>(
                 //   builder: (context, subjectState) {
@@ -101,7 +103,7 @@ class _CreateLectureSchedulePageState extends State<CreateLectureSchedulePage> {
                 //         // Get all subjects for the department
                 //         final allSubjects =
                 //             subjectState.subjects
-                               
+
                 //                 .toList();
 
                 //         // Get subjects already scheduled on the selected day
@@ -191,128 +193,85 @@ class _CreateLectureSchedulePageState extends State<CreateLectureSchedulePage> {
                 // ),
                 // SizedBox(height: 16),
 
-                // // Start Date and Time Field
-                // TextFormField(
-                //   controller: _startDateController,
-                //   decoration: InputDecoration(
-                //     labelText: 'Start Date and Time',
-                //     suffixIcon: IconButton(
-                //       icon: Icon(Icons.calendar_today),
-                //       onPressed: () => _selectStartDate(context),
-                //     ),
-                //   ),
-                //   readOnly: true, // Prevent manual editing
-                //   validator: (value) {
-                //     if (value == null || value.isEmpty) {
-                //       return 'Please select a start date and time';
-                //     }
-                //     return null;
-                //   },
-                // ),
-                // SizedBox(height: 16),
+                // Start Date and Time Field
+                TextFormField(
+                  controller: _startDateController,
+                  decoration: InputDecoration(
+                    labelText: 'Start Date and Time',
+                    suffixIcon: IconButton(
+                      icon: Icon(Icons.calendar_today),
+                      onPressed: () => _selectStartDate(context),
+                    ),
+                  ),
+                  readOnly: true, // Prevent manual editing
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please select a start date and time';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 16),
 
-                // // End Date and Time Field
-                // TextFormField(
-                //   controller: _endDateController,
-                //   decoration: InputDecoration(
-                //     labelText: 'End Date and Time',
-                //     suffixIcon: IconButton(
-                //       icon: Icon(Icons.calendar_today),
-                //       onPressed: () {}
-                //       //  _selectEndDate(context),
-                //     ),
-                //   ),
-                //   readOnly: true, // Prevent manual editing
-                //   validator: (value) {
-                //     if (value == null || value.isEmpty) {
-                //       return 'Please select an end date and time';
-                //     }
-                //     return null;
-                //   },
-                // ),
-                // SizedBox(height: 20),
+                // End Date and Time Field
+                TextFormField(
+                  controller: _endDateController,
+                  decoration: InputDecoration(
+                    labelText: 'End Date and Time',
+                    suffixIcon: IconButton(
+                      icon: Icon(Icons.calendar_today),
+                      onPressed: () => _selectEndDate(context),
+                    ),
+                  ),
+                  readOnly: true, // Prevent manual editing
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please select an end date and time';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 20),
 
-                // // Create Button
-                // ElevatedButton(
-                //   onPressed: () {
-                //     if (_formKey.currentState!.validate()) {
-                //       final newStart = DateTime.parse(
-                //         _startDateController.text,
-                //       );
-                //       final newEnd = DateTime.parse(_endDateController.text);
+                // Create Button
+                ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      final newStart = DateTime.parse(
+                        _startDateController.text,
+                      );
+                      final newEnd = DateTime.parse(_endDateController.text);
 
-                //       // Prevent adding schedules on Fridays
-                //       if (newStart.weekday == DateTime.friday) {
-                //         ScaffoldMessenger.of(context).showSnackBar(
-                //           SnackBar(
-                //             content: Text(
-                //               'Schedules cannot be added on Fridays.',
-                //             ),
-                //           ),
-                //         );
-                //         return;
-                //       }
+                      // Prevent adding schedules on Fridays
+                      if (newStart.weekday == DateTime.friday) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Schedules cannot be added on Fridays.',
+                            ),
+                          ),
+                        );
+                        return;
+                      }
 
-                //       // Fetch existing schedules for the selected user on the same day
-                //       final state = context.read<LectureScheduleBloc>().state;
-                //       if (state is LectureScheduleLoaded) {
-                //         final userSchedules =
-                //             state.schedules
-                //                 .where(
-                //                   (schedule) =>
-                //                       schedule.user.id == _selectedUser?.id &&
-                //                       schedule.date.toDate().day ==
-                //                           newStart.day &&
-                //                       schedule.date.toDate().month ==
-                //                           newStart.month &&
-                //                       schedule.date.toDate().year ==
-                //                           newStart.year,
-                //                 )
-                //                 .toList();
+                      // If no overlapping schedules, proceed to create the new schedule
+                      final schedule = ScheduleCreateBody(
+                        termStart: Timestamp.fromDate(newStart),
+                        termEnd: Timestamp.fromDate(newEnd),
+                      );
 
-                //         // Check for overlapping schedules
-                //         if (_isScheduleOverlapping(
-                //           userSchedules,
-                //           newStart,
-                //           newEnd,
-                //         )) {
-                //           ScaffoldMessenger.of(context).showSnackBar(
-                //             SnackBar(
-                //               content: Text(
-                //                 'The selected time overlaps with an existing schedule for this user.',
-                //               ),
-                //             ),
-                //           );
-                //           return; // Prevent creating the schedule
-                //         }
-                //       }
+                      context.read<LectureScheduleBloc>().add(
+                        AddLectureSchedule(
+                          departmentId: widget.department.id,
+                          scheduleCreateBody: schedule,
+                        ),
+                      );
 
-                //       // If no overlapping schedules, proceed to create the new schedule
-                //       final schedule = LectureSchedule(
-                //         subject: _selectedSubject!,
-                //         user: _selectedUser!,
-                //         date: Timestamp.fromDate(newStart),
-                //         endDate: Timestamp.fromDate(newEnd),
-                //         hall: _hallController.text,
-                //         lectures: getLectures(
-                //           Timestamp.fromDate(
-                //             widget.department.termStart.toDate(),
-                //           ),
-                //           Timestamp.fromDate(
-                //             widget.department.termEnd.toDate(),
-                //           ),
-                //         ),
-                //       );
-
-                //       context.read<LectureScheduleBloc>().add(
-                //         AddLectureSchedule(schedule),
-                //       );
-
-                //       Navigator.pop(context);
-                //     }
-                //   },
-                //   child: Text('Create'),
-                // ),
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: Text('Create'),
+                ),
               ],
             ),
           ),
@@ -348,5 +307,23 @@ class _CreateLectureSchedulePageState extends State<CreateLectureSchedulePage> {
     }
 
     return weeklyDates;
+  }
+
+  Widget _buildDropdown<T>(
+    BuildContext context, {
+    required String hint,
+    required List<T> items,
+    required T? selectedValue,
+    required void Function(T?) onChanged,
+    String Function(T)? displayTex,
+  }) {
+    return DropDownWidget<T>(
+      displayText: displayTex,
+      hint: hint,
+      items: items,
+      selectedValue: selectedValue,
+      onChanged: onChanged,
+      validator: (value) => value == null ? 'Please select a $hint' : null,
+    );
   }
 }

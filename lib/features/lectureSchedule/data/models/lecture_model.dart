@@ -2,13 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../core/converters/timestamp_converter.dart';
-import '../../../attendance/data/models/attendance_model.dart';
 import '../../../auth/data/models/user_model.dart';
 import '../../../subject/data/models/subject_model.dart';
 
 
-part 'lecture.freezed.dart';
-part 'lecture.g.dart';
+part 'lecture_model.freezed.dart';
+part 'lecture_model.g.dart';
 
 @freezed
 class Lecture with _$Lecture {

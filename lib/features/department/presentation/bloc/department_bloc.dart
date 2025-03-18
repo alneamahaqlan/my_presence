@@ -3,12 +3,14 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../core/models/api_result.dart';
 import '../../../../core/models/status.dart';
+import '../../data/models/department_create_body.dart';
 import '../../data/models/department_model.dart';
 import '../../data/repositories/department_repository.dart';
 
+part 'department_bloc.freezed.dart';
 part 'department_event.dart';
 part 'department_state.dart';
-part 'department_bloc.freezed.dart';
+
 class DepartmentBloc extends Bloc<DepartmentEvent, DepartmentState> {
   final DepartmentRepository repository;
 
@@ -25,29 +27,20 @@ class DepartmentBloc extends Bloc<DepartmentEvent, DepartmentState> {
     Emitter<DepartmentState> emit,
   ) async {
     emit(state.copyWith(status: const Status.loading()));
-    final result = repository.getDepartments();
-    await emit.onEach<ApiResult<List<Department>>>(
-      result,
-      onData: (result) {
-        result.when(
-          success: (departments) {
-            emit(state.copyWith(
-              status: const Status.success(),
-              departments: departments,
-            ));
-          },
-          failure: (error) {
-            emit(state.copyWith(
-              status: const Status.failed(),
-              message: error.toString(),
-            ));
-          },
-        );
+
+    final result = await repository.getAllDepartments();
+
+    result.when(
+      success: (departments) {
+        emit(state.copyWith(
+          status: const Status.success(),
+          departments: departments,
+        ));
       },
-      onError: (error, stackTrace) {
+      failure: (error) {
         emit(state.copyWith(
           status: const Status.failed(),
-          message: 'Failed to fetch departments. Please try again.',
+          message: error.toString(),
         ));
       },
     );
@@ -57,7 +50,8 @@ class DepartmentBloc extends Bloc<DepartmentEvent, DepartmentState> {
     AddDepartment event,
     Emitter<DepartmentState> emit,
   ) async {
-    final result = await repository.createDepartment(facultyId: event.facultyId, department: event.department);
+    // repository.test();
+    final result = await repository.createDepartment(facultyId: event.facultyId, departmentCreateBody: event.departmentCreateBody);
     result.when(
       success: (id) {
         // Refresh the list of departments
@@ -83,10 +77,12 @@ class DepartmentBloc extends Bloc<DepartmentEvent, DepartmentState> {
         add(const FetchDepartments());
       },
       failure: (error) {
-        emit(state.copyWith(
-          status: const Status.failed(),
-          message: error.toString(),
-        ));
+        emit(
+          state.copyWith(
+            status: const Status.failed(),
+            message: error.toString(),
+          ),
+        );
       },
     );
   }

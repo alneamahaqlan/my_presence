@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 
-import '../../data/models/lecture_schedule.dart';
+import '../../data/models/schedule_model.dart';
 
 class LectureScheduleDetailPage extends StatelessWidget {
-  final LectureSchedule schedule;
+  final Schedule schedule;
 
-  LectureScheduleDetailPage({required this.schedule});
+  const LectureScheduleDetailPage({super.key, required this.schedule});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Lecture Schedule Details'),
-      ),
+      appBar: AppBar(title: Text('Lecture Schedule Details')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

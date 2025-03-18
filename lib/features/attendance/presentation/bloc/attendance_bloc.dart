@@ -1,14 +1,12 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../data/models/attendance_model.dart';
 
+part 'attendance_bloc.freezed.dart';
 part 'attendance_event.dart';
 part 'attendance_state.dart';
-part 'attendance_bloc.freezed.dart';
-
 
 class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -28,10 +26,15 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   Future<void> _fetchAllAttendance(Emitter<AttendanceState> emit) async {
     emit(const AttendanceState.loading());
     try {
-      final QuerySnapshot snapshot = await _firestore.collection('attendance').get();
-      final List<AttendanceModel> attendanceList = snapshot.docs
-          .map((doc) => AttendanceModel.fromJson(doc.data() as Map<String, dynamic>))
-          .toList();
+      final QuerySnapshot snapshot =
+          await _firestore.collection('attendance').get();
+      final List<Attendance> attendanceList =
+          snapshot.docs
+              .map(
+                (doc) =>
+                    Attendance.fromJson(doc.data() as Map<String, dynamic>),
+              )
+              .toList();
       emit(AttendanceState.loaded(attendanceList));
     } catch (e) {
       emit(AttendanceState.error('Failed to fetch attendance records: $e'));
@@ -39,7 +42,10 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   }
 
   // Add a new attendance record
-  Future<void> _addAttendance(AddAttendance event, Emitter<AttendanceState> emit) async {
+  Future<void> _addAttendance(
+    AddAttendance event,
+    Emitter<AttendanceState> emit,
+  ) async {
     emit(const AttendanceState.loading());
     try {
       await _firestore.collection('attendance').add(event.attendance.toJson());
@@ -50,7 +56,10 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   }
 
   // Update an existing attendance record
-  Future<void> _updateAttendance(UpdateAttendance event, Emitter<AttendanceState> emit) async {
+  Future<void> _updateAttendance(
+    UpdateAttendance event,
+    Emitter<AttendanceState> emit,
+  ) async {
     emit(const AttendanceState.loading());
     try {
       await _firestore
@@ -64,7 +73,10 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   }
 
   // Delete an attendance record
-  Future<void> _deleteAttendance(DeleteAttendance event, Emitter<AttendanceState> emit) async {
+  Future<void> _deleteAttendance(
+    DeleteAttendance event,
+    Emitter<AttendanceState> emit,
+  ) async {
     emit(const AttendanceState.loading());
     try {
       await _firestore.collection('attendance').doc(event.id).delete();

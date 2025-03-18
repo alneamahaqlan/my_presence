@@ -45,8 +45,8 @@ class _AddFacultyPageState extends State<AddFacultyPage> {
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     setState(() => _isSubmitting = true);
-                    final newFaculty = Faculty(name: _nameController.text);
-                    context.read<FacultyBloc>().add(AddFaculty(newFaculty));
+               
+                    context.read<FacultyBloc>().add(AddFaculty( _nameController.text));
                     setState(() => _isSubmitting = false);
                     Navigator.pop(context);
                   }

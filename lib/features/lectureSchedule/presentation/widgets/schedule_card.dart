@@ -9,8 +9,8 @@ import '../../../../dependency_injection.dart';
 import '../../../attendance/data/models/attendance_model.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../department/data/models/department_model.dart';
-import '../../data/models/lecture.dart';
-import '../../data/models/lecture_schedule.dart';
+import '../../data/models/lecture_model.dart';
+import '../../data/models/schedule_model.dart';
 import '../bloc/lecture_schedule_bloc.dart';
 
 class ScheduleCard extends StatefulWidget {
@@ -20,7 +20,7 @@ class ScheduleCard extends StatefulWidget {
     required this.department,
   });
 
-  final LectureSchedule schedule;
+  final Schedule schedule;
   final Department department;
 
   @override
@@ -28,7 +28,7 @@ class ScheduleCard extends StatefulWidget {
 }
 
 class _ScheduleCardState extends State<ScheduleCard> {
-  bool _isExpanded = false;
+  final bool _isExpanded = false;
   AttendanceStatus _selectedStatus = AttendanceStatus.absent;
   DateTime? _arrivalDate; // Moved to widget state
 
@@ -165,7 +165,7 @@ class _ScheduleCardState extends State<ScheduleCard> {
                           return;
                         }
 
-                        final attendance = AttendanceModel(
+                        final attendance = Attendance(
                           byUser: getIt<AuthBloc>().state.user!,
                           status: _selectedStatus.name,
                           arrivalDate: Timestamp.fromDate(_arrivalDate!),

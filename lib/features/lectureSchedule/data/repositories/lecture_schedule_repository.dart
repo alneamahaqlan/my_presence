@@ -1,58 +1,98 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../../../../core/error/api_error_handler.dart';
 import '../../../../core/models/api_result.dart';
 import '../../../../core/services/firestore_service.dart';
 import '../../../attendance/data/models/attendance_model.dart';
-import '../models/lecture.dart';
-import '../models/lecture_schedule.dart';
+import '../../../department/data/models/department_model.dart';
+import '../models/lecture_model.dart';
+import '../models/schedule_create_body.dart';
+import '../models/schedule_model.dart';
 
 class LectureScheduleRepository {
   final FirestoreService _firestoreService;
 
   LectureScheduleRepository(this._firestoreService);
-  Future<ApiResult<List<LectureSchedule>>> fetchLectureSchedules() async {
+  Future<ApiResult<List<Schedule>>> fetchLectureSchedules({
+    required String departmentId,
+  }) async {
     try {
       final snapshot =
-          await _firestoreService
-              .getWithSubDocuments(
-                mainCollection: 'lecture_schedules',
-                subCollection: 'lectures',
-              )
-              .first;
+          await _firestoreService.firestore
+              .collection('departments')
+              .doc(departmentId)
+              .collection('schedules')
+              .get();
+      final schedules =  snapshot.docs.map((doc) {
+              final schedule = Schedule.fromJson(
+                doc.data()
+              );
+              return schedule.copyWith(id: doc.id);
+            }).toList();
+      
 
-      final schedules =
-          snapshot.map((doc) {
-            // Extract main document data with ID
-            final Map<String, dynamic> mainData = {
-              'id': doc['mainDocument']['id'], // Ensure main doc ID is included
-              ...doc['mainDocument'],
-            };
+      // final snapshot =
+      //     await _firestoreService
+      //         .getWithSubDocuments(
+      //           mainCollection: 'lecture_schedules',
+      //           subCollection: 'lectures',
+      //         )
+      //         .first;
 
-            // Extract and transform subcollection data with IDs
-            final List<Lecture> lectures =
-                (doc['subCollection'] as List)
-                    .map(
-                      (subDoc) => Lecture.fromJson({
-                        'id': subDoc['id'], // Ensure subdoc ID is included
-                        ...subDoc,
-                      }),
-                    )
-                    .toList();
+      // final schedules =
+      //     snapshot.map((doc) {
+      //       // Extract main document data with ID
+      //       final Map<String, dynamic> mainData = {
+      //         'id': doc['mainDocument']['id'], // Ensure main doc ID is included
+      //         ...doc['mainDocument'],
+      //       };
 
-            // Convert to LectureSchedule model
-            return LectureSchedule.fromJson(
-              mainData,
-            ).copyWith(lectures: lectures);
-          }).toList();
+      //       // Extract and transform subcollection data with IDs
+      //       final List<Lecture> lectures =
+      //           (doc['subCollection'] as List)
+      //               .map(
+      //                 (subDoc) => Lecture.fromJson({
+      //                   'id': subDoc['id'], // Ensure subdoc ID is included
+      //                   ...subDoc,
+      //                 }),
+      //               )
+      //               .toList();
+
+      //       // Convert to LectureSchedule model
+      //       return Schedule.fromJson(mainData).copyWith(lectures: lectures);
+      //     }).toList();
 
       return ApiResult.success(schedules);
     } catch (error) {
       return ApiResult.failure(ApiErrorHandler.handle(error));
     }
   }
+  //
+
+  Future<ApiResult<String>> createSchedule({
+    required String departmentId,
+    required ScheduleCreateBody scheduleCreateBody,
+  }) async {
+    try {
+      final subCollectionData = {
+        ...scheduleCreateBody.toJson(),
+        'createdAt': Timestamp.now(),
+        'updatedAt': Timestamp.now(),
+      };
+      final docRef = await _firestoreService.firestore
+          .collection('departments')
+          .doc(departmentId)
+          .collection('schedules')
+          .add(subCollectionData);
+      return ApiResult.success(docRef.id);
+    } catch (e) {
+      return ApiResult.failure(ApiErrorHandler.handle(e));
+    }
+  }
 
   /// Add a new lecture schedule
   Future<ApiResult<void>> addLectureSchedule({
-    required LectureSchedule schedule,
+    required Schedule schedule,
   }) async {
     try {
       // final member = schedule.user;
@@ -60,12 +100,12 @@ class LectureScheduleRepository {
         mainCollection: 'lecture_schedules',
         mainData: {
           'id': schedule.id,
-        'termStart': schedule.termStart,
-        'termEnd': schedule.termEnd,
+          'termStart': schedule.termStart,
+          'termEnd': schedule.termEnd,
           // 'subject': {
           //   'id': schedule.subject.id,
           //   'name': schedule.subject.name,
-            
+
           //   'code': schedule.subject.code,
           //   'number': schedule.subject.number,
           // },
@@ -101,7 +141,7 @@ class LectureScheduleRepository {
   /// Update an existing lecture schedule
   Future<ApiResult<void>> updateLectureSchedule(
     String id,
-    LectureSchedule schedule,
+    Schedule schedule,
   ) async {
     try {
       await _firestoreService.updateDocument(
@@ -131,7 +171,7 @@ class LectureScheduleRepository {
   Future<ApiResult<void>> updateAttendance({
     required String lectureId,
     required String scheduleId,
-    required AttendanceModel attendance,
+    required Attendance attendance,
   }) async {
     try {
       await _firestoreService.updateSubDocument(

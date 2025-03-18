@@ -1,29 +1,21 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'lecture_schedule.dart';
+part of 'schedule_create_body.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$LectureScheduleImpl _$$LectureScheduleImplFromJson(
+_$ScheduleCreateBodyImpl _$$ScheduleCreateBodyImplFromJson(
   Map<String, dynamic> json,
-) => _$LectureScheduleImpl(
-  id: json['id'],
+) => _$ScheduleCreateBodyImpl(
   termStart: const TimestampConverter().fromJson(json['termStart']),
   termEnd: const TimestampConverter().fromJson(json['termEnd']),
-  lectures:
-      (json['lectures'] as List<dynamic>?)
-          ?.map((e) => Lecture.fromJson(e as Map<String, dynamic>))
-          .toList() ??
-      const [],
 );
 
-Map<String, dynamic> _$$LectureScheduleImplToJson(
-  _$LectureScheduleImpl instance,
+Map<String, dynamic> _$$ScheduleCreateBodyImplToJson(
+  _$ScheduleCreateBodyImpl instance,
 ) => <String, dynamic>{
-  'id': instance.id,
   'termStart': const TimestampConverter().toJson(instance.termStart),
   'termEnd': const TimestampConverter().toJson(instance.termEnd),
-  'lectures': instance.lectures,
 };

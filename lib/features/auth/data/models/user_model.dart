@@ -31,15 +31,11 @@ class UserModel with _$UserModel {
     @JsonKey(name: 'notifications')
     @Default([])
     List<NotificationModel> notifications,
-    @JsonKey(name: 'attendances')
-    @Default([])
-    List<AttendanceModel> attendances,
+    @JsonKey(name: 'attendances') @Default([]) List<Attendance> attendances,
     @TimestampConverter() @JsonKey(name: 'createdAt') Timestamp? createdAt,
     @TimestampConverter() @JsonKey(name: 'updatedAt') Timestamp? updatedAt,
   }) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
-
-      
 }

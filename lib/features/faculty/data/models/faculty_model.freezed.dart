@@ -26,6 +26,12 @@ mixin _$Faculty {
   @JsonKey(name: 'name')
   String get name => throw _privateConstructorUsedError;
   List<Department> get departments => throw _privateConstructorUsedError;
+  @TimestampConverter()
+  @JsonKey(name: 'createdAt')
+  Timestamp? get createdAt => throw _privateConstructorUsedError;
+  @TimestampConverter()
+  @JsonKey(name: 'updatedAt')
+  Timestamp? get updatedAt => throw _privateConstructorUsedError;
 
   /// Serializes this Faculty to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -45,6 +51,8 @@ abstract class $FacultyCopyWith<$Res> {
     @JsonKey(name: 'id') dynamic id,
     @JsonKey(name: 'name') String name,
     List<Department> departments,
+    @TimestampConverter() @JsonKey(name: 'createdAt') Timestamp? createdAt,
+    @TimestampConverter() @JsonKey(name: 'updatedAt') Timestamp? updatedAt,
   });
 }
 
@@ -66,6 +74,8 @@ class _$FacultyCopyWithImpl<$Res, $Val extends Faculty>
     Object? id = freezed,
     Object? name = null,
     Object? departments = null,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -84,6 +94,16 @@ class _$FacultyCopyWithImpl<$Res, $Val extends Faculty>
                     ? _value.departments
                     : departments // ignore: cast_nullable_to_non_nullable
                         as List<Department>,
+            createdAt:
+                freezed == createdAt
+                    ? _value.createdAt
+                    : createdAt // ignore: cast_nullable_to_non_nullable
+                        as Timestamp?,
+            updatedAt:
+                freezed == updatedAt
+                    ? _value.updatedAt
+                    : updatedAt // ignore: cast_nullable_to_non_nullable
+                        as Timestamp?,
           )
           as $Val,
     );
@@ -102,6 +122,8 @@ abstract class _$$FacultyImplCopyWith<$Res> implements $FacultyCopyWith<$Res> {
     @JsonKey(name: 'id') dynamic id,
     @JsonKey(name: 'name') String name,
     List<Department> departments,
+    @TimestampConverter() @JsonKey(name: 'createdAt') Timestamp? createdAt,
+    @TimestampConverter() @JsonKey(name: 'updatedAt') Timestamp? updatedAt,
   });
 }
 
@@ -122,6 +144,8 @@ class __$$FacultyImplCopyWithImpl<$Res>
     Object? id = freezed,
     Object? name = null,
     Object? departments = null,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
   }) {
     return _then(
       _$FacultyImpl(
@@ -140,6 +164,16 @@ class __$$FacultyImplCopyWithImpl<$Res>
                 ? _value._departments
                 : departments // ignore: cast_nullable_to_non_nullable
                     as List<Department>,
+        createdAt:
+            freezed == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                    as Timestamp?,
+        updatedAt:
+            freezed == updatedAt
+                ? _value.updatedAt
+                : updatedAt // ignore: cast_nullable_to_non_nullable
+                    as Timestamp?,
       ),
     );
   }
@@ -152,6 +186,8 @@ class _$FacultyImpl implements _Faculty {
     @JsonKey(name: 'id') this.id,
     @JsonKey(name: 'name') required this.name,
     final List<Department> departments = const [],
+    @TimestampConverter() @JsonKey(name: 'createdAt') this.createdAt,
+    @TimestampConverter() @JsonKey(name: 'updatedAt') this.updatedAt,
   }) : _departments = departments;
 
   factory _$FacultyImpl.fromJson(Map<String, dynamic> json) =>
@@ -173,8 +209,17 @@ class _$FacultyImpl implements _Faculty {
   }
 
   @override
+  @TimestampConverter()
+  @JsonKey(name: 'createdAt')
+  final Timestamp? createdAt;
+  @override
+  @TimestampConverter()
+  @JsonKey(name: 'updatedAt')
+  final Timestamp? updatedAt;
+
+  @override
   String toString() {
-    return 'Faculty(id: $id, name: $name, departments: $departments)';
+    return 'Faculty(id: $id, name: $name, departments: $departments, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -187,7 +232,11 @@ class _$FacultyImpl implements _Faculty {
             const DeepCollectionEquality().equals(
               other._departments,
               _departments,
-            ));
+            ) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -197,6 +246,8 @@ class _$FacultyImpl implements _Faculty {
     const DeepCollectionEquality().hash(id),
     name,
     const DeepCollectionEquality().hash(_departments),
+    createdAt,
+    updatedAt,
   );
 
   /// Create a copy of Faculty
@@ -218,6 +269,12 @@ abstract class _Faculty implements Faculty {
     @JsonKey(name: 'id') final dynamic id,
     @JsonKey(name: 'name') required final String name,
     final List<Department> departments,
+    @TimestampConverter()
+    @JsonKey(name: 'createdAt')
+    final Timestamp? createdAt,
+    @TimestampConverter()
+    @JsonKey(name: 'updatedAt')
+    final Timestamp? updatedAt,
   }) = _$FacultyImpl;
 
   factory _Faculty.fromJson(Map<String, dynamic> json) = _$FacultyImpl.fromJson;
@@ -230,6 +287,14 @@ abstract class _Faculty implements Faculty {
   String get name;
   @override
   List<Department> get departments;
+  @override
+  @TimestampConverter()
+  @JsonKey(name: 'createdAt')
+  Timestamp? get createdAt;
+  @override
+  @TimestampConverter()
+  @JsonKey(name: 'updatedAt')
+  Timestamp? get updatedAt;
 
   /// Create a copy of Faculty
   /// with the given fields replaced by the non-null parameter values.

@@ -41,7 +41,7 @@ _$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
           const [],
       attendances:
           (json['attendances'] as List<dynamic>?)
-              ?.map((e) => AttendanceModel.fromJson(e as Map<String, dynamic>))
+              ?.map((e) => Attendance.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
       createdAt: const TimestampConverter().fromJson(json['createdAt']),
