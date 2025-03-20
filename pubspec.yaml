@@ -46,6 +46,7 @@ dependencies:
   basic_utils: ^5.8.2
   googleapis_auth: ^1.6.0
   googleapis: ^14.0.0
+  timezone: ^0.10.0
 
 dev_dependencies:
   flutter_test:

@@ -25,6 +25,8 @@ mixin _$Attendance {
   dynamic get id => throw _privateConstructorUsedError;
   @JsonKey(name: 'byUser')
   UserModel get byUser => throw _privateConstructorUsedError;
+  @JsonKey(name: 'lecture')
+  Lecture get lecture => throw _privateConstructorUsedError;
   @TimestampConverter()
   @JsonKey(name: 'arrivalDate')
   Timestamp? get arrivalDate => throw _privateConstructorUsedError;
@@ -51,11 +53,13 @@ abstract class $AttendanceCopyWith<$Res> {
   $Res call({
     @JsonKey(name: 'id') dynamic id,
     @JsonKey(name: 'byUser') UserModel byUser,
+    @JsonKey(name: 'lecture') Lecture lecture,
     @TimestampConverter() @JsonKey(name: 'arrivalDate') Timestamp? arrivalDate,
     @JsonKey(name: 'status') String status,
   });
 
   $UserModelCopyWith<$Res> get byUser;
+  $LectureCopyWith<$Res> get lecture;
 }
 
 /// @nodoc
@@ -75,6 +79,7 @@ class _$AttendanceCopyWithImpl<$Res, $Val extends Attendance>
   $Res call({
     Object? id = freezed,
     Object? byUser = null,
+    Object? lecture = null,
     Object? arrivalDate = freezed,
     Object? status = null,
   }) {
@@ -90,6 +95,11 @@ class _$AttendanceCopyWithImpl<$Res, $Val extends Attendance>
                     ? _value.byUser
                     : byUser // ignore: cast_nullable_to_non_nullable
                         as UserModel,
+            lecture:
+                null == lecture
+                    ? _value.lecture
+                    : lecture // ignore: cast_nullable_to_non_nullable
+                        as Lecture,
             arrivalDate:
                 freezed == arrivalDate
                     ? _value.arrivalDate
@@ -114,6 +124,16 @@ class _$AttendanceCopyWithImpl<$Res, $Val extends Attendance>
       return _then(_value.copyWith(byUser: value) as $Val);
     });
   }
+
+  /// Create a copy of Attendance
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $LectureCopyWith<$Res> get lecture {
+    return $LectureCopyWith<$Res>(_value.lecture, (value) {
+      return _then(_value.copyWith(lecture: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -128,12 +148,15 @@ abstract class _$$AttendanceImplCopyWith<$Res>
   $Res call({
     @JsonKey(name: 'id') dynamic id,
     @JsonKey(name: 'byUser') UserModel byUser,
+    @JsonKey(name: 'lecture') Lecture lecture,
     @TimestampConverter() @JsonKey(name: 'arrivalDate') Timestamp? arrivalDate,
     @JsonKey(name: 'status') String status,
   });
 
   @override
   $UserModelCopyWith<$Res> get byUser;
+  @override
+  $LectureCopyWith<$Res> get lecture;
 }
 
 /// @nodoc
@@ -152,6 +175,7 @@ class __$$AttendanceImplCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? byUser = null,
+    Object? lecture = null,
     Object? arrivalDate = freezed,
     Object? status = null,
   }) {
@@ -167,6 +191,11 @@ class __$$AttendanceImplCopyWithImpl<$Res>
                 ? _value.byUser
                 : byUser // ignore: cast_nullable_to_non_nullable
                     as UserModel,
+        lecture:
+            null == lecture
+                ? _value.lecture
+                : lecture // ignore: cast_nullable_to_non_nullable
+                    as Lecture,
         arrivalDate:
             freezed == arrivalDate
                 ? _value.arrivalDate
@@ -188,6 +217,7 @@ class _$AttendanceImpl implements _Attendance {
   _$AttendanceImpl({
     @JsonKey(name: 'id') this.id,
     @JsonKey(name: 'byUser') required this.byUser,
+    @JsonKey(name: 'lecture') required this.lecture,
     @TimestampConverter() @JsonKey(name: 'arrivalDate') this.arrivalDate,
     @JsonKey(name: 'status') required this.status,
   });
@@ -202,6 +232,9 @@ class _$AttendanceImpl implements _Attendance {
   @JsonKey(name: 'byUser')
   final UserModel byUser;
   @override
+  @JsonKey(name: 'lecture')
+  final Lecture lecture;
+  @override
   @TimestampConverter()
   @JsonKey(name: 'arrivalDate')
   final Timestamp? arrivalDate;
@@ -211,7 +244,7 @@ class _$AttendanceImpl implements _Attendance {
 
   @override
   String toString() {
-    return 'Attendance(id: $id, byUser: $byUser, arrivalDate: $arrivalDate, status: $status)';
+    return 'Attendance(id: $id, byUser: $byUser, lecture: $lecture, arrivalDate: $arrivalDate, status: $status)';
   }
 
   @override
@@ -221,6 +254,7 @@ class _$AttendanceImpl implements _Attendance {
             other is _$AttendanceImpl &&
             const DeepCollectionEquality().equals(other.id, id) &&
             (identical(other.byUser, byUser) || other.byUser == byUser) &&
+            (identical(other.lecture, lecture) || other.lecture == lecture) &&
             (identical(other.arrivalDate, arrivalDate) ||
                 other.arrivalDate == arrivalDate) &&
             (identical(other.status, status) || other.status == status));
@@ -232,6 +266,7 @@ class _$AttendanceImpl implements _Attendance {
     runtimeType,
     const DeepCollectionEquality().hash(id),
     byUser,
+    lecture,
     arrivalDate,
     status,
   );
@@ -254,6 +289,7 @@ abstract class _Attendance implements Attendance {
   factory _Attendance({
     @JsonKey(name: 'id') final dynamic id,
     @JsonKey(name: 'byUser') required final UserModel byUser,
+    @JsonKey(name: 'lecture') required final Lecture lecture,
     @TimestampConverter()
     @JsonKey(name: 'arrivalDate')
     final Timestamp? arrivalDate,
@@ -269,6 +305,9 @@ abstract class _Attendance implements Attendance {
   @override
   @JsonKey(name: 'byUser')
   UserModel get byUser;
+  @override
+  @JsonKey(name: 'lecture')
+  Lecture get lecture;
   @override
   @TimestampConverter()
   @JsonKey(name: 'arrivalDate')

@@ -41,6 +41,8 @@ mixin _$UserModel {
   List<Evaluation> get evaluations => throw _privateConstructorUsedError;
   @JsonKey(name: 'researches')
   List<Research> get researches => throw _privateConstructorUsedError;
+  @JsonKey(name: 'lectures')
+  List<Lecture> get lectures => throw _privateConstructorUsedError;
   @JsonKey(name: 'notifications')
   List<NotificationModel> get notifications =>
       throw _privateConstructorUsedError;
@@ -81,6 +83,7 @@ abstract class $UserModelCopyWith<$Res> {
     @JsonKey(name: 'subjects') List<Subject> subjects,
     @JsonKey(name: 'evaluations') List<Evaluation> evaluations,
     @JsonKey(name: 'researches') List<Research> researches,
+    @JsonKey(name: 'lectures') List<Lecture> lectures,
     @JsonKey(name: 'notifications') List<NotificationModel> notifications,
     @JsonKey(name: 'attendances') List<Attendance> attendances,
     @TimestampConverter() @JsonKey(name: 'createdAt') Timestamp? createdAt,
@@ -115,6 +118,7 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? subjects = null,
     Object? evaluations = null,
     Object? researches = null,
+    Object? lectures = null,
     Object? notifications = null,
     Object? attendances = null,
     Object? createdAt = freezed,
@@ -182,6 +186,11 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
                     ? _value.researches
                     : researches // ignore: cast_nullable_to_non_nullable
                         as List<Research>,
+            lectures:
+                null == lectures
+                    ? _value.lectures
+                    : lectures // ignore: cast_nullable_to_non_nullable
+                        as List<Lecture>,
             notifications:
                 null == notifications
                     ? _value.notifications
@@ -230,6 +239,7 @@ abstract class _$$UserModelImplCopyWith<$Res>
     @JsonKey(name: 'subjects') List<Subject> subjects,
     @JsonKey(name: 'evaluations') List<Evaluation> evaluations,
     @JsonKey(name: 'researches') List<Research> researches,
+    @JsonKey(name: 'lectures') List<Lecture> lectures,
     @JsonKey(name: 'notifications') List<NotificationModel> notifications,
     @JsonKey(name: 'attendances') List<Attendance> attendances,
     @TimestampConverter() @JsonKey(name: 'createdAt') Timestamp? createdAt,
@@ -263,6 +273,7 @@ class __$$UserModelImplCopyWithImpl<$Res>
     Object? subjects = null,
     Object? evaluations = null,
     Object? researches = null,
+    Object? lectures = null,
     Object? notifications = null,
     Object? attendances = null,
     Object? createdAt = freezed,
@@ -330,6 +341,11 @@ class __$$UserModelImplCopyWithImpl<$Res>
                 ? _value._researches
                 : researches // ignore: cast_nullable_to_non_nullable
                     as List<Research>,
+        lectures:
+            null == lectures
+                ? _value._lectures
+                : lectures // ignore: cast_nullable_to_non_nullable
+                    as List<Lecture>,
         notifications:
             null == notifications
                 ? _value._notifications
@@ -371,6 +387,7 @@ class _$UserModelImpl implements _UserModel {
     @JsonKey(name: 'subjects') final List<Subject> subjects = const [],
     @JsonKey(name: 'evaluations') final List<Evaluation> evaluations = const [],
     @JsonKey(name: 'researches') final List<Research> researches = const [],
+    @JsonKey(name: 'lectures') final List<Lecture> lectures = const [],
     @JsonKey(name: 'notifications')
     final List<NotificationModel> notifications = const [],
     @JsonKey(name: 'attendances') final List<Attendance> attendances = const [],
@@ -379,6 +396,7 @@ class _$UserModelImpl implements _UserModel {
   }) : _subjects = subjects,
        _evaluations = evaluations,
        _researches = researches,
+       _lectures = lectures,
        _notifications = notifications,
        _attendances = attendances;
 
@@ -435,6 +453,15 @@ class _$UserModelImpl implements _UserModel {
     return EqualUnmodifiableListView(_researches);
   }
 
+  final List<Lecture> _lectures;
+  @override
+  @JsonKey(name: 'lectures')
+  List<Lecture> get lectures {
+    if (_lectures is EqualUnmodifiableListView) return _lectures;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_lectures);
+  }
+
   final List<NotificationModel> _notifications;
   @override
   @JsonKey(name: 'notifications')
@@ -464,7 +491,7 @@ class _$UserModelImpl implements _UserModel {
 
   @override
   String toString() {
-    return 'UserModel(id: $id, email: $email, name: $name, role: $role, activityStatus: $activityStatus, isActive: $isActive, specialization: $specialization, academicRank: $academicRank, fcmToken: $fcmToken, subjects: $subjects, evaluations: $evaluations, researches: $researches, notifications: $notifications, attendances: $attendances, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'UserModel(id: $id, email: $email, name: $name, role: $role, activityStatus: $activityStatus, isActive: $isActive, specialization: $specialization, academicRank: $academicRank, fcmToken: $fcmToken, subjects: $subjects, evaluations: $evaluations, researches: $researches, lectures: $lectures, notifications: $notifications, attendances: $attendances, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -495,6 +522,7 @@ class _$UserModelImpl implements _UserModel {
               other._researches,
               _researches,
             ) &&
+            const DeepCollectionEquality().equals(other._lectures, _lectures) &&
             const DeepCollectionEquality().equals(
               other._notifications,
               _notifications,
@@ -525,6 +553,7 @@ class _$UserModelImpl implements _UserModel {
     const DeepCollectionEquality().hash(_subjects),
     const DeepCollectionEquality().hash(_evaluations),
     const DeepCollectionEquality().hash(_researches),
+    const DeepCollectionEquality().hash(_lectures),
     const DeepCollectionEquality().hash(_notifications),
     const DeepCollectionEquality().hash(_attendances),
     createdAt,
@@ -559,6 +588,7 @@ abstract class _UserModel implements UserModel {
     @JsonKey(name: 'subjects') final List<Subject> subjects,
     @JsonKey(name: 'evaluations') final List<Evaluation> evaluations,
     @JsonKey(name: 'researches') final List<Research> researches,
+    @JsonKey(name: 'lectures') final List<Lecture> lectures,
     @JsonKey(name: 'notifications') final List<NotificationModel> notifications,
     @JsonKey(name: 'attendances') final List<Attendance> attendances,
     @TimestampConverter()
@@ -604,6 +634,9 @@ abstract class _UserModel implements UserModel {
   @override
   @JsonKey(name: 'researches')
   List<Research> get researches;
+  @override
+  @JsonKey(name: 'lectures')
+  List<Lecture> get lectures;
   @override
   @JsonKey(name: 'notifications')
   List<NotificationModel> get notifications;

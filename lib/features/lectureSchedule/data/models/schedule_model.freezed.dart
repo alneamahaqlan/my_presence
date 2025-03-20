@@ -23,6 +23,10 @@ Schedule _$ScheduleFromJson(Map<String, dynamic> json) {
 mixin _$Schedule {
   @JsonKey(name: 'id')
   dynamic get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'title')
+  String get title => throw _privateConstructorUsedError;
+  @JsonKey(name: 'departmentId')
+  String get departmentId => throw _privateConstructorUsedError;
   @TimestampConverter()
   @JsonKey(name: 'termStart')
   Timestamp get termStart => throw _privateConstructorUsedError;
@@ -55,6 +59,8 @@ abstract class $ScheduleCopyWith<$Res> {
   @useResult
   $Res call({
     @JsonKey(name: 'id') dynamic id,
+    @JsonKey(name: 'title') String title,
+    @JsonKey(name: 'departmentId') String departmentId,
     @TimestampConverter() @JsonKey(name: 'termStart') Timestamp termStart,
     @TimestampConverter() @JsonKey(name: 'termEnd') Timestamp termEnd,
     @JsonKey(name: 'lectures') List<Lecture> lectures,
@@ -79,6 +85,8 @@ class _$ScheduleCopyWithImpl<$Res, $Val extends Schedule>
   @override
   $Res call({
     Object? id = freezed,
+    Object? title = null,
+    Object? departmentId = null,
     Object? termStart = null,
     Object? termEnd = null,
     Object? lectures = null,
@@ -92,6 +100,16 @@ class _$ScheduleCopyWithImpl<$Res, $Val extends Schedule>
                     ? _value.id
                     : id // ignore: cast_nullable_to_non_nullable
                         as dynamic,
+            title:
+                null == title
+                    ? _value.title
+                    : title // ignore: cast_nullable_to_non_nullable
+                        as String,
+            departmentId:
+                null == departmentId
+                    ? _value.departmentId
+                    : departmentId // ignore: cast_nullable_to_non_nullable
+                        as String,
             termStart:
                 null == termStart
                     ? _value.termStart
@@ -134,6 +152,8 @@ abstract class _$$ScheduleImplCopyWith<$Res>
   @useResult
   $Res call({
     @JsonKey(name: 'id') dynamic id,
+    @JsonKey(name: 'title') String title,
+    @JsonKey(name: 'departmentId') String departmentId,
     @TimestampConverter() @JsonKey(name: 'termStart') Timestamp termStart,
     @TimestampConverter() @JsonKey(name: 'termEnd') Timestamp termEnd,
     @JsonKey(name: 'lectures') List<Lecture> lectures,
@@ -157,6 +177,8 @@ class __$$ScheduleImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
+    Object? title = null,
+    Object? departmentId = null,
     Object? termStart = null,
     Object? termEnd = null,
     Object? lectures = null,
@@ -170,6 +192,16 @@ class __$$ScheduleImplCopyWithImpl<$Res>
                 ? _value.id
                 : id // ignore: cast_nullable_to_non_nullable
                     as dynamic,
+        title:
+            null == title
+                ? _value.title
+                : title // ignore: cast_nullable_to_non_nullable
+                    as String,
+        departmentId:
+            null == departmentId
+                ? _value.departmentId
+                : departmentId // ignore: cast_nullable_to_non_nullable
+                    as String,
         termStart:
             null == termStart
                 ? _value.termStart
@@ -205,6 +237,8 @@ class __$$ScheduleImplCopyWithImpl<$Res>
 class _$ScheduleImpl implements _Schedule {
   const _$ScheduleImpl({
     @JsonKey(name: 'id') this.id,
+    @JsonKey(name: 'title') required this.title,
+    @JsonKey(name: 'departmentId') required this.departmentId,
     @TimestampConverter() @JsonKey(name: 'termStart') required this.termStart,
     @TimestampConverter() @JsonKey(name: 'termEnd') required this.termEnd,
     @JsonKey(name: 'lectures') final List<Lecture> lectures = const [],
@@ -218,6 +252,12 @@ class _$ScheduleImpl implements _Schedule {
   @override
   @JsonKey(name: 'id')
   final dynamic id;
+  @override
+  @JsonKey(name: 'title')
+  final String title;
+  @override
+  @JsonKey(name: 'departmentId')
+  final String departmentId;
   @override
   @TimestampConverter()
   @JsonKey(name: 'termStart')
@@ -246,7 +286,7 @@ class _$ScheduleImpl implements _Schedule {
 
   @override
   String toString() {
-    return 'Schedule(id: $id, termStart: $termStart, termEnd: $termEnd, lectures: $lectures, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'Schedule(id: $id, title: $title, departmentId: $departmentId, termStart: $termStart, termEnd: $termEnd, lectures: $lectures, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -255,6 +295,9 @@ class _$ScheduleImpl implements _Schedule {
         (other.runtimeType == runtimeType &&
             other is _$ScheduleImpl &&
             const DeepCollectionEquality().equals(other.id, id) &&
+            (identical(other.title, title) || other.title == title) &&
+            (identical(other.departmentId, departmentId) ||
+                other.departmentId == departmentId) &&
             (identical(other.termStart, termStart) ||
                 other.termStart == termStart) &&
             (identical(other.termEnd, termEnd) || other.termEnd == termEnd) &&
@@ -270,6 +313,8 @@ class _$ScheduleImpl implements _Schedule {
   int get hashCode => Object.hash(
     runtimeType,
     const DeepCollectionEquality().hash(id),
+    title,
+    departmentId,
     termStart,
     termEnd,
     const DeepCollectionEquality().hash(_lectures),
@@ -294,6 +339,8 @@ class _$ScheduleImpl implements _Schedule {
 abstract class _Schedule implements Schedule {
   const factory _Schedule({
     @JsonKey(name: 'id') final dynamic id,
+    @JsonKey(name: 'title') required final String title,
+    @JsonKey(name: 'departmentId') required final String departmentId,
     @TimestampConverter()
     @JsonKey(name: 'termStart')
     required final Timestamp termStart,
@@ -315,6 +362,12 @@ abstract class _Schedule implements Schedule {
   @override
   @JsonKey(name: 'id')
   dynamic get id;
+  @override
+  @JsonKey(name: 'title')
+  String get title;
+  @override
+  @JsonKey(name: 'departmentId')
+  String get departmentId;
   @override
   @TimestampConverter()
   @JsonKey(name: 'termStart')

@@ -16,6 +16,9 @@ import '../../features/department/presentation/pages/add_department_page.dart';
 import '../../features/department/presentation/pages/department_page.dart';
 import '../../features/faculty/presentation/pages/add_faculty_page.dart';
 import '../../features/faculty/presentation/pages/faculties_page.dart';
+import '../../features/lecture/presentation/bloc/lecture_bloc.dart';
+import '../../features/lecture/presentation/pages/create_lecture_page.dart';
+import '../../features/lecture/presentation/pages/lectures_page.dart';
 import '../../features/lectureSchedule/data/models/schedule_model.dart';
 import '../../features/lectureSchedule/presentation/pages/create_lecture_schedule_page.dart';
 import '../../features/lectureSchedule/presentation/pages/edit_lecture_schedule_page.dart';
@@ -92,6 +95,23 @@ class AppPages {
       name: AppRoutes.notifications,
       builder: (context, state) => NotificationsPage(),
     ),
+    //AddSubjectPage
+    GoRoute(
+      path: AppRoutes.addSubject,
+      name: AppRoutes.addSubject,
+      builder: (context, state) {
+        return AddSubjectPage();
+      },
+    ),
+
+    //SubjectsPage
+    GoRoute(
+      path: AppRoutes.subjects,
+      name: AppRoutes.subjects,
+      builder: (context, state) {
+        return SubjectsPage();
+      },
+    ),
     GoRoute(
       path: AppRoutes.faculties,
       name: AppRoutes.faculties,
@@ -104,81 +124,78 @@ class AppPages {
           builder: (context, state) => AddFacultyPage(),
         ),
         GoRoute(
-          path: AppRoutes.lectureScheduleList,
-          name: AppRoutes.lectureScheduleList,
+          path: AppRoutes.departments,
+          name: AppRoutes.departments,
           builder: (context, state) {
-            // final department = state.extra as Department;
-            return LectureScheduleListPage(
-              // department:department 
-              );
+            return DepartmentPage();
           },
           routes: [
-            //DepartmentPage
             GoRoute(
-              path: AppRoutes.departments,
-              name: AppRoutes.departments,
+              path: AppRoutes.lectureScheduleList,
+              name: AppRoutes.lectureScheduleList,
               builder: (context, state) {
-                return DepartmentPage();
+                return SchedulePage();
               },
               routes: [
-                //AddDepartmentPage
+                //CreateLectureSchedulePage
                 GoRoute(
-                  path: AppRoutes.addDepartment,
-                  name: AppRoutes.addDepartment,
+                  path: AppRoutes.addLectureSchedule,
+                  name: AppRoutes.addLectureSchedule,
                   builder: (context, state) {
-                    // final faculty = state.extra as Faculty;
-                    return AddDepartmentPage();
+                    final department = state.extra as Department;
+                    return CreateLectureSchedulePage(department: department);
+                  },
+                ),
+
+                //EditLectureSchedulePage
+                GoRoute(
+                  path: AppRoutes.editLectureSchedule,
+                  name: AppRoutes.editLectureSchedule,
+                  builder: (context, state) {
+                    final schedule = state.extra as Schedule;
+                    return EditLectureSchedulePage(schedule: schedule);
+                  },
+                ),
+
+                //LectureScheduleDetailPage
+                GoRoute(
+                  path: AppRoutes.viewLectureSchedule,
+                  name: AppRoutes.viewLectureSchedule,
+                  builder: (context, state) {
+                    final schedule = state.extra as Schedule;
+                    return LectureScheduleDetailPage(schedule: schedule);
+                  },
+                ),
+                // lectures
+                GoRoute(
+                  path: AppRoutes.lectures,
+                  name: AppRoutes.lectures,
+                  builder: (context, state) {
+                    return LecturesPage();
                   },
                   routes: [
-                    //AddSubjectPage
+                    //CreateLecturePage
                     GoRoute(
-                      path: AppRoutes.addSubject,
-                      name: AppRoutes.addSubject,
+                      path: AppRoutes.createLecture,
+                      name: AppRoutes.createLecture,
                       builder: (context, state) {
-                        return AddSubjectPage();
-                      },
-                    ),
+                        // final schedule = state.extra as Schedule;
 
-                    //SubjectsPage
-                    GoRoute(
-                      path: AppRoutes.subjects,
-                      name: AppRoutes.subjects,
-                      builder: (context, state) {
-                        return SubjectsPage();
-                      },
-                    ),
-                    //CreateLectureSchedulePage
-                    GoRoute(
-                      path: AppRoutes.addLectureSchedule,
-                      name: AppRoutes.addLectureSchedule,
-                      builder: (context, state) {
-                        final department = state.extra as Department;
-                        return CreateLectureSchedulePage(department:department ,);
-                      },
-                    ),
-
-                    //EditLectureSchedulePage
-                    GoRoute(
-                      path: AppRoutes.editLectureSchedule,
-                      name: AppRoutes.editLectureSchedule,
-                      builder: (context, state) {
-                        final schedule = state.extra as Schedule;
-                        return EditLectureSchedulePage(schedule: schedule);
-                      },
-                    ),
-
-                    //LectureScheduleDetailPage
-                    GoRoute(
-                      path: AppRoutes.viewLectureSchedule,
-                      name: AppRoutes.viewLectureSchedule,
-                      builder: (context, state) {
-                        final schedule = state.extra as Schedule;
-                        return LectureScheduleDetailPage(schedule: schedule);
+                        return CreateLecturePage();
                       },
                     ),
                   ],
                 ),
               ],
+            ),
+            //AddDepartmentPage
+            GoRoute(
+              path: AppRoutes.addDepartment,
+              name: AppRoutes.addDepartment,
+              builder: (context, state) {
+                // final faculty = state.extra as Faculty;
+                return AddDepartmentPage();
+              },
             ),
           ],
         ),

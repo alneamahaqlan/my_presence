@@ -84,7 +84,18 @@
   "interactionWithStudents": "Interaction with Students",
   "management": "Management",
   "teacher": "Teacher",
-  "admin": "Admin"
+  "admin": "Admin",
+  "present": "Present",
+  "absent": "Absent",
+  "late": "Late",
+  "excused": "Excused",
+  "faculties": "Faculties",
+  "departments": "Departments",
+  "subjects": "Subjects",
+  "busy": "Busy",
+  "available": "Available",
+  "inLecture": "In Lecture",
+  "unknown": "Unknown"
 
   }
   

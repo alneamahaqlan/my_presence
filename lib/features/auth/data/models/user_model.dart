@@ -5,6 +5,7 @@ import '../../../../core/converters/timestamp_converter.dart';
 import '../../../../core/utils/enums/activity_status.dart';
 import '../../../../core/utils/enums/role.dart';
 import '../../../attendance/data/models/attendance_model.dart';
+import '../../../lecture/data/models/lecture_model.dart';
 import '../../../notifications/data/models/notification_model.dart';
 import '../../../reports/data/models/evaluation_model.dart';
 import '../../../reports/data/models/research_model.dart';
@@ -28,6 +29,7 @@ class UserModel with _$UserModel {
     @JsonKey(name: 'subjects') @Default([]) List<Subject> subjects,
     @JsonKey(name: 'evaluations') @Default([]) List<Evaluation> evaluations,
     @JsonKey(name: 'researches') @Default([]) List<Research> researches,
+    @JsonKey(name: 'lectures') @Default([]) List<Lecture> lectures,
     @JsonKey(name: 'notifications')
     @Default([])
     List<NotificationModel> notifications,

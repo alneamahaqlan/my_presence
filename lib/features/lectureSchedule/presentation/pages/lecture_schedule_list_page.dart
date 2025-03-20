@@ -1,53 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart' ;
+import 'package:go_router/go_router.dart';
 
 // import '../../../../core/extensions/context_extensions.dart';
+import '../../../../core/models/status.dart';
 import '../../../../core/routes/app_pages.dart';
-import '../../../../dependency_injection.dart';
-import '../../../department/data/models/department_model.dart';
 import '../bloc/lecture_schedule_bloc.dart';
+import '../widgets/schedule_card.dart';
 
-
-class LectureScheduleListPage extends StatelessWidget {
-    // final Department department;
- 
-
-  const LectureScheduleListPage({super.key,
-  //  required this.department
-   });
+class SchedulePage extends StatelessWidget {
+  const SchedulePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lecture Schedules'),
+        title: const Text('المستويات الدراسية'),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.print),
-            onPressed: () {
-              final state = context.read<LectureScheduleBloc>().state;
-              if (state is LectureScheduleLoaded) {
-                final schedules =
-                    state.schedules
-                       
-                        .toList();
-                // generateAndPrintPdf(schedules, department);
-              }
-            },
-          ),
-        ],
       ),
       body: BlocBuilder<LectureScheduleBloc, LectureScheduleState>(
         builder: (context, state) {
-          if (state is LectureScheduleLoading) {
+          if (state.status == Status.loading()) {
             return const Center(child: CircularProgressIndicator());
-          } else if (state is LectureScheduleLoaded) {
-            final schedules =
-                state.schedules
-                   
-                    .toList();
+          } else if (state.status == Status.success()) {
+            final schedules = state.schedules.toList();
 
             if (schedules.isEmpty) {
               return _buildEmptyState();
@@ -58,8 +34,18 @@ class LectureScheduleListPage extends StatelessWidget {
               itemCount: schedules.length,
               itemBuilder: (context, index) {
                 final schedule = schedules[index];
-                return Text(schedule.id ?? 'not found');    
-                //  return ScheduleCard(schedule: schedule);
+                return InkWell(
+                  onTap: () {
+                    context.pushNamed(
+                      AppRoutes.lectures,
+                      extra: {
+                        'schedule': schedule,
+                        'department': state.department,
+                      },
+                    );
+                  },
+                  child: ScheduleCard(schedule: schedule),
+                ); // Use ScheduleCard
               },
             );
           } else {
@@ -69,8 +55,11 @@ class LectureScheduleListPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-             final router = getIt.call<GoRouter>;
-          context.pushNamed(AppRoutes.addLectureSchedule,extra: router.call().state.extra as Department);
+          final state = context.read<LectureScheduleBloc>().state;
+          context.pushNamed(
+            AppRoutes.addLectureSchedule,
+            extra: state.department!,
+          );
         },
         child: const Icon(Icons.add),
       ),

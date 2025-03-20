@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 import '../widgets/custom_snackbar.dart';
 import 'theme/app_colors.dart';
 
 class Ui {
   static BoxDecoration getBox({
-    Color? color, // Default solid color
-    double borderRadius = 16.0, // Default border radius
-    Color? borderColor, // Optional border color
-    double borderWidth = 1.0, // Default border width if border is set
-    double elevation = 0.0, // Shadow intensity
-    Color shadowColor = Colors.black26, // Default shadow color
+    Color? color,
+    double borderRadius = 16.0,
+    Color? borderColor,
+    double borderWidth = 1.0,
+    double elevation = 0.0,
+    Color shadowColor = Colors.black26,
     Gradient? gradient,
     BoxShape shape = BoxShape.rectangle,
   }) {
     return BoxDecoration(
       gradient: gradient,
-      color: color ?? AppColors.primary, // Solid background color
+      color: color ?? AppColors.primary,
       borderRadius:
           shape == BoxShape.rectangle
               ? BorderRadius.circular(borderRadius)
@@ -32,7 +33,7 @@ class Ui {
                   color: shadowColor,
                   blurRadius: elevation,
                   spreadRadius: elevation * 0.2,
-                  offset: const Offset(0, 2), // Subtle shadow
+                  offset: const Offset(0, 2),
                 ),
               ]
               : [],
@@ -46,7 +47,7 @@ class Ui {
     required String message,
     required String confirmText,
     required String cancelText,
-    Color confirmButtonColor = Colors.red, // Default to red, can be customized
+    Color confirmButtonColor = Colors.red,
   }) {
     return showDialog<bool>(
       context: context,
@@ -130,51 +131,51 @@ class Ui {
         break;
     }
   }
-static Future<DateTime?> selectDate(
-  BuildContext context, {
-  DateTime? initialDate,
-  DateTime? firstDate,
-  DateTime? lastDate,
-}) async {
-  firstDate ??= DateTime.now(); // Default to today
-  lastDate ??= DateTime(2100); // Default to a far future date
 
-  // Ensure initialDate is not before firstDate
-  initialDate ??= DateTime.now();
-  if (initialDate.isBefore(firstDate)) {
-    initialDate = firstDate;
-  }
+  static Future<DateTime?> selectDate(
+    BuildContext context, {
+    DateTime? initialDate,
+    DateTime? firstDate,
+    DateTime? lastDate,
+  }) async {
+    firstDate ??= DateTime.now();
+    lastDate ??= DateTime(2100);
 
-  final DateTime? pickedDate = await showDatePicker(
-    context: context,
-    initialDate: initialDate,
-    firstDate: firstDate,
-    lastDate: lastDate,
-  );
+    initialDate ??= DateTime.now();
+    if (initialDate.isBefore(firstDate)) {
+      initialDate = firstDate;
+    }
 
-  if (pickedDate == null || !context.mounted) return null;
-
-  // Optional: Add a check for Fridays (if needed)
-  if (pickedDate.weekday == DateTime.friday) {
-    showSnackBar(
+    final DateTime? pickedDate = await showDatePicker(
       context: context,
-      message: 'Friday is a holiday',
-      type: SnackBarType.warning,
+      initialDate: initialDate,
+      firstDate: firstDate,
+      lastDate: lastDate,
     );
-    return null;
+
+    if (pickedDate == null || !context.mounted) return null;
+
+    if (pickedDate.weekday == DateTime.friday) {
+      showSnackBar(
+        context: context,
+        message: 'Friday is a holiday',
+        type: SnackBarType.warning,
+      );
+      return null;
+    }
+
+    return pickedDate;
   }
 
-  return pickedDate;
-}
   static Future<DateTime?> selectDateTime(
     BuildContext context, {
     DateTime? initialDate,
-     DateTime? firstDate,
-     DateTime? lastDate,
+    DateTime? firstDate,
+    DateTime? lastDate,
   }) async {
-    firstDate ??= DateTime.now().add(Duration(days: 1));
-     lastDate ??= DateTime(2100);
-    // Ensure initialDate is not before firstDate
+    firstDate ??= DateTime.now();
+    lastDate ??= DateTime(2100);
+
     initialDate ??= DateTime.now();
     if (initialDate.isBefore(firstDate)) {
       initialDate = firstDate;
@@ -205,13 +206,44 @@ static Future<DateTime?> selectDate(
 
     if (pickedTime == null || !context.mounted) return null;
 
-    return DateTime(
+    // Combine date and time
+    final localDateTime = DateTime(
       pickedDate.year,
       pickedDate.month,
       pickedDate.day,
       pickedTime.hour,
       pickedTime.minute,
     );
+
+    // Ensure the combined date and time is not before the firstDate
+    if (localDateTime.isBefore(firstDate)) {
+      showSnackBar(
+        context: context,
+        message: 'Selected time is before the minimum allowed date',
+        type: SnackBarType.warning,
+      );
+      return null;
+    }
+
+    // Convert to Asia/Riyadh time zone
+    final riyadhLocation = tz.getLocation('Asia/Riyadh');
+    final riyadhDateTime = tz.TZDateTime.from(localDateTime, riyadhLocation);
+
+    return riyadhDateTime;
+  }
+
+  static Future<TimeOfDay?> selectTime(
+    BuildContext context, {
+    TimeOfDay? initialTime,
+  }) async {
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: initialTime ?? TimeOfDay.now(),
+    );
+
+    if (pickedTime == null || !context.mounted) return null;
+
+    return pickedTime;
   }
 }
 

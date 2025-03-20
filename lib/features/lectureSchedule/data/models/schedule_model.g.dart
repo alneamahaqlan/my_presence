@@ -9,6 +9,8 @@ part of 'schedule_model.dart';
 _$ScheduleImpl _$$ScheduleImplFromJson(Map<String, dynamic> json) =>
     _$ScheduleImpl(
       id: json['id'],
+      title: json['title'] as String,
+      departmentId: json['departmentId'] as String,
       termStart: const TimestampConverter().fromJson(json['termStart']),
       termEnd: const TimestampConverter().fromJson(json['termEnd']),
       lectures:
@@ -23,6 +25,8 @@ _$ScheduleImpl _$$ScheduleImplFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$ScheduleImplToJson(_$ScheduleImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'title': instance.title,
+      'departmentId': instance.departmentId,
       'termStart': const TimestampConverter().toJson(instance.termStart),
       'termEnd': const TimestampConverter().toJson(instance.termEnd),
       'lectures': instance.lectures,

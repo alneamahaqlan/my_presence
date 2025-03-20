@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -13,7 +16,8 @@ part 'member_event.dart';
 part 'member_state.dart';
 
 class MemberBloc extends Bloc<MemberEvent, MemberState> {
-  final MemberRepository _memberRepository;
+   final MemberRepository _memberRepository;
+  StreamSubscription? _membersSubscription;
 
   MemberBloc(this._memberRepository) : super(MemberState.initial()) {
     on<MemberEvent>((event, emit) async {
@@ -26,31 +30,7 @@ class MemberBloc extends Bloc<MemberEvent, MemberState> {
         addResearch: (event) async => _onAddResearch(event, emit),
       );
     });
-    add(const LoadMembers());
-  }
-
-  Future<void> _onSaveMember(
-    SaveMember event,
-    Emitter<MemberState> emit,
-  ) async {
-    // _memberRepository.test();
-    emit(state.copyWith(status: const Status.loading()));
-
-    final result = await _memberRepository.createMember(event.user);
-
-    result.when(
-      success: (userId) {
-        emit(state.copyWith(status: const Status.success()));
-      },
-      failure: (error) {
-        emit(
-          state.copyWith(
-            status: const Status.failed(),
-            errorMessage: error.message,
-          ),
-        );
-      },
-    );
+   
   }
 
   Future<void> _onLoadMembers(
@@ -59,11 +39,52 @@ class MemberBloc extends Bloc<MemberEvent, MemberState> {
   ) async {
     emit(state.copyWith(status: const Status.loading()));
 
-    final result = await _memberRepository.getMembers();
+    // Cancel any existing subscription
+    _membersSubscription?.cancel();
+
+    try {
+      // Use emit.forEach to handle the stream
+      await emit.forEach(
+        _memberRepository.getMembersStream(),
+        onData: (users) {
+          return state.copyWith(status: const Status.success(), members: users);
+        },
+        onError: (error, stackTrace) {
+          log('Error loading members: $error', stackTrace: stackTrace);
+          return state.copyWith(
+            status: const Status.failed(),
+            errorMessage: 'Failed to load members: $error',
+          );
+        },
+      );
+    } catch (e, stackTrace) {
+      log('Error in _onLoadMembers: $e', stackTrace: stackTrace);
+      emit(state.copyWith(
+        status: const Status.failed(),
+        errorMessage: 'Failed to load members: $e',
+      ));
+    }
+  }
+
+  @override
+  Future<void> close() {
+    _membersSubscription?.cancel();
+    return super.close();
+  }
+  Future<void> _onSaveMember(
+    SaveMember event,
+    Emitter<MemberState> emit,
+  ) async {
+    // final mm = await _memberRepository.fetchUsersWithDetails();
+    // print(mm);
+    emit(state.copyWith(status: const Status.loading()));
+
+    final result = await _memberRepository.createMember(event.user);
 
     result.when(
-      success: (users) {
-        emit(state.copyWith(status: const Status.success(), members: users));
+      success: (userId) {
+        emit(state.copyWith(status: const Status.success()));
+      add(const MemberEvent.loadMembers());
       },
       failure: (error) {
         emit(
@@ -74,8 +95,7 @@ class MemberBloc extends Bloc<MemberEvent, MemberState> {
         );
       },
     );
-  }
-
+  }  
   Future<void> _onDeleteMember(
     DeleteMember event,
     Emitter<MemberState> emit,
@@ -170,6 +190,7 @@ class MemberBloc extends Bloc<MemberEvent, MemberState> {
     result.when(
       success: (_) {
         emit(state.copyWith(status: const Status.success()));
+          add(const MemberEvent.loadMembers());
       },
       failure: (error) {
         emit(

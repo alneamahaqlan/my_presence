@@ -15,10 +15,14 @@ class Lecture with _$Lecture {
     @JsonKey(name: 'id') dynamic id,
       @JsonKey(name: 'subject') required Subject subject,
 
-    @JsonKey(name: 'user') required UserModel user,
+    @JsonKey(name: 'user') required UserModel user, 
+
+     @JsonKey(name: 'scheduleId') required String scheduleId,
     @TimestampConverter() @JsonKey(name: 'startTime') required Timestamp startTime,
     @TimestampConverter() @JsonKey(name: 'endTime') required Timestamp endTime,
     @JsonKey(name: 'hall') required String hall,
+        @TimestampConverter() @JsonKey(name: 'createdAt') Timestamp? createdAt,
+    @TimestampConverter() @JsonKey(name: 'updatedAt') Timestamp? updatedAt,
 
 
   }) = _Lecture;

@@ -23,7 +23,7 @@ class _AddSubjectPageState extends State<AddSubjectPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Subject')),
+      appBar: AppBar(title: const Text('إضافة مادة')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -33,36 +33,36 @@ class _AddSubjectPageState extends State<AddSubjectPage> {
               children: [
                 TextFieldWidget(
                   controller: _nameController,
-                  hint: 'Subject Name',
+                  hint: 'اسم المادة',
                   validator:
                       (value) =>
                           (value == null || value.isEmpty)
-                              ? 'Please enter a subject name'
+                              ? 'الرجاء إدخال اسم المادة'
                               : null,
                 ),
                 const SizedBox(height: 16),
                 TextFieldWidget(
                   controller: _codeController,
-                  hint: 'Subject Code',
+                  hint: 'كود المادة',
                   validator:
                       (value) =>
                           (value == null || value.isEmpty)
-                              ? 'Please enter a subject code'
+                              ? 'الرجاء إدخال كود المادة'
                               : null,
                 ),
                 const SizedBox(height: 16),
                 TextFieldWidget(
                   controller: _numberController,
-                  hint: 'Subject Number',
+                  hint: 'رقم المادة',
                   validator:
                       (value) =>
                           (value == null || value.isEmpty)
-                              ? 'Please enter a subject number'
+                              ? 'الرجاء إدخال رقم المادة'
                               : null,
                 ),
                 const SizedBox(height: 20),
                 ButtonWidget(
-                  text: 'Add Subject',
+                  text: 'إضافة المادة',
                   isSubmitting: _isSubmitting,
                   onPressed: _submitForm,
                 ),

@@ -4,6 +4,7 @@ import 'package:my_presence/core/extensions/context_extensions.dart';
 
 import '../../../../core/models/status.dart';
 import '../../../../core/routes/app_pages.dart';
+import '../../data/models/subject_model.dart';
 import '../bloc/subject_bloc.dart';
 
 class SubjectsPage extends StatelessWidget {
@@ -12,7 +13,7 @@ class SubjectsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Subjects')),
+      appBar: AppBar(title: const Text('المواد')),
       body: BlocBuilder<SubjectBloc, SubjectState>(
         builder: (context, state) {
           if (state.status == Status.loading()) {
@@ -20,66 +21,11 @@ class SubjectsPage extends StatelessWidget {
           } else if (state.status == Status.success()) {
             final subjects = state.subjects.toList();
             return ListView.builder(
-              padding: const EdgeInsets.all(
-                16.0,
-              ), // Add padding around the list
+              padding: const EdgeInsets.all(16.0),
               itemCount: subjects.length,
               itemBuilder: (context, index) {
                 final subject = subjects[index];
-                return Card(
-                  elevation: 4, // Add shadow to the card
-                  margin: const EdgeInsets.only(
-                    bottom: 16.0,
-                  ), // Add margin between cards
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      12.0,
-                    ), // Rounded corners
-                  ),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(
-                      12.0,
-                    ), // Rounded corners for InkWell
-                    onTap: () {
-                      // Navigate to faculty profile page
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(
-                        16.0,
-                      ), // Add padding inside the card
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Faculty Name
-                          Text(
-                            subject.name,
-                            style: Theme.of(context).textTheme.titleLarge
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-
-                          const SizedBox(
-                            height: 8.0,
-                          ), // Add spacing between text and icon
-                          // Icon or Action Button
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: 16,
-                                ),
-                                onPressed: () {
-                                  // context.pushNamed(AppRoutes.departments, extra: subject);
-                                },
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
+                return _SubjectCard(subject: subject);
               },
             );
           } else if (state.status == Status.failed()) {
@@ -90,10 +36,80 @@ class SubjectsPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Navigate to add subject page
           context.pushNamed(AppRoutes.addSubject);
         },
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+class _SubjectCard extends StatelessWidget {
+  final Subject subject;
+
+  const _SubjectCard({required this.subject});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 6,
+      margin: const EdgeInsets.only(bottom: 16.0),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12.0),
+        onTap: () {
+          context.pushNamed(AppRoutes.departments, extra: subject);
+        },
+        child: Container(
+          padding: const EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12.0),
+            gradient: LinearGradient(
+              colors: [Colors.blue.shade100, Colors.blue.shade50],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+          child: Row(
+            children: [
+              CircleAvatar(
+                backgroundColor: Colors.blue.shade700,
+                foregroundColor: Colors.white,
+                child: Text(
+                  subject.name[0].toUpperCase(),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              const SizedBox(width: 12.0),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      subject.name,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4.0),
+                    Text(
+                      'Code: ${subject.code}',
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodySmall?.copyWith(color: Colors.grey[700]),
+                    ),
+                  ],
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.arrow_forward_ios, size: 18),
+                onPressed: () {
+                  context.pushNamed(AppRoutes.departments, extra: subject);
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

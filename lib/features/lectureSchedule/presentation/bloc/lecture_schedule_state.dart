@@ -2,10 +2,12 @@ part of 'lecture_schedule_bloc.dart';
 
 @freezed
 class LectureScheduleState with _$LectureScheduleState {
-  const factory LectureScheduleState.initial() = LectureScheduleInitial;
-  const factory LectureScheduleState.loading() = LectureScheduleLoading;
-  const factory LectureScheduleState.loaded(List<Schedule> schedules) =
-      LectureScheduleLoaded;
-  const factory LectureScheduleState.error(String message) =
-      LectureScheduleError;
+  const factory LectureScheduleState({
+    @Default(Status.initial()) Status status, // Add status field
+    @Default([]) List<Schedule> schedules, // Rename to schedules
+     Department? department,
+    String? errorMessage, // Add errorMessage field
+  }) = _LectureScheduleState;
+
+  factory LectureScheduleState.initial() => const LectureScheduleState();
 }

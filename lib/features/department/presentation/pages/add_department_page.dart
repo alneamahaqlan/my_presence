@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/models/status.dart';
+import '../../../../core/widgets/button_widget.dart'; // Import the ButtonWidget
 import '../../../../core/widgets/drop_down_widget.dart';
+import '../../../../core/widgets/text_field_widget.dart';
 import '../../../faculty/data/models/faculty_model.dart';
 import '../../../faculty/presentation/bloc/faculty_bloc.dart';
 import '../../data/models/department_create_body.dart';
-import '../../data/models/department_model.dart';
 import '../bloc/department_bloc.dart';
 
 class AddDepartmentPage extends StatefulWidget {
@@ -52,9 +53,9 @@ class _AddDepartmentPageState extends State<AddDepartmentPage> {
             key: _formKey,
             child: Column(
               children: [
-                TextFormField(
+                TextFieldWidget(
+                  hint: 'Department Name',
                   controller: _nameController,
-                  decoration: InputDecoration(labelText: 'Department Name'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter a department name';
@@ -81,15 +82,14 @@ class _AddDepartmentPageState extends State<AddDepartmentPage> {
                 SizedBox(height: 20),
                 BlocBuilder<DepartmentBloc, DepartmentState>(
                   builder: (context, state) {
-                    if (state.status == Status.loading()) {
-                      return CircularProgressIndicator();
-                    }
-                    return ElevatedButton(
+                    return ButtonWidget(
+                      text: 'Add Department',
                       onPressed: () {
                         if (_formKey.currentState!.validate() &&
                             selectedFaculty != null) {
                           final department = DepartmentCreateBody(
                             name: _nameController.text,
+                            facultyId: selectedFaculty!.id,
                           );
                           context.read<DepartmentBloc>().add(
                             AddDepartment(
@@ -99,7 +99,7 @@ class _AddDepartmentPageState extends State<AddDepartmentPage> {
                           );
                         }
                       },
-                      child: Text('Add Department'),
+                      isSubmitting: state.status == Status.loading(),
                     );
                   },
                 ),

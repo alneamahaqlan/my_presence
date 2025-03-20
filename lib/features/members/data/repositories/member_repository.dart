@@ -1,11 +1,15 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:my_presence/features/department/data/models/department_model.dart';
+import 'package:my_presence/features/faculty/data/models/faculty_model.dart';
 import '../../../../core/error/api_error_handler.dart';
 import '../../../../core/models/api_result.dart';
 import '../../../../core/services/firestore_service.dart';
+import '../../../attendance/data/models/attendance_model.dart';
 import '../../../auth/data/models/user_model.dart';
+import '../../../lecture/data/models/lecture_model.dart';
 import '../../../lectureSchedule/data/models/schedule_model.dart';
 import '../../../reports/data/models/evaluation_model.dart';
 import '../../../reports/data/models/research_model.dart';
@@ -17,7 +21,7 @@ class MemberRepository {
 
   MemberRepository(this._firestoreService);
 
-  /// Creates a new expense in the Firestore `members` collection.
+  /// Creates a new member in the Firestore `users` collection.
   Future<ApiResult<String>> createMember(UserModel member) async {
     try {
       final docRef = await _firestoreService.addDocument(
@@ -37,210 +41,153 @@ class MemberRepository {
     }
   }
 
-  Future<ApiResult<List<UserModel>>> getMembers() async {
-    try {
-      final usersSnapshot =
-          await _firestoreService.firestore.collection('users').get();
+Stream<List<UserModel>> getMembersStream() {
+  final firestore = _firestoreService.firestore;
 
-      List<UserModel> usersWithSchedules = [];
+  return firestore.collection('users').snapshots().asyncMap((snapshot) async {
+    Map<String, UserModel> userMap = {};
 
-      for (var userDoc in usersSnapshot.docs) {
-        final user = UserModel.fromJson(
-          userDoc.data(),
-        ).copyWith(id: userDoc.id);
+    for (var userDoc in snapshot.docs) {
+      try {
+        final userData = userDoc.data();
+        final userId = userDoc.id;
 
-        final schedulesSnapshot =
-            await _firestoreService.firestore
-                .collection('lecture_schedules')
-                .get(); // Use .get() instead of .first
+        // Validate user data
+        if (userData['name'] == null || userData['email'] == null) {
+          log('Invalid user data for user ID: $userId');
+          continue; // Skip invalid user documents
+        }
 
-        final schedules =
-            schedulesSnapshot.docs
-                .map(
-                  (doc) => Schedule.fromJson(doc.data()).copyWith(id: doc.id),
-                )
-                .toList()
-                // .where((s) => s.user.id == user.id)
-                .toList();
-        final subjects = <Subject>[];
-        // schedules.map((schedule) => schedule).toList();
+        final user = UserModel.fromJson({
+          ...userData,
+          'id': userId,
+        });
 
-        usersWithSchedules.add(user.copyWith(subjects: subjects, id: user.id));
+        // Fetch additional data for each user
+        final lectures = await _fetchLecturesForUser(userId);
+        final researches = await _fetchResearchesForUser(userId);
+        final evaluations = await _fetchEvaluationsForUser(userId);
+        final attendances = await _fetchAttendancesForUser(userId);
+
+        userMap[userId] = user.copyWith(
+          lectures: lectures,
+          researches: researches,
+          evaluations: evaluations,
+          attendances: attendances,
+        );
+      } catch (e, stackTrace) {
+        log('Error processing user document: $e', stackTrace: stackTrace);
       }
-
-      return ApiResult.success(usersWithSchedules);
-    } catch (e) {
-      return ApiResult.failure(ApiErrorHandler.handle(e));
     }
+
+    return userMap.values.toList();
+  }).handleError((error, stackTrace) {
+    log('Error in members stream: $error', stackTrace: stackTrace);
+    throw error; // Re-throw the error to propagate it to the Bloc
+  });
+}
+
+Future<List<Lecture>> _fetchLecturesForUser(String userId) async {
+  final firestore = _firestoreService.firestore;
+  final lectures = <Lecture>[];
+
+  try {
+    final facultiesSnapshot = await firestore.collection('faculties').get();
+    for (var facultyDoc in facultiesSnapshot.docs) {
+      final departmentsSnapshot = await facultyDoc.reference.collection('departments').get();
+      for (var departmentDoc in departmentsSnapshot.docs) {
+        final schedulesSnapshot = await departmentDoc.reference.collection('schedules').get();
+        for (var scheduleDoc in schedulesSnapshot.docs) {
+          final lecturesSnapshot = await scheduleDoc.reference.collection('lectures').get();
+          for (var lectureDoc in lecturesSnapshot.docs) {
+            try {
+              final lectureData = lectureDoc.data();
+              if (lectureData['user'] != null && lectureData['user']['id'] == userId) {
+                lectures.add(Lecture.fromJson({
+                  ...lectureData,
+                  'id': lectureDoc.id,
+                }));
+              }
+            } catch (e, stackTrace) {
+              log('Error processing lecture document: $e', stackTrace: stackTrace);
+            }
+          }
+        }
+      }
+    }
+  } catch (e, stackTrace) {
+    log('Error fetching lectures for user $userId: $e', stackTrace: stackTrace);
   }
 
-  Future<ApiResult<void>> addEvaluation(
-    String userId,
-    Evaluation evaluation,
-  ) async {
+  return lectures;
+}
+
+
+
+  /// Fetches researches for a specific user.
+  Future<List<Research>> _fetchResearchesForUser(String userId) async {
+    final firestore = _firestoreService.firestore;
+    final researchesSnapshot = await firestore.collection('users').doc(userId).collection('researches').get();
+    return researchesSnapshot.docs.map((doc) => Research.fromJson({
+      ...doc.data(),
+      'id': doc.id,
+    })).toList();
+  }
+
+  /// Fetches evaluations for a specific user.
+  Future<List<Evaluation>> _fetchEvaluationsForUser(String userId) async {
+    final firestore = _firestoreService.firestore;
+    final evaluationsSnapshot = await firestore.collection('users').doc(userId).collection('evaluations').get();
+    return evaluationsSnapshot.docs.map((doc) => Evaluation.fromJson({
+      ...doc.data(),
+      'id': doc.id,
+    })).toList();
+  }
+
+  /// Fetches attendances for a specific user.
+  Future<List<Attendance>> _fetchAttendancesForUser(String userId) async {
+    final firestore = _firestoreService.firestore;
+    final attendancesSnapshot = await firestore.collection('users').doc(userId).collection('attendances').get();
+    return attendancesSnapshot.docs.map((doc) => Attendance.fromJson({
+      ...doc.data(),
+      'id': doc.id,
+    })).toList();
+  }
+
+  /// Adds an evaluation for a specific user.
+  Future<ApiResult<String>> addEvaluation(String userId, Evaluation evaluation) async {
     try {
-      await _firestoreService.firestore.collection('users').doc(userId).update({
-        'evaluations': FieldValue.arrayUnion([evaluation.toJson()]),
-      });
-      return const ApiResult.success(null);
+      final docRef = await _firestoreService.firestore
+          .collection('users')
+          .doc(userId)
+          .collection('evaluations')
+          .add(evaluation.toJson());
+      return ApiResult.success(docRef.id);
     } catch (e) {
       return ApiResult.failure(ApiErrorHandler.handle(e));
     }
   }
 
-  Future<ApiResult<void>> addResearch(String userId, Research research) async {
+  /// Adds a research for a specific user.
+  Future<ApiResult<String>> addResearch(String userId, Research research) async {
     try {
-      await _firestoreService.firestore.collection('users').doc(userId).update({
-        'researches': FieldValue.arrayUnion([research.toJson()]),
-      });
-      return const ApiResult.success(null);
+      final docRef = await _firestoreService.firestore
+          .collection('users')
+          .doc(userId)
+          .collection('researches')
+          .add(research.toJson());
+      return ApiResult.success(docRef.id);
     } catch (e) {
       return ApiResult.failure(ApiErrorHandler.handle(e));
     }
   }
 
-  // Future<void> test() async {
-  //   FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-  //   // Fetch all user IDs
-  //   CollectionReference userCollectionRef = firestore.collection('users');
-  //   QuerySnapshot userQuerySnapshot = await userCollectionRef.get();
-  //   final usersId = userQuerySnapshot.docs.map((doc) => doc.id).toList();
-
-  //   // Fetch all lecture schedules
-  //   CollectionReference collectionRef = firestore.collection(
-  //     'lecture_schedules',
-  //   );
-  //   QuerySnapshot querySnapshot = await collectionRef.get();
-
-  //   List<Map<String, dynamic>> schedules = [];
-
-  //   for (var doc in querySnapshot.docs) {
-  //     Map<String, dynamic> schedule = {
-  //       'id': doc.id,
-  //       ...?doc.data() as Map<String, dynamic>?,
-  //     };
-
-  //     // Check if the schedule contains a 'user' field
-  //     if (!schedule.containsKey('user') || schedule['user'] == null) {
-  //       continue; // Skip if 'user' field is missing
-  //     }
-
-  //     // Fetch nested 'lectures' collection
-  //     CollectionReference nestedCollectionRef = doc.reference.collection(
-  //       'lectures',
-  //     );
-  //     QuerySnapshot nestedQuerySnapshot = await nestedCollectionRef.get();
-  //     List<Map<String, dynamic>> lectures = [];
-
-  //     for (var nestedDoc in nestedQuerySnapshot.docs) {
-  //       Map<String, dynamic> lectureData = {
-  //         'id': nestedDoc.id,
-  //         ...nestedDoc.data() as Map<String, dynamic>,
-  //       };
-
-  //       lectures.add(lectureData);
-  //     }
-
-  //     schedule['lectures'] = lectures;
-  //     schedules.add(schedule);
-  //   }
-
-  //   // Extract and filter attendance records for each user
-  //   for (var userId in usersId) {
-  //     List<dynamic> userAttendances = [];
-
-  //     // Get lectures linked to the user
-  //     final lectures =
-  //         schedules
-  //             .where((schedule) => schedule['user']['id'] == userId)
-  //             .expand((schedule) => schedule['lectures'])
-  //             .toList();
-
-  //     for (var lecture in lectures) {
-  //       if (lecture.containsKey('attendance') &&
-  //           lecture['attendance'] != null) {
-  //         userAttendances.add(lecture['attendance']);
-  //       }
-  //     }
-
-  //     // Log only if attendance data is found
-  //     if (userAttendances.isNotEmpty) {
-  //       log('User $userId Attendance: $userAttendances');
-  //     }
-  //   }
-  // }
-
-  // test() async {
-  //   CollectionReference userCollectionRef = FirebaseFirestore.instance
-  //       .collection('users');
-  //   QuerySnapshot userQuerySnapshot = await userCollectionRef.get();
-  //   final usersId = userQuerySnapshot.docs.map((doc) => doc.id).toList();
-
-  //   CollectionReference collectionRef = _firestoreService.firestore.collection(
-  //     'lecture_schedules',
-  //   );
-  //   QuerySnapshot querySnapshot = await collectionRef.get();
-  //   List<Map<String, dynamic>> schedules = [];
-
-  //   for (var doc in querySnapshot.docs) {
-  //     final Map<String, dynamic> schedule = {
-  //       'id': doc.id,
-  //       ...?doc.data() as Map<String, dynamic>?,
-  //     };
-
-  //     // Fetch nested collection for each document
-  //     CollectionReference nestedCollectionRef = doc.reference.collection(
-  //       'lectures',
-  //     );
-  //     QuerySnapshot nestedQuerySnapshot = await nestedCollectionRef.get();
-  //     List lectures = [];
-
-  //     for (var nestedDoc in nestedQuerySnapshot.docs) {
-  //       // print('Nested Document: ${nestedDoc.id}');
-  //       lectures.add({
-  //         'id': nestedDoc.id,
-  //         ...nestedDoc.data() as Map<String, dynamic>,
-  //       });
-  //     }
-
-  //     schedule['lectures'] = lectures;
-
-  //     schedules.add(schedule);
-  //   }
-
-  //   final userAttendances = [];
-  //   // log('**********************************************'.toString());
-  //   // log(schedules.toString());
-  //   // log('**********************************************'.toString());
-  //   // final lectures = schedules.map((e) => e['lectures']).toList();
-
-  //   for (var userId in usersId) {
-  //     var userAttendance;
-  //     final lectures =
-  //         schedules
-  //             .where((schedule) => schedule['user']['id'] == userId)
-  //             .map((e) => e['lectures'])
-  //             .toList();
-  //     for (var element in lectures) {
-  //       for (var lecture in element) {
-  //         userAttendances.add(lecture['attendance']);
-  //       }
-  //     }
-
-  //     // log('**********************************************'.toString());
-  //     log(userAttendances.toString());
-
-  //     // userAttendances.addAll(userAttendance);
-  //   }
-  // }
-
-  /// Deletes an expense by its document ID.
-  Future<ApiResult<bool>> deleteMember(String expenseId) async {
+  /// Deletes a member by their document ID.
+  Future<ApiResult<bool>> deleteMember(String userId) async {
     try {
       final result = await _firestoreService.deleteDocument(
         collectionName: 'users',
-        documentId: expenseId,
+        documentId: userId,
       );
       return ApiResult.success(result);
     } catch (e) {
@@ -249,6 +196,7 @@ class MemberRepository {
     }
   }
 
+  /// Updates the activity status of a member.
   Future<ApiResult<bool>> setMemberStatus({
     required String userId,
     required bool isActive,
@@ -266,7 +214,7 @@ class MemberRepository {
     }
   }
 
-  /// Updates an expense document with provided fields.
+  /// Updates a member's details.
   Future<ApiResult<bool>> updateMember({
     required MemberEditBody memberEditBody,
     required String documentId,
@@ -298,109 +246,8 @@ class MemberRepository {
       );
       return ApiResult.success(result);
     } catch (e) {
-      log('Error updating expense: $e');
+      log('Error updating member: $e');
       return ApiResult.failure(ApiErrorHandler.handle(e));
     }
-  }
-
-  Future<void> test() async {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-    // Get all users
-    CollectionReference usersCollection = firestore.collection('users');
-    QuerySnapshot usersSnapshot = await usersCollection.get();
-    int totalUsers = usersSnapshot.size;
-
-    // Initialize counters
-    int totalPresentAttendances = 0;
-    int totalEvaluations = 0;
-    double totalTeachingPerformance = 0;
-    double totalInteractionWithStudents = 0;
-    int totalResearches = 0;
-
-    // Process attendance from lecture_schedules
-    CollectionReference schedulesCollection = firestore.collection(
-      'lecture_schedules',
-    );
-    QuerySnapshot schedulesSnapshot = await schedulesCollection.get();
-
-    for (var scheduleDoc in schedulesSnapshot.docs) {
-      Map<String, dynamic>? scheduleData =
-          scheduleDoc.data() as Map<String, dynamic>?;
-
-      if (scheduleData != null && scheduleData.containsKey('lectures')) {
-        List<dynamic> lectures = scheduleData['lectures'];
-
-        for (var lecture in lectures) {
-          if (lecture is Map<String, dynamic> &&
-              lecture.containsKey('attendance')) {
-            var attendance = lecture['attendance'];
-            if (attendance is Map<String, dynamic>) {
-              totalPresentAttendances +=
-                  attendance.values
-                      .where((status) => status == "present")
-                      .length;
-            }
-          }
-        }
-      }
-    }
-
-    // Process evaluations and researches directly inside users collection
-    for (var userDoc in usersSnapshot.docs) {
-      Map<String, dynamic>? userData = userDoc.data() as Map<String, dynamic>?;
-
-      if (userData != null) {
-        // Evaluations
-        if (userData.containsKey('evaluations')) {
-          List<dynamic> evaluations = userData['evaluations'];
-          for (var evaluation in evaluations) {
-            if (evaluation is Map<String, dynamic> &&
-                evaluation.containsKey('rateType') &&
-                evaluation.containsKey('score')) {
-              double score = (evaluation['score'] as num).toDouble();
-              totalEvaluations++;
-
-              if (evaluation['rateType'] == "teachingPerformance") {
-                totalTeachingPerformance += score;
-              } else if (evaluation['rateType'] == "interactionWithStudents") {
-                totalInteractionWithStudents += score;
-              }
-            }
-          }
-        }
-
-        // Researches
-        if (userData.containsKey('researches')) {
-          List<dynamic> researches = userData['researches'];
-          totalResearches += researches.length;
-        }
-      }
-    }
-
-    // Calculate averages
-    double teachingPerformanceAvg =
-        (totalEvaluations > 0)
-            ? (totalTeachingPerformance / totalEvaluations)
-            : 0;
-    double interactionWithStudentsAvg =
-        (totalEvaluations > 0)
-            ? (totalInteractionWithStudents / totalEvaluations)
-            : 0;
-    double attendanceRate =
-        (totalUsers > 0) ? (totalPresentAttendances / totalUsers) : 0;
-    double researchRate = (totalUsers > 0) ? (totalResearches / totalUsers) : 0;
-
-    // Return data as a map
-    final data = {
-      "total_users": totalUsers,
-      "attendance_discipline_rate": attendanceRate.toStringAsFixed(2),
-      "teaching_performance": teachingPerformanceAvg.toStringAsFixed(2),
-      "interaction_with_students": interactionWithStudentsAvg.toStringAsFixed(
-        2,
-      ),
-      "research_publication_rate": researchRate.toStringAsFixed(2),
-    };
-    log(data.toString());
   }
 }

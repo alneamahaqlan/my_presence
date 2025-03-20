@@ -17,50 +17,40 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$AttendanceEvent {
+  Attendance get attendance => throw _privateConstructorUsedError;
+  UserModel get member => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() fetchAll,
-    required TResult Function(Attendance attendance) add,
-    required TResult Function(Attendance attendance) update,
-    required TResult Function(String id) delete,
+    required TResult Function(Attendance attendance, UserModel member) add,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? fetchAll,
-    TResult? Function(Attendance attendance)? add,
-    TResult? Function(Attendance attendance)? update,
-    TResult? Function(String id)? delete,
+    TResult? Function(Attendance attendance, UserModel member)? add,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? fetchAll,
-    TResult Function(Attendance attendance)? add,
-    TResult Function(Attendance attendance)? update,
-    TResult Function(String id)? delete,
+    TResult Function(Attendance attendance, UserModel member)? add,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(FetchAllAttendance value) fetchAll,
     required TResult Function(AddAttendance value) add,
-    required TResult Function(UpdateAttendance value) update,
-    required TResult Function(DeleteAttendance value) delete,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(FetchAllAttendance value)? fetchAll,
     TResult? Function(AddAttendance value)? add,
-    TResult? Function(UpdateAttendance value)? update,
-    TResult? Function(DeleteAttendance value)? delete,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(FetchAllAttendance value)? fetchAll,
     TResult Function(AddAttendance value)? add,
-    TResult Function(UpdateAttendance value)? update,
-    TResult Function(DeleteAttendance value)? delete,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
+
+  /// Create a copy of AttendanceEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $AttendanceEventCopyWith<AttendanceEvent> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -69,6 +59,11 @@ abstract class $AttendanceEventCopyWith<$Res> {
     AttendanceEvent value,
     $Res Function(AttendanceEvent) then,
   ) = _$AttendanceEventCopyWithImpl<$Res, AttendanceEvent>;
+  @useResult
+  $Res call({Attendance attendance, UserModel member});
+
+  $AttendanceCopyWith<$Res> get attendance;
+  $UserModelCopyWith<$Res> get member;
 }
 
 /// @nodoc
@@ -83,137 +78,62 @@ class _$AttendanceEventCopyWithImpl<$Res, $Val extends AttendanceEvent>
 
   /// Create a copy of AttendanceEvent
   /// with the given fields replaced by the non-null parameter values.
-}
-
-/// @nodoc
-abstract class _$$FetchAllAttendanceImplCopyWith<$Res> {
-  factory _$$FetchAllAttendanceImplCopyWith(
-    _$FetchAllAttendanceImpl value,
-    $Res Function(_$FetchAllAttendanceImpl) then,
-  ) = __$$FetchAllAttendanceImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$FetchAllAttendanceImplCopyWithImpl<$Res>
-    extends _$AttendanceEventCopyWithImpl<$Res, _$FetchAllAttendanceImpl>
-    implements _$$FetchAllAttendanceImplCopyWith<$Res> {
-  __$$FetchAllAttendanceImplCopyWithImpl(
-    _$FetchAllAttendanceImpl _value,
-    $Res Function(_$FetchAllAttendanceImpl) _then,
-  ) : super(_value, _then);
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? attendance = null, Object? member = null}) {
+    return _then(
+      _value.copyWith(
+            attendance:
+                null == attendance
+                    ? _value.attendance
+                    : attendance // ignore: cast_nullable_to_non_nullable
+                        as Attendance,
+            member:
+                null == member
+                    ? _value.member
+                    : member // ignore: cast_nullable_to_non_nullable
+                        as UserModel,
+          )
+          as $Val,
+    );
+  }
 
   /// Create a copy of AttendanceEvent
   /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $AttendanceCopyWith<$Res> get attendance {
+    return $AttendanceCopyWith<$Res>(_value.attendance, (value) {
+      return _then(_value.copyWith(attendance: value) as $Val);
+    });
+  }
+
+  /// Create a copy of AttendanceEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $UserModelCopyWith<$Res> get member {
+    return $UserModelCopyWith<$Res>(_value.member, (value) {
+      return _then(_value.copyWith(member: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
-
-class _$FetchAllAttendanceImpl implements FetchAllAttendance {
-  const _$FetchAllAttendanceImpl();
-
-  @override
-  String toString() {
-    return 'AttendanceEvent.fetchAll()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$FetchAllAttendanceImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() fetchAll,
-    required TResult Function(Attendance attendance) add,
-    required TResult Function(Attendance attendance) update,
-    required TResult Function(String id) delete,
-  }) {
-    return fetchAll();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? fetchAll,
-    TResult? Function(Attendance attendance)? add,
-    TResult? Function(Attendance attendance)? update,
-    TResult? Function(String id)? delete,
-  }) {
-    return fetchAll?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? fetchAll,
-    TResult Function(Attendance attendance)? add,
-    TResult Function(Attendance attendance)? update,
-    TResult Function(String id)? delete,
-    required TResult orElse(),
-  }) {
-    if (fetchAll != null) {
-      return fetchAll();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(FetchAllAttendance value) fetchAll,
-    required TResult Function(AddAttendance value) add,
-    required TResult Function(UpdateAttendance value) update,
-    required TResult Function(DeleteAttendance value) delete,
-  }) {
-    return fetchAll(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(FetchAllAttendance value)? fetchAll,
-    TResult? Function(AddAttendance value)? add,
-    TResult? Function(UpdateAttendance value)? update,
-    TResult? Function(DeleteAttendance value)? delete,
-  }) {
-    return fetchAll?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(FetchAllAttendance value)? fetchAll,
-    TResult Function(AddAttendance value)? add,
-    TResult Function(UpdateAttendance value)? update,
-    TResult Function(DeleteAttendance value)? delete,
-    required TResult orElse(),
-  }) {
-    if (fetchAll != null) {
-      return fetchAll(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class FetchAllAttendance implements AttendanceEvent {
-  const factory FetchAllAttendance() = _$FetchAllAttendanceImpl;
-}
-
-/// @nodoc
-abstract class _$$AddAttendanceImplCopyWith<$Res> {
+abstract class _$$AddAttendanceImplCopyWith<$Res>
+    implements $AttendanceEventCopyWith<$Res> {
   factory _$$AddAttendanceImplCopyWith(
     _$AddAttendanceImpl value,
     $Res Function(_$AddAttendanceImpl) then,
   ) = __$$AddAttendanceImplCopyWithImpl<$Res>;
+  @override
   @useResult
-  $Res call({Attendance attendance});
+  $Res call({Attendance attendance, UserModel member});
 
+  @override
   $AttendanceCopyWith<$Res> get attendance;
+  @override
+  $UserModelCopyWith<$Res> get member;
 }
 
 /// @nodoc
@@ -229,39 +149,37 @@ class __$$AddAttendanceImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? attendance = null}) {
+  $Res call({Object? attendance = null, Object? member = null}) {
     return _then(
       _$AddAttendanceImpl(
-        null == attendance
-            ? _value.attendance
-            : attendance // ignore: cast_nullable_to_non_nullable
-                as Attendance,
+        attendance:
+            null == attendance
+                ? _value.attendance
+                : attendance // ignore: cast_nullable_to_non_nullable
+                    as Attendance,
+        member:
+            null == member
+                ? _value.member
+                : member // ignore: cast_nullable_to_non_nullable
+                    as UserModel,
       ),
     );
-  }
-
-  /// Create a copy of AttendanceEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $AttendanceCopyWith<$Res> get attendance {
-    return $AttendanceCopyWith<$Res>(_value.attendance, (value) {
-      return _then(_value.copyWith(attendance: value));
-    });
   }
 }
 
 /// @nodoc
 
 class _$AddAttendanceImpl implements AddAttendance {
-  const _$AddAttendanceImpl(this.attendance);
+  const _$AddAttendanceImpl({required this.attendance, required this.member});
 
   @override
   final Attendance attendance;
+  @override
+  final UserModel member;
 
   @override
   String toString() {
-    return 'AttendanceEvent.add(attendance: $attendance)';
+    return 'AttendanceEvent.add(attendance: $attendance, member: $member)';
   }
 
   @override
@@ -270,11 +188,12 @@ class _$AddAttendanceImpl implements AddAttendance {
         (other.runtimeType == runtimeType &&
             other is _$AddAttendanceImpl &&
             (identical(other.attendance, attendance) ||
-                other.attendance == attendance));
+                other.attendance == attendance) &&
+            (identical(other.member, member) || other.member == member));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, attendance);
+  int get hashCode => Object.hash(runtimeType, attendance, member);
 
   /// Create a copy of AttendanceEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -287,36 +206,27 @@ class _$AddAttendanceImpl implements AddAttendance {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() fetchAll,
-    required TResult Function(Attendance attendance) add,
-    required TResult Function(Attendance attendance) update,
-    required TResult Function(String id) delete,
+    required TResult Function(Attendance attendance, UserModel member) add,
   }) {
-    return add(attendance);
+    return add(attendance, member);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? fetchAll,
-    TResult? Function(Attendance attendance)? add,
-    TResult? Function(Attendance attendance)? update,
-    TResult? Function(String id)? delete,
+    TResult? Function(Attendance attendance, UserModel member)? add,
   }) {
-    return add?.call(attendance);
+    return add?.call(attendance, member);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? fetchAll,
-    TResult Function(Attendance attendance)? add,
-    TResult Function(Attendance attendance)? update,
-    TResult Function(String id)? delete,
+    TResult Function(Attendance attendance, UserModel member)? add,
     required TResult orElse(),
   }) {
     if (add != null) {
-      return add(attendance);
+      return add(attendance, member);
     }
     return orElse();
   }
@@ -324,10 +234,7 @@ class _$AddAttendanceImpl implements AddAttendance {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(FetchAllAttendance value) fetchAll,
     required TResult Function(AddAttendance value) add,
-    required TResult Function(UpdateAttendance value) update,
-    required TResult Function(DeleteAttendance value) delete,
   }) {
     return add(this);
   }
@@ -335,10 +242,7 @@ class _$AddAttendanceImpl implements AddAttendance {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(FetchAllAttendance value)? fetchAll,
     TResult? Function(AddAttendance value)? add,
-    TResult? Function(UpdateAttendance value)? update,
-    TResult? Function(DeleteAttendance value)? delete,
   }) {
     return add?.call(this);
   }
@@ -346,10 +250,7 @@ class _$AddAttendanceImpl implements AddAttendance {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(FetchAllAttendance value)? fetchAll,
     TResult Function(AddAttendance value)? add,
-    TResult Function(UpdateAttendance value)? update,
-    TResult Function(DeleteAttendance value)? delete,
     required TResult orElse(),
   }) {
     if (add != null) {
@@ -360,343 +261,21 @@ class _$AddAttendanceImpl implements AddAttendance {
 }
 
 abstract class AddAttendance implements AttendanceEvent {
-  const factory AddAttendance(final Attendance attendance) =
-      _$AddAttendanceImpl;
+  const factory AddAttendance({
+    required final Attendance attendance,
+    required final UserModel member,
+  }) = _$AddAttendanceImpl;
 
+  @override
   Attendance get attendance;
+  @override
+  UserModel get member;
 
   /// Create a copy of AttendanceEvent
   /// with the given fields replaced by the non-null parameter values.
+  @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AddAttendanceImplCopyWith<_$AddAttendanceImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$UpdateAttendanceImplCopyWith<$Res> {
-  factory _$$UpdateAttendanceImplCopyWith(
-    _$UpdateAttendanceImpl value,
-    $Res Function(_$UpdateAttendanceImpl) then,
-  ) = __$$UpdateAttendanceImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({Attendance attendance});
-
-  $AttendanceCopyWith<$Res> get attendance;
-}
-
-/// @nodoc
-class __$$UpdateAttendanceImplCopyWithImpl<$Res>
-    extends _$AttendanceEventCopyWithImpl<$Res, _$UpdateAttendanceImpl>
-    implements _$$UpdateAttendanceImplCopyWith<$Res> {
-  __$$UpdateAttendanceImplCopyWithImpl(
-    _$UpdateAttendanceImpl _value,
-    $Res Function(_$UpdateAttendanceImpl) _then,
-  ) : super(_value, _then);
-
-  /// Create a copy of AttendanceEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({Object? attendance = null}) {
-    return _then(
-      _$UpdateAttendanceImpl(
-        null == attendance
-            ? _value.attendance
-            : attendance // ignore: cast_nullable_to_non_nullable
-                as Attendance,
-      ),
-    );
-  }
-
-  /// Create a copy of AttendanceEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $AttendanceCopyWith<$Res> get attendance {
-    return $AttendanceCopyWith<$Res>(_value.attendance, (value) {
-      return _then(_value.copyWith(attendance: value));
-    });
-  }
-}
-
-/// @nodoc
-
-class _$UpdateAttendanceImpl implements UpdateAttendance {
-  const _$UpdateAttendanceImpl(this.attendance);
-
-  @override
-  final Attendance attendance;
-
-  @override
-  String toString() {
-    return 'AttendanceEvent.update(attendance: $attendance)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$UpdateAttendanceImpl &&
-            (identical(other.attendance, attendance) ||
-                other.attendance == attendance));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, attendance);
-
-  /// Create a copy of AttendanceEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$UpdateAttendanceImplCopyWith<_$UpdateAttendanceImpl> get copyWith =>
-      __$$UpdateAttendanceImplCopyWithImpl<_$UpdateAttendanceImpl>(
-        this,
-        _$identity,
-      );
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() fetchAll,
-    required TResult Function(Attendance attendance) add,
-    required TResult Function(Attendance attendance) update,
-    required TResult Function(String id) delete,
-  }) {
-    return update(attendance);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? fetchAll,
-    TResult? Function(Attendance attendance)? add,
-    TResult? Function(Attendance attendance)? update,
-    TResult? Function(String id)? delete,
-  }) {
-    return update?.call(attendance);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? fetchAll,
-    TResult Function(Attendance attendance)? add,
-    TResult Function(Attendance attendance)? update,
-    TResult Function(String id)? delete,
-    required TResult orElse(),
-  }) {
-    if (update != null) {
-      return update(attendance);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(FetchAllAttendance value) fetchAll,
-    required TResult Function(AddAttendance value) add,
-    required TResult Function(UpdateAttendance value) update,
-    required TResult Function(DeleteAttendance value) delete,
-  }) {
-    return update(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(FetchAllAttendance value)? fetchAll,
-    TResult? Function(AddAttendance value)? add,
-    TResult? Function(UpdateAttendance value)? update,
-    TResult? Function(DeleteAttendance value)? delete,
-  }) {
-    return update?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(FetchAllAttendance value)? fetchAll,
-    TResult Function(AddAttendance value)? add,
-    TResult Function(UpdateAttendance value)? update,
-    TResult Function(DeleteAttendance value)? delete,
-    required TResult orElse(),
-  }) {
-    if (update != null) {
-      return update(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class UpdateAttendance implements AttendanceEvent {
-  const factory UpdateAttendance(final Attendance attendance) =
-      _$UpdateAttendanceImpl;
-
-  Attendance get attendance;
-
-  /// Create a copy of AttendanceEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$UpdateAttendanceImplCopyWith<_$UpdateAttendanceImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$DeleteAttendanceImplCopyWith<$Res> {
-  factory _$$DeleteAttendanceImplCopyWith(
-    _$DeleteAttendanceImpl value,
-    $Res Function(_$DeleteAttendanceImpl) then,
-  ) = __$$DeleteAttendanceImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({String id});
-}
-
-/// @nodoc
-class __$$DeleteAttendanceImplCopyWithImpl<$Res>
-    extends _$AttendanceEventCopyWithImpl<$Res, _$DeleteAttendanceImpl>
-    implements _$$DeleteAttendanceImplCopyWith<$Res> {
-  __$$DeleteAttendanceImplCopyWithImpl(
-    _$DeleteAttendanceImpl _value,
-    $Res Function(_$DeleteAttendanceImpl) _then,
-  ) : super(_value, _then);
-
-  /// Create a copy of AttendanceEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({Object? id = null}) {
-    return _then(
-      _$DeleteAttendanceImpl(
-        null == id
-            ? _value.id
-            : id // ignore: cast_nullable_to_non_nullable
-                as String,
-      ),
-    );
-  }
-}
-
-/// @nodoc
-
-class _$DeleteAttendanceImpl implements DeleteAttendance {
-  const _$DeleteAttendanceImpl(this.id);
-
-  @override
-  final String id;
-
-  @override
-  String toString() {
-    return 'AttendanceEvent.delete(id: $id)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$DeleteAttendanceImpl &&
-            (identical(other.id, id) || other.id == id));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, id);
-
-  /// Create a copy of AttendanceEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$DeleteAttendanceImplCopyWith<_$DeleteAttendanceImpl> get copyWith =>
-      __$$DeleteAttendanceImplCopyWithImpl<_$DeleteAttendanceImpl>(
-        this,
-        _$identity,
-      );
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() fetchAll,
-    required TResult Function(Attendance attendance) add,
-    required TResult Function(Attendance attendance) update,
-    required TResult Function(String id) delete,
-  }) {
-    return delete(id);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? fetchAll,
-    TResult? Function(Attendance attendance)? add,
-    TResult? Function(Attendance attendance)? update,
-    TResult? Function(String id)? delete,
-  }) {
-    return delete?.call(id);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? fetchAll,
-    TResult Function(Attendance attendance)? add,
-    TResult Function(Attendance attendance)? update,
-    TResult Function(String id)? delete,
-    required TResult orElse(),
-  }) {
-    if (delete != null) {
-      return delete(id);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(FetchAllAttendance value) fetchAll,
-    required TResult Function(AddAttendance value) add,
-    required TResult Function(UpdateAttendance value) update,
-    required TResult Function(DeleteAttendance value) delete,
-  }) {
-    return delete(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(FetchAllAttendance value)? fetchAll,
-    TResult? Function(AddAttendance value)? add,
-    TResult? Function(UpdateAttendance value)? update,
-    TResult? Function(DeleteAttendance value)? delete,
-  }) {
-    return delete?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(FetchAllAttendance value)? fetchAll,
-    TResult Function(AddAttendance value)? add,
-    TResult Function(UpdateAttendance value)? update,
-    TResult Function(DeleteAttendance value)? delete,
-    required TResult orElse(),
-  }) {
-    if (delete != null) {
-      return delete(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class DeleteAttendance implements AttendanceEvent {
-  const factory DeleteAttendance(final String id) = _$DeleteAttendanceImpl;
-
-  String get id;
-
-  /// Create a copy of AttendanceEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$DeleteAttendanceImplCopyWith<_$DeleteAttendanceImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -730,26 +309,26 @@ mixin _$AttendanceState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
+    required TResult Function(Loading value) loading,
     required TResult Function(_Loaded value) loaded,
-    required TResult Function(_Error value) error,
-    required TResult Function(_Success value) success,
+    required TResult Function(Error value) error,
+    required TResult Function(Success value) success,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
+    TResult? Function(Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_Error value)? error,
-    TResult? Function(_Success value)? success,
+    TResult? Function(Error value)? error,
+    TResult? Function(Success value)? success,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
+    TResult Function(Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
-    TResult Function(_Error value)? error,
-    TResult Function(_Success value)? success,
+    TResult Function(Error value)? error,
+    TResult Function(Success value)? success,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
 }
@@ -860,10 +439,10 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
+    required TResult Function(Loading value) loading,
     required TResult Function(_Loaded value) loaded,
-    required TResult Function(_Error value) error,
-    required TResult Function(_Success value) success,
+    required TResult Function(Error value) error,
+    required TResult Function(Success value) success,
   }) {
     return initial(this);
   }
@@ -872,10 +451,10 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
+    TResult? Function(Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_Error value)? error,
-    TResult? Function(_Success value)? success,
+    TResult? Function(Error value)? error,
+    TResult? Function(Success value)? success,
   }) {
     return initial?.call(this);
   }
@@ -884,10 +463,10 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
+    TResult Function(Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
-    TResult Function(_Error value)? error,
-    TResult Function(_Success value)? success,
+    TResult Function(Error value)? error,
+    TResult Function(Success value)? success,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -924,7 +503,7 @@ class __$$LoadingImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LoadingImpl implements _Loading {
+class _$LoadingImpl implements Loading {
   const _$LoadingImpl();
 
   @override
@@ -985,10 +564,10 @@ class _$LoadingImpl implements _Loading {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
+    required TResult Function(Loading value) loading,
     required TResult Function(_Loaded value) loaded,
-    required TResult Function(_Error value) error,
-    required TResult Function(_Success value) success,
+    required TResult Function(Error value) error,
+    required TResult Function(Success value) success,
   }) {
     return loading(this);
   }
@@ -997,10 +576,10 @@ class _$LoadingImpl implements _Loading {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
+    TResult? Function(Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_Error value)? error,
-    TResult? Function(_Success value)? success,
+    TResult? Function(Error value)? error,
+    TResult? Function(Success value)? success,
   }) {
     return loading?.call(this);
   }
@@ -1009,10 +588,10 @@ class _$LoadingImpl implements _Loading {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
+    TResult Function(Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
-    TResult Function(_Error value)? error,
-    TResult Function(_Success value)? success,
+    TResult Function(Error value)? error,
+    TResult Function(Success value)? success,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -1022,8 +601,8 @@ class _$LoadingImpl implements _Loading {
   }
 }
 
-abstract class _Loading implements AttendanceState {
-  const factory _Loading() = _$LoadingImpl;
+abstract class Loading implements AttendanceState {
+  const factory Loading() = _$LoadingImpl;
 }
 
 /// @nodoc
@@ -1149,10 +728,10 @@ class _$LoadedImpl implements _Loaded {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
+    required TResult Function(Loading value) loading,
     required TResult Function(_Loaded value) loaded,
-    required TResult Function(_Error value) error,
-    required TResult Function(_Success value) success,
+    required TResult Function(Error value) error,
+    required TResult Function(Success value) success,
   }) {
     return loaded(this);
   }
@@ -1161,10 +740,10 @@ class _$LoadedImpl implements _Loaded {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
+    TResult? Function(Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_Error value)? error,
-    TResult? Function(_Success value)? success,
+    TResult? Function(Error value)? error,
+    TResult? Function(Success value)? success,
   }) {
     return loaded?.call(this);
   }
@@ -1173,10 +752,10 @@ class _$LoadedImpl implements _Loaded {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
+    TResult Function(Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
-    TResult Function(_Error value)? error,
-    TResult Function(_Success value)? success,
+    TResult Function(Error value)? error,
+    TResult Function(Success value)? success,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -1235,7 +814,7 @@ class __$$ErrorImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ErrorImpl implements _Error {
+class _$ErrorImpl implements Error {
   const _$ErrorImpl(this.message);
 
   @override
@@ -1309,10 +888,10 @@ class _$ErrorImpl implements _Error {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
+    required TResult Function(Loading value) loading,
     required TResult Function(_Loaded value) loaded,
-    required TResult Function(_Error value) error,
-    required TResult Function(_Success value) success,
+    required TResult Function(Error value) error,
+    required TResult Function(Success value) success,
   }) {
     return error(this);
   }
@@ -1321,10 +900,10 @@ class _$ErrorImpl implements _Error {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
+    TResult? Function(Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_Error value)? error,
-    TResult? Function(_Success value)? success,
+    TResult? Function(Error value)? error,
+    TResult? Function(Success value)? success,
   }) {
     return error?.call(this);
   }
@@ -1333,10 +912,10 @@ class _$ErrorImpl implements _Error {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
+    TResult Function(Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
-    TResult Function(_Error value)? error,
-    TResult Function(_Success value)? success,
+    TResult Function(Error value)? error,
+    TResult Function(Success value)? success,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -1346,8 +925,8 @@ class _$ErrorImpl implements _Error {
   }
 }
 
-abstract class _Error implements AttendanceState {
-  const factory _Error(final String message) = _$ErrorImpl;
+abstract class Error implements AttendanceState {
+  const factory Error(final String message) = _$ErrorImpl;
 
   String get message;
 
@@ -1395,7 +974,7 @@ class __$$SuccessImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$SuccessImpl implements _Success {
+class _$SuccessImpl implements Success {
   const _$SuccessImpl(this.message);
 
   @override
@@ -1469,10 +1048,10 @@ class _$SuccessImpl implements _Success {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
+    required TResult Function(Loading value) loading,
     required TResult Function(_Loaded value) loaded,
-    required TResult Function(_Error value) error,
-    required TResult Function(_Success value) success,
+    required TResult Function(Error value) error,
+    required TResult Function(Success value) success,
   }) {
     return success(this);
   }
@@ -1481,10 +1060,10 @@ class _$SuccessImpl implements _Success {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
+    TResult? Function(Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_Error value)? error,
-    TResult? Function(_Success value)? success,
+    TResult? Function(Error value)? error,
+    TResult? Function(Success value)? success,
   }) {
     return success?.call(this);
   }
@@ -1493,10 +1072,10 @@ class _$SuccessImpl implements _Success {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
+    TResult Function(Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
-    TResult Function(_Error value)? error,
-    TResult Function(_Success value)? success,
+    TResult Function(Error value)? error,
+    TResult Function(Success value)? success,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -1506,8 +1085,8 @@ class _$SuccessImpl implements _Success {
   }
 }
 
-abstract class _Success implements AttendanceState {
-  const factory _Success(final String message) = _$SuccessImpl;
+abstract class Success implements AttendanceState {
+  const factory Success(final String message) = _$SuccessImpl;
 
   String get message;
 

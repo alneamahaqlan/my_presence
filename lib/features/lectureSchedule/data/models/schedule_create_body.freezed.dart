@@ -21,6 +21,10 @@ ScheduleCreateBody _$ScheduleCreateBodyFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ScheduleCreateBody {
+  @JsonKey(name: 'title')
+  String get title => throw _privateConstructorUsedError;
+  @JsonKey(name: 'departmentId')
+  String get departmentId => throw _privateConstructorUsedError;
   @TimestampConverter()
   @JsonKey(name: 'termStart')
   Timestamp get termStart => throw _privateConstructorUsedError;
@@ -46,6 +50,8 @@ abstract class $ScheduleCreateBodyCopyWith<$Res> {
   ) = _$ScheduleCreateBodyCopyWithImpl<$Res, ScheduleCreateBody>;
   @useResult
   $Res call({
+    @JsonKey(name: 'title') String title,
+    @JsonKey(name: 'departmentId') String departmentId,
     @TimestampConverter() @JsonKey(name: 'termStart') Timestamp termStart,
     @TimestampConverter() @JsonKey(name: 'termEnd') Timestamp termEnd,
   });
@@ -65,9 +71,24 @@ class _$ScheduleCreateBodyCopyWithImpl<$Res, $Val extends ScheduleCreateBody>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? termStart = null, Object? termEnd = null}) {
+  $Res call({
+    Object? title = null,
+    Object? departmentId = null,
+    Object? termStart = null,
+    Object? termEnd = null,
+  }) {
     return _then(
       _value.copyWith(
+            title:
+                null == title
+                    ? _value.title
+                    : title // ignore: cast_nullable_to_non_nullable
+                        as String,
+            departmentId:
+                null == departmentId
+                    ? _value.departmentId
+                    : departmentId // ignore: cast_nullable_to_non_nullable
+                        as String,
             termStart:
                 null == termStart
                     ? _value.termStart
@@ -94,6 +115,8 @@ abstract class _$$ScheduleCreateBodyImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
+    @JsonKey(name: 'title') String title,
+    @JsonKey(name: 'departmentId') String departmentId,
     @TimestampConverter() @JsonKey(name: 'termStart') Timestamp termStart,
     @TimestampConverter() @JsonKey(name: 'termEnd') Timestamp termEnd,
   });
@@ -112,9 +135,24 @@ class __$$ScheduleCreateBodyImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? termStart = null, Object? termEnd = null}) {
+  $Res call({
+    Object? title = null,
+    Object? departmentId = null,
+    Object? termStart = null,
+    Object? termEnd = null,
+  }) {
     return _then(
       _$ScheduleCreateBodyImpl(
+        title:
+            null == title
+                ? _value.title
+                : title // ignore: cast_nullable_to_non_nullable
+                    as String,
+        departmentId:
+            null == departmentId
+                ? _value.departmentId
+                : departmentId // ignore: cast_nullable_to_non_nullable
+                    as String,
         termStart:
             null == termStart
                 ? _value.termStart
@@ -134,6 +172,8 @@ class __$$ScheduleCreateBodyImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ScheduleCreateBodyImpl implements _ScheduleCreateBody {
   const _$ScheduleCreateBodyImpl({
+    @JsonKey(name: 'title') required this.title,
+    @JsonKey(name: 'departmentId') required this.departmentId,
     @TimestampConverter() @JsonKey(name: 'termStart') required this.termStart,
     @TimestampConverter() @JsonKey(name: 'termEnd') required this.termEnd,
   });
@@ -141,6 +181,12 @@ class _$ScheduleCreateBodyImpl implements _ScheduleCreateBody {
   factory _$ScheduleCreateBodyImpl.fromJson(Map<String, dynamic> json) =>
       _$$ScheduleCreateBodyImplFromJson(json);
 
+  @override
+  @JsonKey(name: 'title')
+  final String title;
+  @override
+  @JsonKey(name: 'departmentId')
+  final String departmentId;
   @override
   @TimestampConverter()
   @JsonKey(name: 'termStart')
@@ -152,7 +198,7 @@ class _$ScheduleCreateBodyImpl implements _ScheduleCreateBody {
 
   @override
   String toString() {
-    return 'ScheduleCreateBody(termStart: $termStart, termEnd: $termEnd)';
+    return 'ScheduleCreateBody(title: $title, departmentId: $departmentId, termStart: $termStart, termEnd: $termEnd)';
   }
 
   @override
@@ -160,6 +206,9 @@ class _$ScheduleCreateBodyImpl implements _ScheduleCreateBody {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ScheduleCreateBodyImpl &&
+            (identical(other.title, title) || other.title == title) &&
+            (identical(other.departmentId, departmentId) ||
+                other.departmentId == departmentId) &&
             (identical(other.termStart, termStart) ||
                 other.termStart == termStart) &&
             (identical(other.termEnd, termEnd) || other.termEnd == termEnd));
@@ -167,7 +216,8 @@ class _$ScheduleCreateBodyImpl implements _ScheduleCreateBody {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, termStart, termEnd);
+  int get hashCode =>
+      Object.hash(runtimeType, title, departmentId, termStart, termEnd);
 
   /// Create a copy of ScheduleCreateBody
   /// with the given fields replaced by the non-null parameter values.
@@ -188,6 +238,8 @@ class _$ScheduleCreateBodyImpl implements _ScheduleCreateBody {
 
 abstract class _ScheduleCreateBody implements ScheduleCreateBody {
   const factory _ScheduleCreateBody({
+    @JsonKey(name: 'title') required final String title,
+    @JsonKey(name: 'departmentId') required final String departmentId,
     @TimestampConverter()
     @JsonKey(name: 'termStart')
     required final Timestamp termStart,
@@ -199,6 +251,12 @@ abstract class _ScheduleCreateBody implements ScheduleCreateBody {
   factory _ScheduleCreateBody.fromJson(Map<String, dynamic> json) =
       _$ScheduleCreateBodyImpl.fromJson;
 
+  @override
+  @JsonKey(name: 'title')
+  String get title;
+  @override
+  @JsonKey(name: 'departmentId')
+  String get departmentId;
   @override
   @TimestampConverter()
   @JsonKey(name: 'termStart')

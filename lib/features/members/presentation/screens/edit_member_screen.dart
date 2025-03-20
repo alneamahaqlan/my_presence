@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/extensions/context_extensions.dart';
+import '../../../../core/models/status.dart';
 import '../../../../core/utils/enums/activity_status.dart';
 import '../../../../core/utils/enums/role.dart';
 import '../../../../core/utils/ui.dart';
 import '../../../../core/widgets/app_bar_widget.dart';
+import '../../../../core/widgets/button_widget.dart';
 import '../../../../core/widgets/drop_down_widget.dart';
 import '../../../../core/widgets/text_field_widget.dart';
-import '../../../../core/widgets/text_widget.dart';
 import '../../../auth/data/models/user_model.dart';
-
 import '../../data/models/member_edit_body.dart';
 import '../bloc/member_bloc.dart';
 
@@ -22,6 +22,9 @@ class EditMemberScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     final formKey = GlobalKey<FormState>();
     final nameController = TextEditingController(text: member.name);
     final emailController = TextEditingController(text: member.email);
@@ -35,40 +38,40 @@ class EditMemberScreen extends StatelessWidget {
     final academicRankController = TextEditingController(
       text: member.academicRank,
     );
-  
-    
-
-    
 
     return Scaffold(
-      appBar: AppBarWidget(title: "edit_member".tr()),
+      appBar: AppBarWidget(title: "تعديل العضو"),
       body: Center(
         child: SingleChildScrollView(
           child: Form(
             key: formKey,
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // حقل الاسم
                   _buildTextField(
                     context,
                     controller: nameController,
-                    hint: "name",
+                    hint: "الاسم",
                   ),
                   const SizedBox(height: 16),
+
+                  // حقل البريد الإلكتروني
                   _buildTextField(
                     context,
                     controller: emailController,
-                    hint: "email",
+                    hint: "البريد الإلكتروني",
                     isEmail: true,
                   ),
                   const SizedBox(height: 16),
-                  // Role Dropdown
+
+                  // قائمة منسدلة للدور
                   _buildDropdown<Role>(
                     context,
-                    hint: "role",
-                    displayTex: (role) => role.name,
+                    hint: "الدور",
+                    displayTex: (role) => role.name.tr(),
                     items: Role.values,
                     selectedValue:
                         roleController.text.isEmpty
@@ -80,11 +83,11 @@ class EditMemberScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
 
-                  // Activity Status Dropdown
+                  // قائمة منسدلة لحالة النشاط
                   _buildDropdown<ActivityStatus>(
-                    displayTex: (status) => status.name,
                     context,
-                    hint: "activity_status",
+                    hint: "حالة النشاط",
+                    displayTex: (status) => status.name.tr(),
                     items: ActivityStatus.values,
                     selectedValue:
                         activityStatusController.text.isEmpty
@@ -96,14 +99,25 @@ class EditMemberScreen extends StatelessWidget {
                       activityStatusController.text = value!.toJson();
                     },
                   ),
-                
                   const SizedBox(height: 16),
-                  _buildSpecializationField(specializationController),
+
+                  // حقل التخصص
+                  _buildTextField(
+                    context,
+                    controller: specializationController,
+                    hint: "التخصص",
+                  ),
                   const SizedBox(height: 16),
-                  _buildAcademicRankField(academicRankController),
-                  const SizedBox(height: 16),
-               
+
+                  // حقل الرتبة الأكاديمية
+                  _buildTextField(
+                    context,
+                    controller: academicRankController,
+                    hint: "الرتبة الأكاديمية",
+                  ),
                   const SizedBox(height: 24),
+
+                  // زر الحفظ
                   _buildSaveButton(
                     context,
                     formKey,
@@ -113,8 +127,6 @@ class EditMemberScreen extends StatelessWidget {
                     activityStatusController,
                     specializationController,
                     academicRankController,
-                 
-             
                     member.id!,
                   ),
                 ],
@@ -136,9 +148,9 @@ class EditMemberScreen extends StatelessWidget {
       controller: controller,
       hint: hint,
       validator: (value) {
-        if (value == null || value.isEmpty) return 'Please enter a $hint';
+        if (value == null || value.isEmpty) return 'يرجى إدخال $hint';
         if (isEmail && !value.contains('@')) {
-          return 'Please enter a valid email';
+          return 'يرجى إدخال بريد إلكتروني صالح';
         }
         return null;
       },
@@ -159,16 +171,8 @@ class EditMemberScreen extends StatelessWidget {
       items: items,
       selectedValue: selectedValue,
       onChanged: onChanged,
-      validator: (value) => value == null ? 'Please select a $hint' : null,
+      validator: (value) => value == null ? 'يرجى اختيار $hint' : null,
     );
-  }
-
-  Widget _buildSpecializationField(TextEditingController controller) {
-    return TextFieldWidget(controller: controller, hint: "Specialization");
-  }
-
-  Widget _buildAcademicRankField(TextEditingController controller) {
-    return TextFieldWidget(controller: controller, hint: "Academic Rank");
   }
 
   Widget _buildSaveButton(
@@ -180,9 +184,6 @@ class EditMemberScreen extends StatelessWidget {
     TextEditingController activityStatusController,
     TextEditingController specializationController,
     TextEditingController academicRankController,
-   
-   
-
     String memberId,
   ) {
     return BlocConsumer<MemberBloc, MemberState>(
@@ -193,7 +194,7 @@ class EditMemberScreen extends StatelessWidget {
           success: () {
             Ui.showSnackBar(
               context: context,
-              message: 'Member edited successfully!',
+              message: 'تم تعديل العضو بنجاح!',
               type: SnackBarType.success,
             );
             context.pop();
@@ -203,7 +204,8 @@ class EditMemberScreen extends StatelessWidget {
         );
       },
       builder: (context, state) {
-        return ElevatedButton(
+        return ButtonWidget(
+          text: 'تحديث',
           onPressed: () {
             if (formKey.currentState!.validate()) {
               context.read<MemberBloc>().add(
@@ -216,15 +218,12 @@ class EditMemberScreen extends StatelessWidget {
                     activityStatus: activityStatusController.text,
                     specialization: specializationController.text,
                     academicRank: academicRankController.text,
-              
-                 
                   ),
                 ),
               );
             }
           },
-          style: ElevatedButton.styleFrom(backgroundColor: Colors.teal),
-          child: Center(child: TextWidget(text: "update")),
+          isSubmitting: state.status == Status.loading(),
         );
       },
     );
@@ -237,5 +236,4 @@ class EditMemberScreen extends StatelessWidget {
       builder: (context) => const Center(child: CircularProgressIndicator()),
     );
   }
-
 }

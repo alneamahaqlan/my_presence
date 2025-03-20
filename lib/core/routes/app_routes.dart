@@ -43,4 +43,10 @@ abstract class AppRoutes {
 
   //dashboard
   static const String dashboard = '/dashboard';
+
+  //lectures
+  static const String lectures = '/lectures';
+  static const String createLecture = '/create-lecture';
+  static const String editLecture = '/edit-lecture';
+  static const String viewLecture = '/view-lecture';
 }

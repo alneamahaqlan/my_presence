@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../../core/models/api_result.dart';
 import '../../../../core/models/status.dart';
 import '../../data/models/department_create_body.dart';
 import '../../data/models/department_model.dart';
@@ -32,16 +31,20 @@ class DepartmentBloc extends Bloc<DepartmentEvent, DepartmentState> {
 
     result.when(
       success: (departments) {
-        emit(state.copyWith(
-          status: const Status.success(),
-          departments: departments,
-        ));
+        emit(
+          state.copyWith(
+            status: const Status.success(),
+            departments: departments,
+          ),
+        );
       },
       failure: (error) {
-        emit(state.copyWith(
-          status: const Status.failed(),
-          message: error.toString(),
-        ));
+        emit(
+          state.copyWith(
+            status: const Status.failed(),
+            message: error.toString(),
+          ),
+        );
       },
     );
   }
@@ -51,17 +54,22 @@ class DepartmentBloc extends Bloc<DepartmentEvent, DepartmentState> {
     Emitter<DepartmentState> emit,
   ) async {
     // repository.test();
-    final result = await repository.createDepartment(facultyId: event.facultyId, departmentCreateBody: event.departmentCreateBody);
+    final result = await repository.createDepartment(
+      facultyId: event.facultyId,
+      departmentCreateBody: event.departmentCreateBody,
+    );
     result.when(
       success: (id) {
         // Refresh the list of departments
         add(const FetchDepartments());
       },
       failure: (error) {
-        emit(state.copyWith(
-          status: const Status.failed(),
-          message: error.toString(),
-        ));
+        emit(
+          state.copyWith(
+            status: const Status.failed(),
+            message: error.toString(),
+          ),
+        );
       },
     );
   }

@@ -19,9 +19,9 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$LectureScheduleEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String departmentId) fetchSchedules,
+    required TResult Function(Department department) fetchSchedules,
     required TResult Function(
-      String departmentId,
+      Department department,
       ScheduleCreateBody scheduleCreateBody,
     )
     addSchedule,
@@ -33,12 +33,13 @@ mixin _$LectureScheduleEvent {
       Attendance attendance,
     )
     updateAttendance,
+    required TResult Function(Department department) setDepartment,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String departmentId)? fetchSchedules,
+    TResult? Function(Department department)? fetchSchedules,
     TResult? Function(
-      String departmentId,
+      Department department,
       ScheduleCreateBody scheduleCreateBody,
     )?
     addSchedule,
@@ -50,12 +51,13 @@ mixin _$LectureScheduleEvent {
       Attendance attendance,
     )?
     updateAttendance,
+    TResult? Function(Department department)? setDepartment,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String departmentId)? fetchSchedules,
+    TResult Function(Department department)? fetchSchedules,
     TResult Function(
-      String departmentId,
+      Department department,
       ScheduleCreateBody scheduleCreateBody,
     )?
     addSchedule,
@@ -67,6 +69,7 @@ mixin _$LectureScheduleEvent {
       Attendance attendance,
     )?
     updateAttendance,
+    TResult Function(Department department)? setDepartment,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -76,6 +79,7 @@ mixin _$LectureScheduleEvent {
     required TResult Function(UpdateLectureSchedule value) updateSchedule,
     required TResult Function(DeleteLectureSchedule value) deleteSchedule,
     required TResult Function(UpdateAttendance value) updateAttendance,
+    required TResult Function(SetDepartment value) setDepartment,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
@@ -84,6 +88,7 @@ mixin _$LectureScheduleEvent {
     TResult? Function(UpdateLectureSchedule value)? updateSchedule,
     TResult? Function(DeleteLectureSchedule value)? deleteSchedule,
     TResult? Function(UpdateAttendance value)? updateAttendance,
+    TResult? Function(SetDepartment value)? setDepartment,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
@@ -92,6 +97,7 @@ mixin _$LectureScheduleEvent {
     TResult Function(UpdateLectureSchedule value)? updateSchedule,
     TResult Function(DeleteLectureSchedule value)? deleteSchedule,
     TResult Function(UpdateAttendance value)? updateAttendance,
+    TResult Function(SetDepartment value)? setDepartment,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
 }
@@ -128,7 +134,9 @@ abstract class _$$FetchLectureSchedulesImplCopyWith<$Res> {
     $Res Function(_$FetchLectureSchedulesImpl) then,
   ) = __$$FetchLectureSchedulesImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String departmentId});
+  $Res call({Department department});
+
+  $DepartmentCopyWith<$Res> get department;
 }
 
 /// @nodoc
@@ -145,30 +153,40 @@ class __$$FetchLectureSchedulesImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? departmentId = null}) {
+  $Res call({Object? department = null}) {
     return _then(
       _$FetchLectureSchedulesImpl(
-        departmentId:
-            null == departmentId
-                ? _value.departmentId
-                : departmentId // ignore: cast_nullable_to_non_nullable
-                    as String,
+        department:
+            null == department
+                ? _value.department
+                : department // ignore: cast_nullable_to_non_nullable
+                    as Department,
       ),
     );
+  }
+
+  /// Create a copy of LectureScheduleEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $DepartmentCopyWith<$Res> get department {
+    return $DepartmentCopyWith<$Res>(_value.department, (value) {
+      return _then(_value.copyWith(department: value));
+    });
   }
 }
 
 /// @nodoc
 
 class _$FetchLectureSchedulesImpl implements FetchLectureSchedules {
-  const _$FetchLectureSchedulesImpl({required this.departmentId});
+  const _$FetchLectureSchedulesImpl({required this.department});
 
   @override
-  final String departmentId;
+  final Department department;
 
   @override
   String toString() {
-    return 'LectureScheduleEvent.fetchSchedules(departmentId: $departmentId)';
+    return 'LectureScheduleEvent.fetchSchedules(department: $department)';
   }
 
   @override
@@ -176,12 +194,12 @@ class _$FetchLectureSchedulesImpl implements FetchLectureSchedules {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$FetchLectureSchedulesImpl &&
-            (identical(other.departmentId, departmentId) ||
-                other.departmentId == departmentId));
+            (identical(other.department, department) ||
+                other.department == department));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, departmentId);
+  int get hashCode => Object.hash(runtimeType, department);
 
   /// Create a copy of LectureScheduleEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -198,9 +216,9 @@ class _$FetchLectureSchedulesImpl implements FetchLectureSchedules {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String departmentId) fetchSchedules,
+    required TResult Function(Department department) fetchSchedules,
     required TResult Function(
-      String departmentId,
+      Department department,
       ScheduleCreateBody scheduleCreateBody,
     )
     addSchedule,
@@ -212,16 +230,17 @@ class _$FetchLectureSchedulesImpl implements FetchLectureSchedules {
       Attendance attendance,
     )
     updateAttendance,
+    required TResult Function(Department department) setDepartment,
   }) {
-    return fetchSchedules(departmentId);
+    return fetchSchedules(department);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String departmentId)? fetchSchedules,
+    TResult? Function(Department department)? fetchSchedules,
     TResult? Function(
-      String departmentId,
+      Department department,
       ScheduleCreateBody scheduleCreateBody,
     )?
     addSchedule,
@@ -233,16 +252,17 @@ class _$FetchLectureSchedulesImpl implements FetchLectureSchedules {
       Attendance attendance,
     )?
     updateAttendance,
+    TResult? Function(Department department)? setDepartment,
   }) {
-    return fetchSchedules?.call(departmentId);
+    return fetchSchedules?.call(department);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String departmentId)? fetchSchedules,
+    TResult Function(Department department)? fetchSchedules,
     TResult Function(
-      String departmentId,
+      Department department,
       ScheduleCreateBody scheduleCreateBody,
     )?
     addSchedule,
@@ -254,10 +274,11 @@ class _$FetchLectureSchedulesImpl implements FetchLectureSchedules {
       Attendance attendance,
     )?
     updateAttendance,
+    TResult Function(Department department)? setDepartment,
     required TResult orElse(),
   }) {
     if (fetchSchedules != null) {
-      return fetchSchedules(departmentId);
+      return fetchSchedules(department);
     }
     return orElse();
   }
@@ -270,6 +291,7 @@ class _$FetchLectureSchedulesImpl implements FetchLectureSchedules {
     required TResult Function(UpdateLectureSchedule value) updateSchedule,
     required TResult Function(DeleteLectureSchedule value) deleteSchedule,
     required TResult Function(UpdateAttendance value) updateAttendance,
+    required TResult Function(SetDepartment value) setDepartment,
   }) {
     return fetchSchedules(this);
   }
@@ -282,6 +304,7 @@ class _$FetchLectureSchedulesImpl implements FetchLectureSchedules {
     TResult? Function(UpdateLectureSchedule value)? updateSchedule,
     TResult? Function(DeleteLectureSchedule value)? deleteSchedule,
     TResult? Function(UpdateAttendance value)? updateAttendance,
+    TResult? Function(SetDepartment value)? setDepartment,
   }) {
     return fetchSchedules?.call(this);
   }
@@ -294,6 +317,7 @@ class _$FetchLectureSchedulesImpl implements FetchLectureSchedules {
     TResult Function(UpdateLectureSchedule value)? updateSchedule,
     TResult Function(DeleteLectureSchedule value)? deleteSchedule,
     TResult Function(UpdateAttendance value)? updateAttendance,
+    TResult Function(SetDepartment value)? setDepartment,
     required TResult orElse(),
   }) {
     if (fetchSchedules != null) {
@@ -304,10 +328,10 @@ class _$FetchLectureSchedulesImpl implements FetchLectureSchedules {
 }
 
 abstract class FetchLectureSchedules implements LectureScheduleEvent {
-  const factory FetchLectureSchedules({required final String departmentId}) =
+  const factory FetchLectureSchedules({required final Department department}) =
       _$FetchLectureSchedulesImpl;
 
-  String get departmentId;
+  Department get department;
 
   /// Create a copy of LectureScheduleEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -323,8 +347,9 @@ abstract class _$$AddLectureScheduleImplCopyWith<$Res> {
     $Res Function(_$AddLectureScheduleImpl) then,
   ) = __$$AddLectureScheduleImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String departmentId, ScheduleCreateBody scheduleCreateBody});
+  $Res call({Department department, ScheduleCreateBody scheduleCreateBody});
 
+  $DepartmentCopyWith<$Res> get department;
   $ScheduleCreateBodyCopyWith<$Res> get scheduleCreateBody;
 }
 
@@ -341,14 +366,14 @@ class __$$AddLectureScheduleImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? departmentId = null, Object? scheduleCreateBody = null}) {
+  $Res call({Object? department = null, Object? scheduleCreateBody = null}) {
     return _then(
       _$AddLectureScheduleImpl(
-        departmentId:
-            null == departmentId
-                ? _value.departmentId
-                : departmentId // ignore: cast_nullable_to_non_nullable
-                    as String,
+        department:
+            null == department
+                ? _value.department
+                : department // ignore: cast_nullable_to_non_nullable
+                    as Department,
         scheduleCreateBody:
             null == scheduleCreateBody
                 ? _value.scheduleCreateBody
@@ -356,6 +381,16 @@ class __$$AddLectureScheduleImplCopyWithImpl<$Res>
                     as ScheduleCreateBody,
       ),
     );
+  }
+
+  /// Create a copy of LectureScheduleEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $DepartmentCopyWith<$Res> get department {
+    return $DepartmentCopyWith<$Res>(_value.department, (value) {
+      return _then(_value.copyWith(department: value));
+    });
   }
 
   /// Create a copy of LectureScheduleEvent
@@ -375,18 +410,18 @@ class __$$AddLectureScheduleImplCopyWithImpl<$Res>
 
 class _$AddLectureScheduleImpl implements AddLectureSchedule {
   const _$AddLectureScheduleImpl({
-    required this.departmentId,
+    required this.department,
     required this.scheduleCreateBody,
   });
 
   @override
-  final String departmentId;
+  final Department department;
   @override
   final ScheduleCreateBody scheduleCreateBody;
 
   @override
   String toString() {
-    return 'LectureScheduleEvent.addSchedule(departmentId: $departmentId, scheduleCreateBody: $scheduleCreateBody)';
+    return 'LectureScheduleEvent.addSchedule(department: $department, scheduleCreateBody: $scheduleCreateBody)';
   }
 
   @override
@@ -394,15 +429,14 @@ class _$AddLectureScheduleImpl implements AddLectureSchedule {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AddLectureScheduleImpl &&
-            (identical(other.departmentId, departmentId) ||
-                other.departmentId == departmentId) &&
+            (identical(other.department, department) ||
+                other.department == department) &&
             (identical(other.scheduleCreateBody, scheduleCreateBody) ||
                 other.scheduleCreateBody == scheduleCreateBody));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, departmentId, scheduleCreateBody);
+  int get hashCode => Object.hash(runtimeType, department, scheduleCreateBody);
 
   /// Create a copy of LectureScheduleEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -418,9 +452,9 @@ class _$AddLectureScheduleImpl implements AddLectureSchedule {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String departmentId) fetchSchedules,
+    required TResult Function(Department department) fetchSchedules,
     required TResult Function(
-      String departmentId,
+      Department department,
       ScheduleCreateBody scheduleCreateBody,
     )
     addSchedule,
@@ -432,16 +466,17 @@ class _$AddLectureScheduleImpl implements AddLectureSchedule {
       Attendance attendance,
     )
     updateAttendance,
+    required TResult Function(Department department) setDepartment,
   }) {
-    return addSchedule(departmentId, scheduleCreateBody);
+    return addSchedule(department, scheduleCreateBody);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String departmentId)? fetchSchedules,
+    TResult? Function(Department department)? fetchSchedules,
     TResult? Function(
-      String departmentId,
+      Department department,
       ScheduleCreateBody scheduleCreateBody,
     )?
     addSchedule,
@@ -453,16 +488,17 @@ class _$AddLectureScheduleImpl implements AddLectureSchedule {
       Attendance attendance,
     )?
     updateAttendance,
+    TResult? Function(Department department)? setDepartment,
   }) {
-    return addSchedule?.call(departmentId, scheduleCreateBody);
+    return addSchedule?.call(department, scheduleCreateBody);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String departmentId)? fetchSchedules,
+    TResult Function(Department department)? fetchSchedules,
     TResult Function(
-      String departmentId,
+      Department department,
       ScheduleCreateBody scheduleCreateBody,
     )?
     addSchedule,
@@ -474,10 +510,11 @@ class _$AddLectureScheduleImpl implements AddLectureSchedule {
       Attendance attendance,
     )?
     updateAttendance,
+    TResult Function(Department department)? setDepartment,
     required TResult orElse(),
   }) {
     if (addSchedule != null) {
-      return addSchedule(departmentId, scheduleCreateBody);
+      return addSchedule(department, scheduleCreateBody);
     }
     return orElse();
   }
@@ -490,6 +527,7 @@ class _$AddLectureScheduleImpl implements AddLectureSchedule {
     required TResult Function(UpdateLectureSchedule value) updateSchedule,
     required TResult Function(DeleteLectureSchedule value) deleteSchedule,
     required TResult Function(UpdateAttendance value) updateAttendance,
+    required TResult Function(SetDepartment value) setDepartment,
   }) {
     return addSchedule(this);
   }
@@ -502,6 +540,7 @@ class _$AddLectureScheduleImpl implements AddLectureSchedule {
     TResult? Function(UpdateLectureSchedule value)? updateSchedule,
     TResult? Function(DeleteLectureSchedule value)? deleteSchedule,
     TResult? Function(UpdateAttendance value)? updateAttendance,
+    TResult? Function(SetDepartment value)? setDepartment,
   }) {
     return addSchedule?.call(this);
   }
@@ -514,6 +553,7 @@ class _$AddLectureScheduleImpl implements AddLectureSchedule {
     TResult Function(UpdateLectureSchedule value)? updateSchedule,
     TResult Function(DeleteLectureSchedule value)? deleteSchedule,
     TResult Function(UpdateAttendance value)? updateAttendance,
+    TResult Function(SetDepartment value)? setDepartment,
     required TResult orElse(),
   }) {
     if (addSchedule != null) {
@@ -525,11 +565,11 @@ class _$AddLectureScheduleImpl implements AddLectureSchedule {
 
 abstract class AddLectureSchedule implements LectureScheduleEvent {
   const factory AddLectureSchedule({
-    required final String departmentId,
+    required final Department department,
     required final ScheduleCreateBody scheduleCreateBody,
   }) = _$AddLectureScheduleImpl;
 
-  String get departmentId;
+  Department get department;
   ScheduleCreateBody get scheduleCreateBody;
 
   /// Create a copy of LectureScheduleEvent
@@ -634,9 +674,9 @@ class _$UpdateLectureScheduleImpl implements UpdateLectureSchedule {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String departmentId) fetchSchedules,
+    required TResult Function(Department department) fetchSchedules,
     required TResult Function(
-      String departmentId,
+      Department department,
       ScheduleCreateBody scheduleCreateBody,
     )
     addSchedule,
@@ -648,6 +688,7 @@ class _$UpdateLectureScheduleImpl implements UpdateLectureSchedule {
       Attendance attendance,
     )
     updateAttendance,
+    required TResult Function(Department department) setDepartment,
   }) {
     return updateSchedule(id, schedule);
   }
@@ -655,9 +696,9 @@ class _$UpdateLectureScheduleImpl implements UpdateLectureSchedule {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String departmentId)? fetchSchedules,
+    TResult? Function(Department department)? fetchSchedules,
     TResult? Function(
-      String departmentId,
+      Department department,
       ScheduleCreateBody scheduleCreateBody,
     )?
     addSchedule,
@@ -669,6 +710,7 @@ class _$UpdateLectureScheduleImpl implements UpdateLectureSchedule {
       Attendance attendance,
     )?
     updateAttendance,
+    TResult? Function(Department department)? setDepartment,
   }) {
     return updateSchedule?.call(id, schedule);
   }
@@ -676,9 +718,9 @@ class _$UpdateLectureScheduleImpl implements UpdateLectureSchedule {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String departmentId)? fetchSchedules,
+    TResult Function(Department department)? fetchSchedules,
     TResult Function(
-      String departmentId,
+      Department department,
       ScheduleCreateBody scheduleCreateBody,
     )?
     addSchedule,
@@ -690,6 +732,7 @@ class _$UpdateLectureScheduleImpl implements UpdateLectureSchedule {
       Attendance attendance,
     )?
     updateAttendance,
+    TResult Function(Department department)? setDepartment,
     required TResult orElse(),
   }) {
     if (updateSchedule != null) {
@@ -706,6 +749,7 @@ class _$UpdateLectureScheduleImpl implements UpdateLectureSchedule {
     required TResult Function(UpdateLectureSchedule value) updateSchedule,
     required TResult Function(DeleteLectureSchedule value) deleteSchedule,
     required TResult Function(UpdateAttendance value) updateAttendance,
+    required TResult Function(SetDepartment value) setDepartment,
   }) {
     return updateSchedule(this);
   }
@@ -718,6 +762,7 @@ class _$UpdateLectureScheduleImpl implements UpdateLectureSchedule {
     TResult? Function(UpdateLectureSchedule value)? updateSchedule,
     TResult? Function(DeleteLectureSchedule value)? deleteSchedule,
     TResult? Function(UpdateAttendance value)? updateAttendance,
+    TResult? Function(SetDepartment value)? setDepartment,
   }) {
     return updateSchedule?.call(this);
   }
@@ -730,6 +775,7 @@ class _$UpdateLectureScheduleImpl implements UpdateLectureSchedule {
     TResult Function(UpdateLectureSchedule value)? updateSchedule,
     TResult Function(DeleteLectureSchedule value)? deleteSchedule,
     TResult Function(UpdateAttendance value)? updateAttendance,
+    TResult Function(SetDepartment value)? setDepartment,
     required TResult orElse(),
   }) {
     if (updateSchedule != null) {
@@ -830,9 +876,9 @@ class _$DeleteLectureScheduleImpl implements DeleteLectureSchedule {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String departmentId) fetchSchedules,
+    required TResult Function(Department department) fetchSchedules,
     required TResult Function(
-      String departmentId,
+      Department department,
       ScheduleCreateBody scheduleCreateBody,
     )
     addSchedule,
@@ -844,6 +890,7 @@ class _$DeleteLectureScheduleImpl implements DeleteLectureSchedule {
       Attendance attendance,
     )
     updateAttendance,
+    required TResult Function(Department department) setDepartment,
   }) {
     return deleteSchedule(id);
   }
@@ -851,9 +898,9 @@ class _$DeleteLectureScheduleImpl implements DeleteLectureSchedule {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String departmentId)? fetchSchedules,
+    TResult? Function(Department department)? fetchSchedules,
     TResult? Function(
-      String departmentId,
+      Department department,
       ScheduleCreateBody scheduleCreateBody,
     )?
     addSchedule,
@@ -865,6 +912,7 @@ class _$DeleteLectureScheduleImpl implements DeleteLectureSchedule {
       Attendance attendance,
     )?
     updateAttendance,
+    TResult? Function(Department department)? setDepartment,
   }) {
     return deleteSchedule?.call(id);
   }
@@ -872,9 +920,9 @@ class _$DeleteLectureScheduleImpl implements DeleteLectureSchedule {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String departmentId)? fetchSchedules,
+    TResult Function(Department department)? fetchSchedules,
     TResult Function(
-      String departmentId,
+      Department department,
       ScheduleCreateBody scheduleCreateBody,
     )?
     addSchedule,
@@ -886,6 +934,7 @@ class _$DeleteLectureScheduleImpl implements DeleteLectureSchedule {
       Attendance attendance,
     )?
     updateAttendance,
+    TResult Function(Department department)? setDepartment,
     required TResult orElse(),
   }) {
     if (deleteSchedule != null) {
@@ -902,6 +951,7 @@ class _$DeleteLectureScheduleImpl implements DeleteLectureSchedule {
     required TResult Function(UpdateLectureSchedule value) updateSchedule,
     required TResult Function(DeleteLectureSchedule value) deleteSchedule,
     required TResult Function(UpdateAttendance value) updateAttendance,
+    required TResult Function(SetDepartment value) setDepartment,
   }) {
     return deleteSchedule(this);
   }
@@ -914,6 +964,7 @@ class _$DeleteLectureScheduleImpl implements DeleteLectureSchedule {
     TResult? Function(UpdateLectureSchedule value)? updateSchedule,
     TResult? Function(DeleteLectureSchedule value)? deleteSchedule,
     TResult? Function(UpdateAttendance value)? updateAttendance,
+    TResult? Function(SetDepartment value)? setDepartment,
   }) {
     return deleteSchedule?.call(this);
   }
@@ -926,6 +977,7 @@ class _$DeleteLectureScheduleImpl implements DeleteLectureSchedule {
     TResult Function(UpdateLectureSchedule value)? updateSchedule,
     TResult Function(DeleteLectureSchedule value)? deleteSchedule,
     TResult Function(UpdateAttendance value)? updateAttendance,
+    TResult Function(SetDepartment value)? setDepartment,
     required TResult orElse(),
   }) {
     if (deleteSchedule != null) {
@@ -1062,9 +1114,9 @@ class _$UpdateAttendanceImpl implements UpdateAttendance {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String departmentId) fetchSchedules,
+    required TResult Function(Department department) fetchSchedules,
     required TResult Function(
-      String departmentId,
+      Department department,
       ScheduleCreateBody scheduleCreateBody,
     )
     addSchedule,
@@ -1076,6 +1128,7 @@ class _$UpdateAttendanceImpl implements UpdateAttendance {
       Attendance attendance,
     )
     updateAttendance,
+    required TResult Function(Department department) setDepartment,
   }) {
     return updateAttendance(lectureId, scheduleId, attendance);
   }
@@ -1083,9 +1136,9 @@ class _$UpdateAttendanceImpl implements UpdateAttendance {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String departmentId)? fetchSchedules,
+    TResult? Function(Department department)? fetchSchedules,
     TResult? Function(
-      String departmentId,
+      Department department,
       ScheduleCreateBody scheduleCreateBody,
     )?
     addSchedule,
@@ -1097,6 +1150,7 @@ class _$UpdateAttendanceImpl implements UpdateAttendance {
       Attendance attendance,
     )?
     updateAttendance,
+    TResult? Function(Department department)? setDepartment,
   }) {
     return updateAttendance?.call(lectureId, scheduleId, attendance);
   }
@@ -1104,9 +1158,9 @@ class _$UpdateAttendanceImpl implements UpdateAttendance {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String departmentId)? fetchSchedules,
+    TResult Function(Department department)? fetchSchedules,
     TResult Function(
-      String departmentId,
+      Department department,
       ScheduleCreateBody scheduleCreateBody,
     )?
     addSchedule,
@@ -1118,6 +1172,7 @@ class _$UpdateAttendanceImpl implements UpdateAttendance {
       Attendance attendance,
     )?
     updateAttendance,
+    TResult Function(Department department)? setDepartment,
     required TResult orElse(),
   }) {
     if (updateAttendance != null) {
@@ -1134,6 +1189,7 @@ class _$UpdateAttendanceImpl implements UpdateAttendance {
     required TResult Function(UpdateLectureSchedule value) updateSchedule,
     required TResult Function(DeleteLectureSchedule value) deleteSchedule,
     required TResult Function(UpdateAttendance value) updateAttendance,
+    required TResult Function(SetDepartment value) setDepartment,
   }) {
     return updateAttendance(this);
   }
@@ -1146,6 +1202,7 @@ class _$UpdateAttendanceImpl implements UpdateAttendance {
     TResult? Function(UpdateLectureSchedule value)? updateSchedule,
     TResult? Function(DeleteLectureSchedule value)? deleteSchedule,
     TResult? Function(UpdateAttendance value)? updateAttendance,
+    TResult? Function(SetDepartment value)? setDepartment,
   }) {
     return updateAttendance?.call(this);
   }
@@ -1158,6 +1215,7 @@ class _$UpdateAttendanceImpl implements UpdateAttendance {
     TResult Function(UpdateLectureSchedule value)? updateSchedule,
     TResult Function(DeleteLectureSchedule value)? deleteSchedule,
     TResult Function(UpdateAttendance value)? updateAttendance,
+    TResult Function(SetDepartment value)? setDepartment,
     required TResult orElse(),
   }) {
     if (updateAttendance != null) {
@@ -1186,51 +1244,226 @@ abstract class UpdateAttendance implements LectureScheduleEvent {
 }
 
 /// @nodoc
-mixin _$LectureScheduleState {
+abstract class _$$SetDepartmentImplCopyWith<$Res> {
+  factory _$$SetDepartmentImplCopyWith(
+    _$SetDepartmentImpl value,
+    $Res Function(_$SetDepartmentImpl) then,
+  ) = __$$SetDepartmentImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({Department department});
+
+  $DepartmentCopyWith<$Res> get department;
+}
+
+/// @nodoc
+class __$$SetDepartmentImplCopyWithImpl<$Res>
+    extends _$LectureScheduleEventCopyWithImpl<$Res, _$SetDepartmentImpl>
+    implements _$$SetDepartmentImplCopyWith<$Res> {
+  __$$SetDepartmentImplCopyWithImpl(
+    _$SetDepartmentImpl _value,
+    $Res Function(_$SetDepartmentImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of LectureScheduleEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? department = null}) {
+    return _then(
+      _$SetDepartmentImpl(
+        department:
+            null == department
+                ? _value.department
+                : department // ignore: cast_nullable_to_non_nullable
+                    as Department,
+      ),
+    );
+  }
+
+  /// Create a copy of LectureScheduleEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $DepartmentCopyWith<$Res> get department {
+    return $DepartmentCopyWith<$Res>(_value.department, (value) {
+      return _then(_value.copyWith(department: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$SetDepartmentImpl implements SetDepartment {
+  const _$SetDepartmentImpl({required this.department});
+
+  @override
+  final Department department;
+
+  @override
+  String toString() {
+    return 'LectureScheduleEvent.setDepartment(department: $department)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SetDepartmentImpl &&
+            (identical(other.department, department) ||
+                other.department == department));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, department);
+
+  /// Create a copy of LectureScheduleEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SetDepartmentImplCopyWith<_$SetDepartmentImpl> get copyWith =>
+      __$$SetDepartmentImplCopyWithImpl<_$SetDepartmentImpl>(this, _$identity);
+
+  @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(List<Schedule> schedules) loaded,
-    required TResult Function(String message) error,
-  }) => throw _privateConstructorUsedError;
+    required TResult Function(Department department) fetchSchedules,
+    required TResult Function(
+      Department department,
+      ScheduleCreateBody scheduleCreateBody,
+    )
+    addSchedule,
+    required TResult Function(String id, Schedule schedule) updateSchedule,
+    required TResult Function(String id) deleteSchedule,
+    required TResult Function(
+      String lectureId,
+      String scheduleId,
+      Attendance attendance,
+    )
+    updateAttendance,
+    required TResult Function(Department department) setDepartment,
+  }) {
+    return setDepartment(department);
+  }
+
+  @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(List<Schedule> schedules)? loaded,
-    TResult? Function(String message)? error,
-  }) => throw _privateConstructorUsedError;
+    TResult? Function(Department department)? fetchSchedules,
+    TResult? Function(
+      Department department,
+      ScheduleCreateBody scheduleCreateBody,
+    )?
+    addSchedule,
+    TResult? Function(String id, Schedule schedule)? updateSchedule,
+    TResult? Function(String id)? deleteSchedule,
+    TResult? Function(
+      String lectureId,
+      String scheduleId,
+      Attendance attendance,
+    )?
+    updateAttendance,
+    TResult? Function(Department department)? setDepartment,
+  }) {
+    return setDepartment?.call(department);
+  }
+
+  @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(List<Schedule> schedules)? loaded,
-    TResult Function(String message)? error,
+    TResult Function(Department department)? fetchSchedules,
+    TResult Function(
+      Department department,
+      ScheduleCreateBody scheduleCreateBody,
+    )?
+    addSchedule,
+    TResult Function(String id, Schedule schedule)? updateSchedule,
+    TResult Function(String id)? deleteSchedule,
+    TResult Function(
+      String lectureId,
+      String scheduleId,
+      Attendance attendance,
+    )?
+    updateAttendance,
+    TResult Function(Department department)? setDepartment,
     required TResult orElse(),
-  }) => throw _privateConstructorUsedError;
+  }) {
+    if (setDepartment != null) {
+      return setDepartment(department);
+    }
+    return orElse();
+  }
+
+  @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(LectureScheduleInitial value) initial,
-    required TResult Function(LectureScheduleLoading value) loading,
-    required TResult Function(LectureScheduleLoaded value) loaded,
-    required TResult Function(LectureScheduleError value) error,
-  }) => throw _privateConstructorUsedError;
+    required TResult Function(FetchLectureSchedules value) fetchSchedules,
+    required TResult Function(AddLectureSchedule value) addSchedule,
+    required TResult Function(UpdateLectureSchedule value) updateSchedule,
+    required TResult Function(DeleteLectureSchedule value) deleteSchedule,
+    required TResult Function(UpdateAttendance value) updateAttendance,
+    required TResult Function(SetDepartment value) setDepartment,
+  }) {
+    return setDepartment(this);
+  }
+
+  @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(LectureScheduleInitial value)? initial,
-    TResult? Function(LectureScheduleLoading value)? loading,
-    TResult? Function(LectureScheduleLoaded value)? loaded,
-    TResult? Function(LectureScheduleError value)? error,
-  }) => throw _privateConstructorUsedError;
+    TResult? Function(FetchLectureSchedules value)? fetchSchedules,
+    TResult? Function(AddLectureSchedule value)? addSchedule,
+    TResult? Function(UpdateLectureSchedule value)? updateSchedule,
+    TResult? Function(DeleteLectureSchedule value)? deleteSchedule,
+    TResult? Function(UpdateAttendance value)? updateAttendance,
+    TResult? Function(SetDepartment value)? setDepartment,
+  }) {
+    return setDepartment?.call(this);
+  }
+
+  @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(LectureScheduleInitial value)? initial,
-    TResult Function(LectureScheduleLoading value)? loading,
-    TResult Function(LectureScheduleLoaded value)? loaded,
-    TResult Function(LectureScheduleError value)? error,
+    TResult Function(FetchLectureSchedules value)? fetchSchedules,
+    TResult Function(AddLectureSchedule value)? addSchedule,
+    TResult Function(UpdateLectureSchedule value)? updateSchedule,
+    TResult Function(DeleteLectureSchedule value)? deleteSchedule,
+    TResult Function(UpdateAttendance value)? updateAttendance,
+    TResult Function(SetDepartment value)? setDepartment,
     required TResult orElse(),
-  }) => throw _privateConstructorUsedError;
+  }) {
+    if (setDepartment != null) {
+      return setDepartment(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class SetDepartment implements LectureScheduleEvent {
+  const factory SetDepartment({required final Department department}) =
+      _$SetDepartmentImpl;
+
+  Department get department;
+
+  /// Create a copy of LectureScheduleEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SetDepartmentImplCopyWith<_$SetDepartmentImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$LectureScheduleState {
+  Status get status => throw _privateConstructorUsedError; // Add status field
+  List<Schedule> get schedules =>
+      throw _privateConstructorUsedError; // Rename to schedules
+  Department? get department => throw _privateConstructorUsedError;
+  String? get errorMessage => throw _privateConstructorUsedError;
+
+  /// Create a copy of LectureScheduleState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $LectureScheduleStateCopyWith<LectureScheduleState> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -1239,6 +1472,16 @@ abstract class $LectureScheduleStateCopyWith<$Res> {
     LectureScheduleState value,
     $Res Function(LectureScheduleState) then,
   ) = _$LectureScheduleStateCopyWithImpl<$Res, LectureScheduleState>;
+  @useResult
+  $Res call({
+    Status status,
+    List<Schedule> schedules,
+    Department? department,
+    String? errorMessage,
+  });
+
+  $StatusCopyWith<$Res> get status;
+  $DepartmentCopyWith<$Res>? get department;
 }
 
 /// @nodoc
@@ -1256,281 +1499,129 @@ class _$LectureScheduleStateCopyWithImpl<
 
   /// Create a copy of LectureScheduleState
   /// with the given fields replaced by the non-null parameter values.
-}
-
-/// @nodoc
-abstract class _$$LectureScheduleInitialImplCopyWith<$Res> {
-  factory _$$LectureScheduleInitialImplCopyWith(
-    _$LectureScheduleInitialImpl value,
-    $Res Function(_$LectureScheduleInitialImpl) then,
-  ) = __$$LectureScheduleInitialImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$LectureScheduleInitialImplCopyWithImpl<$Res>
-    extends
-        _$LectureScheduleStateCopyWithImpl<$Res, _$LectureScheduleInitialImpl>
-    implements _$$LectureScheduleInitialImplCopyWith<$Res> {
-  __$$LectureScheduleInitialImplCopyWithImpl(
-    _$LectureScheduleInitialImpl _value,
-    $Res Function(_$LectureScheduleInitialImpl) _then,
-  ) : super(_value, _then);
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? status = null,
+    Object? schedules = null,
+    Object? department = freezed,
+    Object? errorMessage = freezed,
+  }) {
+    return _then(
+      _value.copyWith(
+            status:
+                null == status
+                    ? _value.status
+                    : status // ignore: cast_nullable_to_non_nullable
+                        as Status,
+            schedules:
+                null == schedules
+                    ? _value.schedules
+                    : schedules // ignore: cast_nullable_to_non_nullable
+                        as List<Schedule>,
+            department:
+                freezed == department
+                    ? _value.department
+                    : department // ignore: cast_nullable_to_non_nullable
+                        as Department?,
+            errorMessage:
+                freezed == errorMessage
+                    ? _value.errorMessage
+                    : errorMessage // ignore: cast_nullable_to_non_nullable
+                        as String?,
+          )
+          as $Val,
+    );
+  }
 
   /// Create a copy of LectureScheduleState
   /// with the given fields replaced by the non-null parameter values.
-}
-
-/// @nodoc
-
-class _$LectureScheduleInitialImpl implements LectureScheduleInitial {
-  const _$LectureScheduleInitialImpl();
-
   @override
-  String toString() {
-    return 'LectureScheduleState.initial()';
+  @pragma('vm:prefer-inline')
+  $StatusCopyWith<$Res> get status {
+    return $StatusCopyWith<$Res>(_value.status, (value) {
+      return _then(_value.copyWith(status: value) as $Val);
+    });
   }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$LectureScheduleInitialImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(List<Schedule> schedules) loaded,
-    required TResult Function(String message) error,
-  }) {
-    return initial();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(List<Schedule> schedules)? loaded,
-    TResult? Function(String message)? error,
-  }) {
-    return initial?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(List<Schedule> schedules)? loaded,
-    TResult Function(String message)? error,
-    required TResult orElse(),
-  }) {
-    if (initial != null) {
-      return initial();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(LectureScheduleInitial value) initial,
-    required TResult Function(LectureScheduleLoading value) loading,
-    required TResult Function(LectureScheduleLoaded value) loaded,
-    required TResult Function(LectureScheduleError value) error,
-  }) {
-    return initial(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(LectureScheduleInitial value)? initial,
-    TResult? Function(LectureScheduleLoading value)? loading,
-    TResult? Function(LectureScheduleLoaded value)? loaded,
-    TResult? Function(LectureScheduleError value)? error,
-  }) {
-    return initial?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(LectureScheduleInitial value)? initial,
-    TResult Function(LectureScheduleLoading value)? loading,
-    TResult Function(LectureScheduleLoaded value)? loaded,
-    TResult Function(LectureScheduleError value)? error,
-    required TResult orElse(),
-  }) {
-    if (initial != null) {
-      return initial(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class LectureScheduleInitial implements LectureScheduleState {
-  const factory LectureScheduleInitial() = _$LectureScheduleInitialImpl;
-}
-
-/// @nodoc
-abstract class _$$LectureScheduleLoadingImplCopyWith<$Res> {
-  factory _$$LectureScheduleLoadingImplCopyWith(
-    _$LectureScheduleLoadingImpl value,
-    $Res Function(_$LectureScheduleLoadingImpl) then,
-  ) = __$$LectureScheduleLoadingImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$LectureScheduleLoadingImplCopyWithImpl<$Res>
-    extends
-        _$LectureScheduleStateCopyWithImpl<$Res, _$LectureScheduleLoadingImpl>
-    implements _$$LectureScheduleLoadingImplCopyWith<$Res> {
-  __$$LectureScheduleLoadingImplCopyWithImpl(
-    _$LectureScheduleLoadingImpl _value,
-    $Res Function(_$LectureScheduleLoadingImpl) _then,
-  ) : super(_value, _then);
 
   /// Create a copy of LectureScheduleState
   /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $DepartmentCopyWith<$Res>? get department {
+    if (_value.department == null) {
+      return null;
+    }
+
+    return $DepartmentCopyWith<$Res>(_value.department!, (value) {
+      return _then(_value.copyWith(department: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
-
-class _$LectureScheduleLoadingImpl implements LectureScheduleLoading {
-  const _$LectureScheduleLoadingImpl();
-
+abstract class _$$LectureScheduleStateImplCopyWith<$Res>
+    implements $LectureScheduleStateCopyWith<$Res> {
+  factory _$$LectureScheduleStateImplCopyWith(
+    _$LectureScheduleStateImpl value,
+    $Res Function(_$LectureScheduleStateImpl) then,
+  ) = __$$LectureScheduleStateImplCopyWithImpl<$Res>;
   @override
-  String toString() {
-    return 'LectureScheduleState.loading()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$LectureScheduleLoadingImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(List<Schedule> schedules) loaded,
-    required TResult Function(String message) error,
-  }) {
-    return loading();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(List<Schedule> schedules)? loaded,
-    TResult? Function(String message)? error,
-  }) {
-    return loading?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(List<Schedule> schedules)? loaded,
-    TResult Function(String message)? error,
-    required TResult orElse(),
-  }) {
-    if (loading != null) {
-      return loading();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(LectureScheduleInitial value) initial,
-    required TResult Function(LectureScheduleLoading value) loading,
-    required TResult Function(LectureScheduleLoaded value) loaded,
-    required TResult Function(LectureScheduleError value) error,
-  }) {
-    return loading(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(LectureScheduleInitial value)? initial,
-    TResult? Function(LectureScheduleLoading value)? loading,
-    TResult? Function(LectureScheduleLoaded value)? loaded,
-    TResult? Function(LectureScheduleError value)? error,
-  }) {
-    return loading?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(LectureScheduleInitial value)? initial,
-    TResult Function(LectureScheduleLoading value)? loading,
-    TResult Function(LectureScheduleLoaded value)? loaded,
-    TResult Function(LectureScheduleError value)? error,
-    required TResult orElse(),
-  }) {
-    if (loading != null) {
-      return loading(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class LectureScheduleLoading implements LectureScheduleState {
-  const factory LectureScheduleLoading() = _$LectureScheduleLoadingImpl;
-}
-
-/// @nodoc
-abstract class _$$LectureScheduleLoadedImplCopyWith<$Res> {
-  factory _$$LectureScheduleLoadedImplCopyWith(
-    _$LectureScheduleLoadedImpl value,
-    $Res Function(_$LectureScheduleLoadedImpl) then,
-  ) = __$$LectureScheduleLoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<Schedule> schedules});
+  $Res call({
+    Status status,
+    List<Schedule> schedules,
+    Department? department,
+    String? errorMessage,
+  });
+
+  @override
+  $StatusCopyWith<$Res> get status;
+  @override
+  $DepartmentCopyWith<$Res>? get department;
 }
 
 /// @nodoc
-class __$$LectureScheduleLoadedImplCopyWithImpl<$Res>
-    extends
-        _$LectureScheduleStateCopyWithImpl<$Res, _$LectureScheduleLoadedImpl>
-    implements _$$LectureScheduleLoadedImplCopyWith<$Res> {
-  __$$LectureScheduleLoadedImplCopyWithImpl(
-    _$LectureScheduleLoadedImpl _value,
-    $Res Function(_$LectureScheduleLoadedImpl) _then,
+class __$$LectureScheduleStateImplCopyWithImpl<$Res>
+    extends _$LectureScheduleStateCopyWithImpl<$Res, _$LectureScheduleStateImpl>
+    implements _$$LectureScheduleStateImplCopyWith<$Res> {
+  __$$LectureScheduleStateImplCopyWithImpl(
+    _$LectureScheduleStateImpl _value,
+    $Res Function(_$LectureScheduleStateImpl) _then,
   ) : super(_value, _then);
 
   /// Create a copy of LectureScheduleState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? schedules = null}) {
+  $Res call({
+    Object? status = null,
+    Object? schedules = null,
+    Object? department = freezed,
+    Object? errorMessage = freezed,
+  }) {
     return _then(
-      _$LectureScheduleLoadedImpl(
-        null == schedules
-            ? _value._schedules
-            : schedules // ignore: cast_nullable_to_non_nullable
-                as List<Schedule>,
+      _$LectureScheduleStateImpl(
+        status:
+            null == status
+                ? _value.status
+                : status // ignore: cast_nullable_to_non_nullable
+                    as Status,
+        schedules:
+            null == schedules
+                ? _value._schedules
+                : schedules // ignore: cast_nullable_to_non_nullable
+                    as List<Schedule>,
+        department:
+            freezed == department
+                ? _value.department
+                : department // ignore: cast_nullable_to_non_nullable
+                    as Department?,
+        errorMessage:
+            freezed == errorMessage
+                ? _value.errorMessage
+                : errorMessage // ignore: cast_nullable_to_non_nullable
+                    as String?,
       ),
     );
   }
@@ -1538,293 +1629,98 @@ class __$$LectureScheduleLoadedImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LectureScheduleLoadedImpl implements LectureScheduleLoaded {
-  const _$LectureScheduleLoadedImpl(final List<Schedule> schedules)
-    : _schedules = schedules;
+class _$LectureScheduleStateImpl implements _LectureScheduleState {
+  const _$LectureScheduleStateImpl({
+    this.status = const Status.initial(),
+    final List<Schedule> schedules = const [],
+    this.department,
+    this.errorMessage,
+  }) : _schedules = schedules;
 
-  final List<Schedule> _schedules;
   @override
+  @JsonKey()
+  final Status status;
+  // Add status field
+  final List<Schedule> _schedules;
+  // Add status field
+  @override
+  @JsonKey()
   List<Schedule> get schedules {
     if (_schedules is EqualUnmodifiableListView) return _schedules;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_schedules);
   }
 
+  // Rename to schedules
+  @override
+  final Department? department;
+  @override
+  final String? errorMessage;
+
   @override
   String toString() {
-    return 'LectureScheduleState.loaded(schedules: $schedules)';
+    return 'LectureScheduleState(status: $status, schedules: $schedules, department: $department, errorMessage: $errorMessage)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LectureScheduleLoadedImpl &&
+            other is _$LectureScheduleStateImpl &&
+            (identical(other.status, status) || other.status == status) &&
             const DeepCollectionEquality().equals(
               other._schedules,
               _schedules,
-            ));
+            ) &&
+            (identical(other.department, department) ||
+                other.department == department) &&
+            (identical(other.errorMessage, errorMessage) ||
+                other.errorMessage == errorMessage));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_schedules));
+  int get hashCode => Object.hash(
+    runtimeType,
+    status,
+    const DeepCollectionEquality().hash(_schedules),
+    department,
+    errorMessage,
+  );
 
   /// Create a copy of LectureScheduleState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$LectureScheduleLoadedImplCopyWith<_$LectureScheduleLoadedImpl>
+  _$$LectureScheduleStateImplCopyWith<_$LectureScheduleStateImpl>
   get copyWith =>
-      __$$LectureScheduleLoadedImplCopyWithImpl<_$LectureScheduleLoadedImpl>(
+      __$$LectureScheduleStateImplCopyWithImpl<_$LectureScheduleStateImpl>(
         this,
         _$identity,
       );
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(List<Schedule> schedules) loaded,
-    required TResult Function(String message) error,
-  }) {
-    return loaded(schedules);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(List<Schedule> schedules)? loaded,
-    TResult? Function(String message)? error,
-  }) {
-    return loaded?.call(schedules);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(List<Schedule> schedules)? loaded,
-    TResult Function(String message)? error,
-    required TResult orElse(),
-  }) {
-    if (loaded != null) {
-      return loaded(schedules);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(LectureScheduleInitial value) initial,
-    required TResult Function(LectureScheduleLoading value) loading,
-    required TResult Function(LectureScheduleLoaded value) loaded,
-    required TResult Function(LectureScheduleError value) error,
-  }) {
-    return loaded(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(LectureScheduleInitial value)? initial,
-    TResult? Function(LectureScheduleLoading value)? loading,
-    TResult? Function(LectureScheduleLoaded value)? loaded,
-    TResult? Function(LectureScheduleError value)? error,
-  }) {
-    return loaded?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(LectureScheduleInitial value)? initial,
-    TResult Function(LectureScheduleLoading value)? loading,
-    TResult Function(LectureScheduleLoaded value)? loaded,
-    TResult Function(LectureScheduleError value)? error,
-    required TResult orElse(),
-  }) {
-    if (loaded != null) {
-      return loaded(this);
-    }
-    return orElse();
-  }
 }
 
-abstract class LectureScheduleLoaded implements LectureScheduleState {
-  const factory LectureScheduleLoaded(final List<Schedule> schedules) =
-      _$LectureScheduleLoadedImpl;
+abstract class _LectureScheduleState implements LectureScheduleState {
+  const factory _LectureScheduleState({
+    final Status status,
+    final List<Schedule> schedules,
+    final Department? department,
+    final String? errorMessage,
+  }) = _$LectureScheduleStateImpl;
 
-  List<Schedule> get schedules;
+  @override
+  Status get status; // Add status field
+  @override
+  List<Schedule> get schedules; // Rename to schedules
+  @override
+  Department? get department;
+  @override
+  String? get errorMessage;
 
   /// Create a copy of LectureScheduleState
   /// with the given fields replaced by the non-null parameter values.
+  @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$LectureScheduleLoadedImplCopyWith<_$LectureScheduleLoadedImpl>
-  get copyWith => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$LectureScheduleErrorImplCopyWith<$Res> {
-  factory _$$LectureScheduleErrorImplCopyWith(
-    _$LectureScheduleErrorImpl value,
-    $Res Function(_$LectureScheduleErrorImpl) then,
-  ) = __$$LectureScheduleErrorImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({String message});
-}
-
-/// @nodoc
-class __$$LectureScheduleErrorImplCopyWithImpl<$Res>
-    extends _$LectureScheduleStateCopyWithImpl<$Res, _$LectureScheduleErrorImpl>
-    implements _$$LectureScheduleErrorImplCopyWith<$Res> {
-  __$$LectureScheduleErrorImplCopyWithImpl(
-    _$LectureScheduleErrorImpl _value,
-    $Res Function(_$LectureScheduleErrorImpl) _then,
-  ) : super(_value, _then);
-
-  /// Create a copy of LectureScheduleState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({Object? message = null}) {
-    return _then(
-      _$LectureScheduleErrorImpl(
-        null == message
-            ? _value.message
-            : message // ignore: cast_nullable_to_non_nullable
-                as String,
-      ),
-    );
-  }
-}
-
-/// @nodoc
-
-class _$LectureScheduleErrorImpl implements LectureScheduleError {
-  const _$LectureScheduleErrorImpl(this.message);
-
-  @override
-  final String message;
-
-  @override
-  String toString() {
-    return 'LectureScheduleState.error(message: $message)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$LectureScheduleErrorImpl &&
-            (identical(other.message, message) || other.message == message));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, message);
-
-  /// Create a copy of LectureScheduleState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$LectureScheduleErrorImplCopyWith<_$LectureScheduleErrorImpl>
-  get copyWith =>
-      __$$LectureScheduleErrorImplCopyWithImpl<_$LectureScheduleErrorImpl>(
-        this,
-        _$identity,
-      );
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(List<Schedule> schedules) loaded,
-    required TResult Function(String message) error,
-  }) {
-    return error(message);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(List<Schedule> schedules)? loaded,
-    TResult? Function(String message)? error,
-  }) {
-    return error?.call(message);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(List<Schedule> schedules)? loaded,
-    TResult Function(String message)? error,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(message);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(LectureScheduleInitial value) initial,
-    required TResult Function(LectureScheduleLoading value) loading,
-    required TResult Function(LectureScheduleLoaded value) loaded,
-    required TResult Function(LectureScheduleError value) error,
-  }) {
-    return error(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(LectureScheduleInitial value)? initial,
-    TResult? Function(LectureScheduleLoading value)? loading,
-    TResult? Function(LectureScheduleLoaded value)? loaded,
-    TResult? Function(LectureScheduleError value)? error,
-  }) {
-    return error?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(LectureScheduleInitial value)? initial,
-    TResult Function(LectureScheduleLoading value)? loading,
-    TResult Function(LectureScheduleLoaded value)? loaded,
-    TResult Function(LectureScheduleError value)? error,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class LectureScheduleError implements LectureScheduleState {
-  const factory LectureScheduleError(final String message) =
-      _$LectureScheduleErrorImpl;
-
-  String get message;
-
-  /// Create a copy of LectureScheduleState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$LectureScheduleErrorImplCopyWith<_$LectureScheduleErrorImpl>
+  _$$LectureScheduleStateImplCopyWith<_$LectureScheduleStateImpl>
   get copyWith => throw _privateConstructorUsedError;
 }

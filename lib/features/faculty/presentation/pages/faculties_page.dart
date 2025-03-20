@@ -16,7 +16,7 @@ class FacultiesPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Faculties'),
+        title: const Text('الكليات'),
         centerTitle: true,
         elevation: 0,
       ),
@@ -25,34 +25,30 @@ class FacultiesPage extends StatelessWidget {
           if (state.status == Status.loading()) {
             return Center(
               child: CircularProgressIndicator(
-                color: colorScheme.primary, // Use theme primary color
+                color: colorScheme.primary, // استخدام لون الموضوع الرئيسي
               ),
             );
           } else if (state.status == Status.success()) {
             final faculties = state.faculties;
             return ListView.builder(
-              padding: const EdgeInsets.all(
-                16.0,
-              ), // Add padding around the list
+              padding: const EdgeInsets.all(16.0), // إضافة padding حول القائمة
               itemCount: faculties.length,
               itemBuilder: (context, index) {
                 final faculty = faculties[index];
                 return Card(
-                  elevation: 4, // Add shadow to the card
+                  elevation: 4, // إضافة ظل للبطاقة
                   margin: const EdgeInsets.only(
                     bottom: 16.0,
-                  ), // Add margin between cards
+                  ), // إضافة margin بين البطاقات
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      16.0,
-                    ), // Rounded corners
+                    borderRadius: BorderRadius.circular(16.0), // زوايا مدورة
                   ),
                   child: InkWell(
                     borderRadius: BorderRadius.circular(
                       16.0,
-                    ), // Rounded corners for InkWell
+                    ), // زوايا مدورة لـ InkWell
                     onTap: () {
-                      // Navigate to faculty profile page
+                      // الانتقال إلى صفحة ملف الكلية
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -69,34 +65,34 @@ class FacultiesPage extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(
                           16.0,
-                        ), // Add padding inside the card
+                        ), // إضافة padding داخل البطاقة
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Faculty Name
+                            // اسم الكلية
                             Text(
                               faculty.name,
                               style: theme.textTheme.titleLarge?.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color:
                                     colorScheme
-                                        .onSurface, // Use theme onSurface color
+                                        .onSurface, // استخدام لون onSurface من الموضوع
                               ),
                             ),
                             const SizedBox(
                               height: 8.0,
-                            ), // Add spacing between text and icon
-                            // Additional Details (e.g., description or stats)
+                            ), // إضافة مسافة بين النص والأيقونة
+                            // تفاصيل إضافية (مثل الوصف أو الإحصائيات)
                             Text(
-                              '${faculty.departments.length} Departments',
+                              '${faculty.departments.length} أقسام',
                               style: theme.textTheme.bodyMedium?.copyWith(
                                 color: colorScheme.onSurface.withOpacity(0.7),
                               ),
                             ),
                             const SizedBox(
                               height: 16.0,
-                            ), // Add spacing between text and icon
-                            // Icon or Action Button
+                            ), // إضافة مسافة بين النص والأيقونة
+                            // أيقونة أو زر إجراء
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
@@ -106,14 +102,9 @@ class FacultiesPage extends StatelessWidget {
                                     size: 16,
                                     color:
                                         colorScheme
-                                            .primary, // Use theme primary color
+                                            .primary, // استخدام لون الموضوع الرئيسي
                                   ),
-                                  onPressed: () {
-                                    context.pushNamed(
-                                      AppRoutes.departments,
-                                      extra: faculty,
-                                    );
-                                  },
+                                  onPressed: () {},
                                 ),
                               ],
                             ),
@@ -130,18 +121,18 @@ class FacultiesPage extends StatelessWidget {
               child: Text(
                 state.message!,
                 style: theme.textTheme.bodyMedium?.copyWith(
-                  color: colorScheme.error, // Use theme error color
+                  color: colorScheme.error, // استخدام لون الخطأ من الموضوع
                 ),
               ),
             );
           }
           return Center(
             child: Text(
-              'No data available',
+              'لا توجد بيانات متاحة',
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: colorScheme.onSurface.withOpacity(
                   0.6,
-                ), // Use theme onSurface color with opacity
+                ), // استخدام لون onSurface مع opacity
               ),
             ),
           );
@@ -151,10 +142,10 @@ class FacultiesPage extends StatelessWidget {
         onPressed: () {
           context.pushNamed(AppRoutes.addFaculty);
         },
-        backgroundColor: colorScheme.primary, // Use theme primary color
+        backgroundColor: colorScheme.primary, // استخدام لون الموضوع الرئيسي
         child: Icon(
           Icons.add,
-          color: colorScheme.onPrimary, // Use theme onPrimary color
+          color: colorScheme.onPrimary, // استخدام لون onPrimary من الموضوع
         ),
       ),
     );

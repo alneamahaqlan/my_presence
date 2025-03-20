@@ -15,6 +15,8 @@ import 'core/routes/app_pages.dart';
 import 'core/services/firebase_auth_service.dart';
 import 'core/services/firestore_service.dart';
 import 'core/services/notification_service.dart';
+import 'features/attendance/data/repositories/attendance_repository.dart';
+import 'features/attendance/presentation/bloc/attendance_bloc.dart';
 import 'features/auth/data/models/user_model.dart';
 import 'features/auth/data/repositories/auth_repository.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
@@ -24,6 +26,8 @@ import 'features/faculty/data/repositories/faculty_repository.dart';
 import 'features/faculty/presentation/bloc/faculty_bloc.dart';
 import 'features/home/data/repositories/home_repository.dart';
 import 'features/home/presentation/bloc/home_bloc.dart';
+import 'features/lecture/data/repositories/lecture_repository.dart';
+import 'features/lecture/presentation/bloc/lecture_bloc.dart';
 import 'features/lectureSchedule/data/repositories/lecture_schedule_repository.dart';
 import 'features/lectureSchedule/presentation/bloc/lecture_schedule_bloc.dart';
 import 'features/members/data/repositories/member_repository.dart';
@@ -34,11 +38,14 @@ import 'features/root/data/repositories/root_repository.dart';
 import 'features/root/presentation/pages/bloc/root_bloc.dart';
 import 'features/subject/data/repositories/subject_repository.dart';
 import 'features/subject/presentation/bloc/subject_bloc.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 final getIt = GetIt.instance;
 String initial = AppRoutes.root;
 
 Future<void> setup() async {
+    tz.initializeTimeZones();
   // Initialize EasyLocalization
   await EasyLocalization.ensureInitialized();
 
@@ -113,12 +120,12 @@ Future<void> setup() async {
     () => HomeBloc(getIt<HomeRepository>()),
   );
   // Register HomeRepository
-  getIt.registerLazySingleton<LectureScheduleRepository>(
+  getIt.registerFactory<LectureScheduleRepository>(
     () => LectureScheduleRepository(getIt<FirestoreService>()),
   );
 
   // Register HomeBloc
-  getIt.registerLazySingleton<LectureScheduleBloc>(
+  getIt.registerFactory<LectureScheduleBloc>(
     () => LectureScheduleBloc(getIt<LectureScheduleRepository>()),
   );
 
@@ -136,6 +143,9 @@ Future<void> setup() async {
   getIt.registerSingleton<SubjectRepository>(
     SubjectRepository(getIt<FirestoreService>()),
   );
+   getIt.registerFactory<LectureRepository>(
+    () => LectureRepository(getIt<FirestoreService>()),
+  );
   
 
 
@@ -148,7 +158,13 @@ Future<void> setup() async {
   getIt.registerSingleton<DepartmentBloc>(
     DepartmentBloc(getIt<DepartmentRepository>()),
   );
-  getIt.registerSingleton<SubjectBloc>(SubjectBloc(getIt<SubjectRepository>()));
+  
+  getIt.registerSingleton<SubjectBloc>(SubjectBloc(getIt<SubjectRepository>())); 
+   getIt.registerFactory<LectureBloc>( () => LectureBloc(getIt<LectureRepository>())); 
+ getIt.registerFactory<AttendanceRepository>(
+    () => AttendanceRepository(getIt<FirestoreService>()),
+  );
+   getIt.registerFactory<AttendanceBloc>( () => AttendanceBloc(getIt<AttendanceRepository>()));
 
   // Register GoRouter
   getIt.registerLazySingleton<GoRouter>(() => AppPages.router);

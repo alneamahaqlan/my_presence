@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/widgets/text_widget.dart';
 import '../../../faculty/presentation/bloc/faculty_bloc.dart';
 import '../../../members/presentation/bloc/member_bloc.dart';
-import '../../../subject/presentation/bloc/subject_bloc.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -26,7 +25,7 @@ class HomePage extends StatelessWidget {
                       return _buildDashboardCard(
                         context: context,
                         count: state.members.length,
-                        title: "Number of Members",
+                        title: "عدد الاعضاء",
                       );
                     },
                   ),
@@ -37,9 +36,9 @@ class HomePage extends StatelessWidget {
                         context: context,
                         count: state.status.maybeWhen(
                           orElse: () => 0,
-                         success:() => state.faculties.length,
+                          success: () => state.faculties.length,
                         ),
-                        title: "Faculties",
+                        title: "الكليات",
                       );
                     },
                   ),

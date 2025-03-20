@@ -68,6 +68,7 @@ class FacultyRepository {
           Department.fromJson({
             'id': departmentDoc.id,
             'name': departmentData['name'],
+            'facultyId': departmentData['facultyId'],
             'createdAt': createdAt,
             'updatedAt': updatedAt,
           }),
@@ -96,7 +97,12 @@ class FacultyRepository {
   // create new faculty
   Future<ApiResult<String>> createFaculty(String name) async {
     try {
-      final faculty = {'name': name};
+
+        final faculty = {
+     'name': name,
+      'createdAt': Timestamp.now(),
+      'updatedAt': Timestamp.now(),
+    };
       final docRef = await _firestoreService.addDocument(
         collectionName: 'faculties',
         data: faculty,

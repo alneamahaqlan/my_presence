@@ -32,6 +32,11 @@ _$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
               ?.map((e) => Research.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
+      lectures:
+          (json['lectures'] as List<dynamic>?)
+              ?.map((e) => Lecture.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
       notifications:
           (json['notifications'] as List<dynamic>?)
               ?.map(
@@ -62,6 +67,7 @@ Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
       'subjects': instance.subjects,
       'evaluations': instance.evaluations,
       'researches': instance.researches,
+      'lectures': instance.lectures,
       'notifications': instance.notifications,
       'attendances': instance.attendances,
       'createdAt': _$JsonConverterToJson<dynamic, Timestamp>(

@@ -11,9 +11,12 @@ _$LectureImpl _$$LectureImplFromJson(Map<String, dynamic> json) =>
       id: json['id'],
       subject: Subject.fromJson(json['subject'] as Map<String, dynamic>),
       user: UserModel.fromJson(json['user'] as Map<String, dynamic>),
+      scheduleId: json['scheduleId'] as String,
       startTime: const TimestampConverter().fromJson(json['startTime']),
       endTime: const TimestampConverter().fromJson(json['endTime']),
       hall: json['hall'] as String,
+      createdAt: const TimestampConverter().fromJson(json['createdAt']),
+      updatedAt: const TimestampConverter().fromJson(json['updatedAt']),
     );
 
 Map<String, dynamic> _$$LectureImplToJson(_$LectureImpl instance) =>
@@ -21,7 +24,21 @@ Map<String, dynamic> _$$LectureImplToJson(_$LectureImpl instance) =>
       'id': instance.id,
       'subject': instance.subject,
       'user': instance.user,
+      'scheduleId': instance.scheduleId,
       'startTime': const TimestampConverter().toJson(instance.startTime),
       'endTime': const TimestampConverter().toJson(instance.endTime),
       'hall': instance.hall,
+      'createdAt': _$JsonConverterToJson<dynamic, Timestamp>(
+        instance.createdAt,
+        const TimestampConverter().toJson,
+      ),
+      'updatedAt': _$JsonConverterToJson<dynamic, Timestamp>(
+        instance.updatedAt,
+        const TimestampConverter().toJson,
+      ),
     };
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) => value == null ? null : toJson(value);

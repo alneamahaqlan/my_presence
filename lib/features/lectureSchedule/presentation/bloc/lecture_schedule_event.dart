@@ -3,10 +3,10 @@ part of 'lecture_schedule_bloc.dart';
 @freezed
 class LectureScheduleEvent with _$LectureScheduleEvent {
   const factory LectureScheduleEvent.fetchSchedules({
-    required String departmentId,
+    required Department department,
   }) = FetchLectureSchedules;
   const factory LectureScheduleEvent.addSchedule({
-    required String departmentId,
+   required Department department,
     required ScheduleCreateBody scheduleCreateBody,
   }) = AddLectureSchedule;
   const factory LectureScheduleEvent.updateSchedule(
@@ -20,5 +20,8 @@ class LectureScheduleEvent with _$LectureScheduleEvent {
     required String lectureId,
     required String scheduleId,
     required Attendance attendance,
-  }) = UpdateAttendance;
+  }) = UpdateAttendance;  
+  const factory LectureScheduleEvent.setDepartment({
+    required  Department department
+  }) = SetDepartment;
 }

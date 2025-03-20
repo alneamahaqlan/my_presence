@@ -9,6 +9,8 @@ part 'schedule_create_body.g.dart';
 @freezed
 class ScheduleCreateBody with _$ScheduleCreateBody {
   const factory ScheduleCreateBody({
+         @JsonKey(name: 'title') required String title, 
+       @JsonKey(name: 'departmentId') required String departmentId,
     @TimestampConverter()
     @JsonKey(name: 'termStart')
     required Timestamp termStart,

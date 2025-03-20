@@ -84,6 +84,18 @@
     "interactionWithStudents": "التفاعل مع الطلاب",
     "management": "الإدارة",
     "teacher": "المعلم",
-    "admin": "الادارة"
+    "admin": "الادارة",
+    "present": "حاضر",
+    "absent": "غائب",
+    "late": "متاخر",
+    "excused": "محذوف",
+    "faculties": "الكليات",
+    "departments": "الاقسام",
+    "subjects": "المواد",
+    "busy": "مشغول",
+    "available": "متاح",
+    "inLecture": "في المحاضرة",
+    "unknown": "غير معروف"
+
   }
   

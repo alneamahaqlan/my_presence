@@ -5,6 +5,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_presence/dependency_injection.dart';
 
+import '../../../../core/models/status.dart';
 import '../../../attendance/data/models/attendance_model.dart';
 import '../../../department/data/models/department_model.dart';
 import '../../data/models/schedule_create_body.dart';
@@ -18,26 +19,35 @@ part 'lecture_schedule_state.dart';
 class LectureScheduleBloc
     extends Bloc<LectureScheduleEvent, LectureScheduleState> {
   final LectureScheduleRepository _repository;
-  Department? department;
+  // Department? department;
 
   LectureScheduleBloc(this._repository)
-    : super(const LectureScheduleState.initial()) {
+    : super(LectureScheduleState.initial()) {
     on<FetchLectureSchedules>(_onFetchSchedules);
     on<AddLectureSchedule>(_onAddSchedule);
     on<UpdateLectureSchedule>(_onUpdateSchedule);
     on<DeleteLectureSchedule>(_onDeleteSchedule);
     on<UpdateAttendance>(_onUpdateAttendance);
+    on<SetDepartment>(_onSetDepartment);
 
-    final router = getIt.call<GoRouter>;
-    log(router.call().state.extra.toString());
-    department = router.call().state.extra as Department;
-    add(FetchLectureSchedules(departmentId: department!.id));
+    final router = getIt.call<GoRouter>();
+  final  department = router.state.extra as Department;
+    add(SetDepartment(department: department));
+    add(FetchLectureSchedules(department: department));
+  }
+  Future<void> _onSetDepartment(
+    SetDepartment event,
+    Emitter<LectureScheduleState> emit,
+  ) async {
+    emit(state.copyWith(department: event.department));
   }
 
   Future<void> _onUpdateAttendance(
     UpdateAttendance event,
     Emitter<LectureScheduleState> emit,
   ) async {
+    emit(state.copyWith(status: const Status.loading())); // Set loading state
+
     try {
       // Call the repository to update attendance
       await _repository.updateAttendance(
@@ -47,16 +57,19 @@ class LectureScheduleBloc
       );
 
       // Show success message
-      if (state is LectureScheduleLoaded) {
-        // If the current state is LectureScheduleLoaded, use its schedules
-        final currentState = state as LectureScheduleLoaded;
-        emit(LectureScheduleState.loaded(currentState.schedules));
-      } else {
-        // If the current state is not LectureScheduleLoaded, emit a new state with an empty list
-        emit(const LectureScheduleState.loaded([]));
-      }
+      emit(
+        state.copyWith(
+          status: const Status.success(),
+          schedules: state.schedules, // Keep existing schedules
+        ),
+      );
     } catch (e) {
-      emit(LectureScheduleState.error('Failed to update attendance: $e'));
+      emit(
+        state.copyWith(
+          status: const Status.failed(),
+          errorMessage: 'Failed to update attendance: $e',
+        ),
+      );
     }
   }
 
@@ -64,15 +77,29 @@ class LectureScheduleBloc
     FetchLectureSchedules event,
     Emitter<LectureScheduleState> emit,
   ) async {
-    emit(const LectureScheduleState.loading());
+    emit(state.copyWith(status: const Status.loading())); // Set loading state
+
     final result = await _repository.fetchLectureSchedules(
-      departmentId: event.departmentId,
+     department: state.department!
     );
+
     result.when(
       success: (schedules) {
-        emit(LectureScheduleState.loaded(schedules));
+        emit(
+          state.copyWith(
+            status: const Status.success(),
+            schedules: schedules, // Update schedules
+          ),
+        );
       },
-      failure: (error) => emit(LectureScheduleState.error(error.message)),
+      failure: (error) {
+        emit(
+          state.copyWith(
+            status: const Status.failed(),
+            errorMessage: error.message, // Set error message
+          ),
+        );
+      },
     );
   }
 
@@ -80,16 +107,28 @@ class LectureScheduleBloc
     AddLectureSchedule event,
     Emitter<LectureScheduleState> emit,
   ) async {
+    emit(state.copyWith(status: const Status.loading())); // Set loading state
+
     final result = await _repository.createSchedule(
-      departmentId: event.departmentId,
+      department: event.department,
       scheduleCreateBody: event.scheduleCreateBody,
     );
+
     result.when(
-      success:
-          (_) => add(
-            FetchLectureSchedules(departmentId: department!.id),
-          ), // Refresh data
-      failure: (error) => emit(LectureScheduleState.error(error.message)),
+      success: (_) {
+        emit(state.copyWith(status: const Status.success()));
+        add(
+          FetchLectureSchedules(department: state.department!),
+        ); // Refresh data
+      },
+      failure: (error) {
+        emit(
+          state.copyWith(
+            status: const Status.failed(),
+            errorMessage: error.message, // Set error message
+          ),
+        );
+      },
     );
   }
 
@@ -97,16 +136,28 @@ class LectureScheduleBloc
     UpdateLectureSchedule event,
     Emitter<LectureScheduleState> emit,
   ) async {
+    emit(state.copyWith(status: const Status.loading())); // Set loading state
+
     final result = await _repository.updateLectureSchedule(
       event.id,
       event.schedule,
     );
+
     result.when(
-      success:
-          (_) => add(
-            FetchLectureSchedules(departmentId: department!.id),
-          ), // Refresh data
-      failure: (error) => emit(LectureScheduleState.error(error.message)),
+      success: (_) {
+        emit(state.copyWith(status: const Status.success()));
+        add(
+          FetchLectureSchedules(department: state.department!),
+        ); // Refresh data
+      },
+      failure: (error) {
+        emit(
+          state.copyWith(
+            status: const Status.failed(),
+            errorMessage: error.message, // Set error message
+          ),
+        );
+      },
     );
   }
 
@@ -114,13 +165,25 @@ class LectureScheduleBloc
     DeleteLectureSchedule event,
     Emitter<LectureScheduleState> emit,
   ) async {
+    emit(state.copyWith(status: const Status.loading())); // Set loading state
+
     final result = await _repository.deleteLectureSchedule(event.id);
+
     result.when(
-      success:
-          (_) => add(
-            FetchLectureSchedules(departmentId: department!.id),
-          ), // Refresh data
-      failure: (error) => emit(LectureScheduleState.error(error.message)),
+      success: (_) {
+        emit(state.copyWith(status: const Status.success()));
+        add(
+          FetchLectureSchedules(department: state.department!),
+        ); // Refresh data
+      },
+      failure: (error) {
+        emit(
+          state.copyWith(
+            status: const Status.failed(),
+            errorMessage: error.message, // Set error message
+          ),
+        );
+      },
     );
   }
 }

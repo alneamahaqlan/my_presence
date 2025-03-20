@@ -6,7 +6,8 @@ part 'department_create_body.g.dart';
 @freezed
 class DepartmentCreateBody with _$DepartmentCreateBody {
   const factory DepartmentCreateBody({
-    required String name,
+    @JsonKey(name: 'name')  required String name,
+    @JsonKey(name: 'facultyId') required String facultyId,
   }) = _DepartmentCreateBody;
 
   factory DepartmentCreateBody.fromJson(Map<String, dynamic> json) =>

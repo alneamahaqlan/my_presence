@@ -5,7 +5,6 @@ import '../../../../core/models/api_result.dart';
 import '../../../../core/services/firestore_service.dart';
 import '../../../attendance/data/models/attendance_model.dart';
 import '../../../department/data/models/department_model.dart';
-import '../models/lecture_model.dart';
 import '../models/schedule_create_body.dart';
 import '../models/schedule_model.dart';
 
@@ -14,22 +13,22 @@ class LectureScheduleRepository {
 
   LectureScheduleRepository(this._firestoreService);
   Future<ApiResult<List<Schedule>>> fetchLectureSchedules({
-    required String departmentId,
+    required Department department,
   }) async {
     try {
       final snapshot =
           await _firestoreService.firestore
+              .collection('faculties')
+              .doc(department.facultyId)
               .collection('departments')
-              .doc(departmentId)
+              .doc(department.id)
               .collection('schedules')
               .get();
-      final schedules =  snapshot.docs.map((doc) {
-              final schedule = Schedule.fromJson(
-                doc.data()
-              );
-              return schedule.copyWith(id: doc.id);
-            }).toList();
-      
+      final schedules =
+          snapshot.docs.map((doc) {
+            final schedule = Schedule.fromJson(doc.data());
+            return schedule.copyWith(id: doc.id);
+          }).toList();
 
       // final snapshot =
       //     await _firestoreService
@@ -70,7 +69,7 @@ class LectureScheduleRepository {
   //
 
   Future<ApiResult<String>> createSchedule({
-    required String departmentId,
+      required Department department,
     required ScheduleCreateBody scheduleCreateBody,
   }) async {
     try {
@@ -80,8 +79,10 @@ class LectureScheduleRepository {
         'updatedAt': Timestamp.now(),
       };
       final docRef = await _firestoreService.firestore
+      .collection('faculties')
+          .doc(department.facultyId)
           .collection('departments')
-          .doc(departmentId)
+          .doc(department.id)
           .collection('schedules')
           .add(subCollectionData);
       return ApiResult.success(docRef.id);

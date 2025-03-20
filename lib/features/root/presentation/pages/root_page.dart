@@ -30,7 +30,7 @@ class RootPage extends StatelessWidget {
               appBar:
                   isRootRoute(context)
                       ? AppBar(
-                        title: const Text('حظوري'),
+                        title: const Text('Tracking'),
                         centerTitle: true,
                         leading: Builder(
                           builder: (context) {

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../core/converters/timestamp_converter.dart';
-import 'lecture_model.dart';
+import '../../../lecture/data/models/lecture_model.dart';
 
 part 'schedule_model.freezed.dart';
 part 'schedule_model.g.dart';
@@ -10,7 +10,9 @@ part 'schedule_model.g.dart';
 @freezed
 class Schedule with _$Schedule {
   const factory Schedule({
-    @JsonKey(name: 'id') dynamic id,
+    @JsonKey(name: 'id') dynamic id, 
+     @JsonKey(name: 'title') required String title, 
+       @JsonKey(name: 'departmentId') required String departmentId,
     @TimestampConverter()
     @JsonKey(name: 'termStart')
     required Timestamp termStart,

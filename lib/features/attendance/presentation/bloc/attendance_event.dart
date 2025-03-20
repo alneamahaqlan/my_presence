@@ -2,16 +2,16 @@ part of 'attendance_bloc.dart';
 
 @freezed
 class AttendanceEvent with _$AttendanceEvent {
-  // Fetch all attendance records
-  const factory AttendanceEvent.fetchAll() = FetchAllAttendance;
+  // // Fetch all attendance records
+  // const factory AttendanceEvent.fetchAll() = FetchAllAttendance;
 
   // Add a new attendance record
-  const factory AttendanceEvent.add(Attendance attendance) = AddAttendance;
+  const factory AttendanceEvent.add({required Attendance attendance,required UserModel member}) = AddAttendance;
 
-  // Update an existing attendance record
-  const factory AttendanceEvent.update(Attendance attendance) =
-      UpdateAttendance;
+  // // Update an existing attendance record
+  // const factory AttendanceEvent.update(Attendance attendance) =
+  //     UpdateAttendance;
 
-  // Delete an attendance record
-  const factory AttendanceEvent.delete(String id) = DeleteAttendance;
+  // // Delete an attendance record
+  // const factory AttendanceEvent.delete(String id) = DeleteAttendance;
 }

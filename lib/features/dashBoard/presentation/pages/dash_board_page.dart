@@ -51,20 +51,6 @@ class DashBoardPage extends StatelessWidget {
                   context.pushNamed(AppRoutes.departments);
                 },
               ),
-              //members
-              _buildDashboardCard(
-                context: context,
-                icon: Icons.people,
-                title: 'members',
-                onTap: () {},
-              ),
-              //attendance
-              _buildDashboardCard(
-                context: context,
-                icon: Icons.checklist,
-                title: 'attendance',
-                onTap: () {},
-              ),
             ],
           ),
         ),
