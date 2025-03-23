@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_presence/core/extensions/context_extensions.dart';
 
 import '../../../../core/widgets/button_widget.dart';
 import '../../../../core/widgets/text_field_widget.dart';
@@ -18,7 +19,7 @@ class _AddSubjectPageState extends State<AddSubjectPage> {
   final _nameController = TextEditingController();
   final _codeController = TextEditingController();
   final _numberController = TextEditingController();
-  bool _isSubmitting = false;
+  final _unitsController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -61,10 +62,36 @@ class _AddSubjectPageState extends State<AddSubjectPage> {
                               : null,
                 ),
                 const SizedBox(height: 20),
-                ButtonWidget(
-                  text: 'إضافة المادة',
-                  isSubmitting: _isSubmitting,
-                  onPressed: _submitForm,
+                TextFieldWidget(
+                  controller: _unitsController,
+                  hint: 'عدد الوحدات',
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'الرجاء إدخال عدد الوحدات';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 20),
+                BlocConsumer<SubjectBloc, SubjectState>(
+                  listener: (context, state) {
+                    state.createStatus.maybeWhen(
+                      success: () {
+                        context.pop();
+                      },
+                      orElse: () {},
+                    );
+                  },
+                  builder: (context, state) {
+                    return ButtonWidget(
+                      text: 'إضافة المادة',
+                      isSubmitting: state.createStatus.maybeWhen(
+                        loading: () => true,
+                        orElse: () => false,
+                      ),
+                      onPressed: _submitForm,
+                    );
+                  },
                 ),
               ],
             ),
@@ -76,24 +103,14 @@ class _AddSubjectPageState extends State<AddSubjectPage> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isSubmitting = true;
-      });
-
       final newSubject = Subject(
         name: _nameController.text,
         code: _codeController.text,
         number: _numberController.text,
+        units: int.parse(_unitsController.text),
       );
 
       context.read<SubjectBloc>().add(AddSubject(newSubject));
-
-      Future.delayed(const Duration(seconds: 1), () {
-        setState(() {
-          _isSubmitting = false;
-        });
-        Navigator.pop(context);
-      });
     }
   }
 

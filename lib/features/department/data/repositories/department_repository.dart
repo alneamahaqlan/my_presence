@@ -1,9 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:my_presence/features/faculty/data/models/faculty_model.dart';
 
 import '../../../../core/error/api_error_handler.dart';
 import '../../../../core/models/api_result.dart';
 import '../../../../core/services/firestore_service.dart';
-import '../../../faculty/data/models/faculty_model.dart';
 import '../../../lectureSchedule/data/models/schedule_model.dart';
 import '../models/department_create_body.dart';
 import '../models/department_model.dart';
@@ -38,16 +37,12 @@ class DepartmentRepository {
     required DepartmentCreateBody departmentCreateBody,
   }) async {
     try {
-        final departmentData = {
-      ...departmentCreateBody.toJson(),
-      'createdAt': Timestamp.now(),
-      'updatedAt': Timestamp.now(),
-    };
+    
       final docRef = await _firestoreService.firestore
           .collection('faculties')
           .doc(facultyId)
           .collection('departments')
-          .add(departmentData);
+          .add(departmentCreateBody.toJson());
       return ApiResult.success(docRef.id);
     } catch (e) {
       return ApiResult.failure(ApiErrorHandler.handle(e));
@@ -67,39 +62,47 @@ class DepartmentRepository {
       return ApiResult.failure(ApiErrorHandler.handle(e));
     }
   }
+
   Future<ApiResult<List<Department>>> getAllDepartments() async {
-  try {
-    // Perform a collection group query on the "departments" subcollection
-    final querySnapshot = await _firestoreService.firestore
-        .collectionGroup('departments')
-        .get();
+    try {
+      // Perform a collection group query on the "departments" subcollection
+      final querySnapshot =
+          await _firestoreService.firestore
+              .collectionGroup('departments')
+              .get();
 
-    // Convert Firestore documents to a list of Department objects
-    final departments = await Future.wait(querySnapshot.docs.map((doc) async {
-      final data = doc.data(); // Get the document data as a Map
+      // Convert Firestore documents to a list of Department objects
+      final departments = await Future.wait(
+        querySnapshot.docs.map((doc) async {
+          final data = doc.data(); // Get the document data as a Map
 
-      // Fetch the schedules subcollection for the current department (if needed)
-      final schedulesSnapshot = await doc.reference.collection('schedules').get();
+          // Fetch the schedules subcollection for the current department (if needed)
+          final schedulesSnapshot =
+              await doc.reference.collection('schedules').get();
 
-      // Map schedules subcollection documents to Schedule objects
-      final schedules = schedulesSnapshot.docs.map((scheduleDoc) {
-        return Schedule.fromJson(scheduleDoc.data());
-      }).toList();
+          // Map schedules subcollection documents to Schedule objects
+          final schedules =
+              schedulesSnapshot.docs.map((scheduleDoc) {
+                return Schedule.fromJson(scheduleDoc.data());
+              }).toList();
 
-      return Department(
-        id: doc.id, // Use the document ID as the department ID
-        name: data['name'] ?? '', // Ensure name is not null
-        facultyId: data['facultyId'] ?? '', // Ensure facultyId is not null
-        schedules: schedules, // Assign parsed schedules
-        createdAt: data['createdAt'], // Can be null
-        updatedAt: data['updatedAt'], // Can be null
+          return Department(
+            id: doc.id, // Use the document ID as the department ID
+            name: data['name'] ?? '', // Ensure name is not null
+            faculty: Faculty.fromJson(
+              data['faculty'],
+            ), // Ensure facultyName is not null
+            // Ensure facultyId is not null
+            schedules: schedules, // Assign parsed schedules
+            createdAt: data['createdAt'], // Can be null
+            updatedAt: data['updatedAt'], // Can be null
+          );
+        }).toList(),
       );
-    }).toList());
 
-    return ApiResult.success(departments);
-  } catch (e) {
-    return ApiResult.failure(ApiErrorHandler.handle(e));
+      return ApiResult.success(departments);
+    } catch (e) {
+      return ApiResult.failure(ApiErrorHandler.handle(e));
+    }
   }
-}
-
 }

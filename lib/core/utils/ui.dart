@@ -41,6 +41,10 @@ class Ui {
     );
   }
 
+  static Widget getDivider({double? thickness, double? height}) {
+    return Divider(thickness: thickness ?? 1, height: height ?? 20);
+  }
+
   static Future<bool?> showCustomDialog({
     required BuildContext context,
     required String title,
@@ -190,15 +194,6 @@ class Ui {
 
     if (pickedDate == null || !context.mounted) return null;
 
-    if (pickedDate.weekday == DateTime.friday) {
-      showSnackBar(
-        context: context,
-        message: 'Friday is a holiday',
-        type: SnackBarType.warning,
-      );
-      return null;
-    }
-
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
@@ -215,16 +210,6 @@ class Ui {
       pickedTime.minute,
     );
 
-    // Ensure the combined date and time is not before the firstDate
-    if (localDateTime.isBefore(firstDate)) {
-      showSnackBar(
-        context: context,
-        message: 'Selected time is before the minimum allowed date',
-        type: SnackBarType.warning,
-      );
-      return null;
-    }
-
     // Convert to Asia/Riyadh time zone
     final riyadhLocation = tz.getLocation('Asia/Riyadh');
     final riyadhDateTime = tz.TZDateTime.from(localDateTime, riyadhLocation);
@@ -235,13 +220,32 @@ class Ui {
   static Future<TimeOfDay?> selectTime(
     BuildContext context, {
     TimeOfDay? initialTime,
+    required TimeOfDay startTime,
   }) async {
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
-      initialTime: initialTime ?? TimeOfDay.now(),
+      initialTime: initialTime ?? startTime,
+      builder: (BuildContext context, Widget? child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            alwaysUse24HourFormat: true, // Use 24-hour format
+          ),
+          child: child!,
+        );
+      },
     );
 
     if (pickedTime == null || !context.mounted) return null;
+
+    // Ensure the picked time is not before startTime
+    if (pickedTime.hour < startTime.hour ||
+        (pickedTime.hour == startTime.hour &&
+            pickedTime.minute < startTime.minute)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('الوقت المحدد قبل وقت البداية')),
+      );
+      return null;
+    }
 
     return pickedTime;
   }

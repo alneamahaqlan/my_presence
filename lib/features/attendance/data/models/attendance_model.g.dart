@@ -13,6 +13,7 @@ _$AttendanceImpl _$$AttendanceImplFromJson(Map<String, dynamic> json) =>
       lecture: Lecture.fromJson(json['lecture'] as Map<String, dynamic>),
       arrivalDate: const TimestampConverter().fromJson(json['arrivalDate']),
       status: json['status'] as String,
+      meet: Meet.fromJson(json['meet'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$AttendanceImplToJson(_$AttendanceImpl instance) =>
@@ -25,6 +26,7 @@ Map<String, dynamic> _$$AttendanceImplToJson(_$AttendanceImpl instance) =>
         const TimestampConverter().toJson,
       ),
       'status': instance.status,
+      'meet': instance.meet,
     };
 
 Json? _$JsonConverterToJson<Json, Value>(

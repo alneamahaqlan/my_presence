@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:my_presence/core/extensions/string_extensions.dart';
 
@@ -21,16 +22,31 @@ class MemberCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get the current theme
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
+
     return Card(
       elevation: 4, // Add shadow
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16), // Rounded corners
+        side: BorderSide(
+          color: colorScheme.primary.withOpacity(
+            0.2,
+          ), // Use primary color with opacity
+          width: 1, // Border width
+        ),
       ),
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.blue.shade50, Colors.white], // Gradient background
+            colors: [
+              colorScheme.primary.withOpacity(
+                0.1,
+              ), // Use primary color with opacity
+              colorScheme.surface, // Use surface color
+            ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -49,18 +65,21 @@ class MemberCard extends StatelessWidget {
                 children: [
                   Text(
                     name,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Colors.blue,
+                      color: colorScheme.primary, // Use primary color
                     ),
                   ),
                   Chip(
                     label: Text(
                       role.trans(context),
-                      style: const TextStyle(fontSize: 12, color: Colors.white),
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: colorScheme.onPrimary, // Use onPrimary color
+                      ),
                     ),
-                    backgroundColor: Colors.blue,
+                    backgroundColor: colorScheme.primary, // Use primary color
                   ),
                 ],
               ),
@@ -68,11 +87,20 @@ class MemberCard extends StatelessWidget {
               // Email
               Row(
                 children: [
-                  const Icon(Icons.email, size: 16, color: Colors.grey),
+                  Icon(
+                    Icons.email,
+                    size: 16,
+                    color: colorScheme.onSurface.withOpacity(0.6),
+                  ), // Use onSurface color with opacity
                   const SizedBox(width: 8),
                   Text(
                     email,
-                    style: const TextStyle(fontSize: 14, color: Colors.grey),
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: colorScheme.onSurface.withOpacity(
+                        0.6,
+                      ), // Use onSurface color with opacity
+                    ),
                   ),
                 ],
               ),
@@ -84,12 +112,20 @@ class MemberCard extends StatelessWidget {
                     Icons.circle,
                     size: 12,
                     color:
-                        activityStatus == "active" ? Colors.green : Colors.red,
+                        activityStatus == "active"
+                            ? Colors.green
+                            : Colors
+                                .red, // Keep as is (or use theme colors if needed)
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'الحالة: ${activityStatus == "active" ? "نشط" : "غير نشط"}',
-                    style: const TextStyle(fontSize: 14, color: Colors.grey),
+                    'الحالة: ${activityStatus.tr()}',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: colorScheme.onSurface.withOpacity(
+                        0.6,
+                      ), // Use onSurface color with opacity
+                    ),
                   ),
                 ],
               ),
@@ -99,12 +135,18 @@ class MemberCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.edit, color: Colors.blue),
+                    icon: Icon(
+                      Icons.edit,
+                      color: colorScheme.primary, // Use primary color
+                    ),
                     onPressed: onEdit,
                   ),
                   if (onDelete != null)
                     IconButton(
-                      icon: const Icon(Icons.delete, color: Colors.red),
+                      icon: Icon(
+                        Icons.delete,
+                        color: colorScheme.error, // Use error color
+                      ),
                       onPressed: onDelete,
                     ),
                 ],

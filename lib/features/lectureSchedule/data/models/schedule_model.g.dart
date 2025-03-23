@@ -10,7 +10,11 @@ _$ScheduleImpl _$$ScheduleImplFromJson(Map<String, dynamic> json) =>
     _$ScheduleImpl(
       id: json['id'],
       title: json['title'] as String,
-      departmentId: json['departmentId'] as String,
+      department: Department.fromJson(
+        json['department'] as Map<String, dynamic>,
+      ),
+      level: (json['level'] as num).toInt(),
+      division: json['division'] as String,
       termStart: const TimestampConverter().fromJson(json['termStart']),
       termEnd: const TimestampConverter().fromJson(json['termEnd']),
       lectures:
@@ -26,7 +30,9 @@ Map<String, dynamic> _$$ScheduleImplToJson(_$ScheduleImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
-      'departmentId': instance.departmentId,
+      'department': instance.department,
+      'level': instance.level,
+      'division': instance.division,
       'termStart': const TimestampConverter().toJson(instance.termStart),
       'termEnd': const TimestampConverter().toJson(instance.termEnd),
       'lectures': instance.lectures,

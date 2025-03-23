@@ -3,7 +3,7 @@ part of 'member_bloc.dart';
 
 @freezed
 class MemberEvent with _$MemberEvent {
-  const factory MemberEvent.saveMember(UserModel user) = SaveMember;
+  const factory MemberEvent.saveMember(MemberCreateBody memberCreateBody) = SaveMember;
   const factory MemberEvent.loadMembers() = LoadMembers;
   const factory MemberEvent.deleteMember({required String userId ,required bool isActive}) = DeleteMember;
   const factory MemberEvent.editMember({

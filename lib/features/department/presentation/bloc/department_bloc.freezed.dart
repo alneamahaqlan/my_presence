@@ -224,8 +224,6 @@ abstract class _$$AddDepartmentImplCopyWith<$Res> {
   ) = __$$AddDepartmentImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String facultyId, DepartmentCreateBody departmentCreateBody});
-
-  $DepartmentCreateBodyCopyWith<$Res> get departmentCreateBody;
 }
 
 /// @nodoc
@@ -256,18 +254,6 @@ class __$$AddDepartmentImplCopyWithImpl<$Res>
                     as DepartmentCreateBody,
       ),
     );
-  }
-
-  /// Create a copy of DepartmentEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $DepartmentCreateBodyCopyWith<$Res> get departmentCreateBody {
-    return $DepartmentCreateBodyCopyWith<$Res>(_value.departmentCreateBody, (
-      value,
-    ) {
-      return _then(_value.copyWith(departmentCreateBody: value));
-    });
   }
 }
 
@@ -588,6 +574,7 @@ abstract class UpdateDepartment implements DepartmentEvent {
 /// @nodoc
 mixin _$DepartmentState {
   Status get status => throw _privateConstructorUsedError;
+  Status get createStatus => throw _privateConstructorUsedError;
   List<Department> get departments => throw _privateConstructorUsedError;
   String? get message => throw _privateConstructorUsedError;
 
@@ -605,9 +592,15 @@ abstract class $DepartmentStateCopyWith<$Res> {
     $Res Function(DepartmentState) then,
   ) = _$DepartmentStateCopyWithImpl<$Res, DepartmentState>;
   @useResult
-  $Res call({Status status, List<Department> departments, String? message});
+  $Res call({
+    Status status,
+    Status createStatus,
+    List<Department> departments,
+    String? message,
+  });
 
   $StatusCopyWith<$Res> get status;
+  $StatusCopyWith<$Res> get createStatus;
 }
 
 /// @nodoc
@@ -626,6 +619,7 @@ class _$DepartmentStateCopyWithImpl<$Res, $Val extends DepartmentState>
   @override
   $Res call({
     Object? status = null,
+    Object? createStatus = null,
     Object? departments = null,
     Object? message = freezed,
   }) {
@@ -635,6 +629,11 @@ class _$DepartmentStateCopyWithImpl<$Res, $Val extends DepartmentState>
                 null == status
                     ? _value.status
                     : status // ignore: cast_nullable_to_non_nullable
+                        as Status,
+            createStatus:
+                null == createStatus
+                    ? _value.createStatus
+                    : createStatus // ignore: cast_nullable_to_non_nullable
                         as Status,
             departments:
                 null == departments
@@ -660,6 +659,16 @@ class _$DepartmentStateCopyWithImpl<$Res, $Val extends DepartmentState>
       return _then(_value.copyWith(status: value) as $Val);
     });
   }
+
+  /// Create a copy of DepartmentState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $StatusCopyWith<$Res> get createStatus {
+    return $StatusCopyWith<$Res>(_value.createStatus, (value) {
+      return _then(_value.copyWith(createStatus: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -671,10 +680,17 @@ abstract class _$$DepartmentStateImplCopyWith<$Res>
   ) = __$$DepartmentStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Status status, List<Department> departments, String? message});
+  $Res call({
+    Status status,
+    Status createStatus,
+    List<Department> departments,
+    String? message,
+  });
 
   @override
   $StatusCopyWith<$Res> get status;
+  @override
+  $StatusCopyWith<$Res> get createStatus;
 }
 
 /// @nodoc
@@ -692,6 +708,7 @@ class __$$DepartmentStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? status = null,
+    Object? createStatus = null,
     Object? departments = null,
     Object? message = freezed,
   }) {
@@ -701,6 +718,11 @@ class __$$DepartmentStateImplCopyWithImpl<$Res>
             null == status
                 ? _value.status
                 : status // ignore: cast_nullable_to_non_nullable
+                    as Status,
+        createStatus:
+            null == createStatus
+                ? _value.createStatus
+                : createStatus // ignore: cast_nullable_to_non_nullable
                     as Status,
         departments:
             null == departments
@@ -722,6 +744,7 @@ class __$$DepartmentStateImplCopyWithImpl<$Res>
 class _$DepartmentStateImpl implements _DepartmentState {
   const _$DepartmentStateImpl({
     this.status = const Status.initial(),
+    this.createStatus = const Status.initial(),
     final List<Department> departments = const [],
     this.message,
   }) : _departments = departments;
@@ -729,6 +752,9 @@ class _$DepartmentStateImpl implements _DepartmentState {
   @override
   @JsonKey()
   final Status status;
+  @override
+  @JsonKey()
+  final Status createStatus;
   final List<Department> _departments;
   @override
   @JsonKey()
@@ -743,7 +769,7 @@ class _$DepartmentStateImpl implements _DepartmentState {
 
   @override
   String toString() {
-    return 'DepartmentState(status: $status, departments: $departments, message: $message)';
+    return 'DepartmentState(status: $status, createStatus: $createStatus, departments: $departments, message: $message)';
   }
 
   @override
@@ -752,6 +778,8 @@ class _$DepartmentStateImpl implements _DepartmentState {
         (other.runtimeType == runtimeType &&
             other is _$DepartmentStateImpl &&
             (identical(other.status, status) || other.status == status) &&
+            (identical(other.createStatus, createStatus) ||
+                other.createStatus == createStatus) &&
             const DeepCollectionEquality().equals(
               other._departments,
               _departments,
@@ -763,6 +791,7 @@ class _$DepartmentStateImpl implements _DepartmentState {
   int get hashCode => Object.hash(
     runtimeType,
     status,
+    createStatus,
     const DeepCollectionEquality().hash(_departments),
     message,
   );
@@ -782,12 +811,15 @@ class _$DepartmentStateImpl implements _DepartmentState {
 abstract class _DepartmentState implements DepartmentState {
   const factory _DepartmentState({
     final Status status,
+    final Status createStatus,
     final List<Department> departments,
     final String? message,
   }) = _$DepartmentStateImpl;
 
   @override
   Status get status;
+  @override
+  Status get createStatus;
   @override
   List<Department> get departments;
   @override

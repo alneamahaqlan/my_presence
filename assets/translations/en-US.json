@@ -95,7 +95,12 @@
   "busy": "Busy",
   "available": "Available",
   "inLecture": "In Lecture",
-  "unknown": "Unknown"
+  "unknown": "Unknown",
+  "teachingAssistant": "Teaching Assistant",
+  "lecturer": "Lecturer",
+  "assistantProfessor": "Assistant Professor",
+  "associateProfessor": "Associate Professor",
+  "professor": "Professor"
 
   }
   

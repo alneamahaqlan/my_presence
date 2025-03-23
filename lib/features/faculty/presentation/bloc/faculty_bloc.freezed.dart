@@ -20,19 +20,19 @@ mixin _$FacultyEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() fetchFaculties,
-    required TResult Function(String name) addFaculty,
+    required TResult Function(FacultyCreateBody facultyCreateBody) addFaculty,
     required TResult Function(Faculty faculty) updateFaculty,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? fetchFaculties,
-    TResult? Function(String name)? addFaculty,
+    TResult? Function(FacultyCreateBody facultyCreateBody)? addFaculty,
     TResult? Function(Faculty faculty)? updateFaculty,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? fetchFaculties,
-    TResult Function(String name)? addFaculty,
+    TResult Function(FacultyCreateBody facultyCreateBody)? addFaculty,
     TResult Function(Faculty faculty)? updateFaculty,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
@@ -123,7 +123,7 @@ class _$FetchFacultiesImpl implements FetchFaculties {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() fetchFaculties,
-    required TResult Function(String name) addFaculty,
+    required TResult Function(FacultyCreateBody facultyCreateBody) addFaculty,
     required TResult Function(Faculty faculty) updateFaculty,
   }) {
     return fetchFaculties();
@@ -133,7 +133,7 @@ class _$FetchFacultiesImpl implements FetchFaculties {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? fetchFaculties,
-    TResult? Function(String name)? addFaculty,
+    TResult? Function(FacultyCreateBody facultyCreateBody)? addFaculty,
     TResult? Function(Faculty faculty)? updateFaculty,
   }) {
     return fetchFaculties?.call();
@@ -143,7 +143,7 @@ class _$FetchFacultiesImpl implements FetchFaculties {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? fetchFaculties,
-    TResult Function(String name)? addFaculty,
+    TResult Function(FacultyCreateBody facultyCreateBody)? addFaculty,
     TResult Function(Faculty faculty)? updateFaculty,
     required TResult orElse(),
   }) {
@@ -199,7 +199,7 @@ abstract class _$$AddFacultyImplCopyWith<$Res> {
     $Res Function(_$AddFacultyImpl) then,
   ) = __$$AddFacultyImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String name});
+  $Res call({FacultyCreateBody facultyCreateBody});
 }
 
 /// @nodoc
@@ -215,13 +215,14 @@ class __$$AddFacultyImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? name = null}) {
+  $Res call({Object? facultyCreateBody = null}) {
     return _then(
       _$AddFacultyImpl(
-        null == name
-            ? _value.name
-            : name // ignore: cast_nullable_to_non_nullable
-                as String,
+        facultyCreateBody:
+            null == facultyCreateBody
+                ? _value.facultyCreateBody
+                : facultyCreateBody // ignore: cast_nullable_to_non_nullable
+                    as FacultyCreateBody,
       ),
     );
   }
@@ -230,14 +231,14 @@ class __$$AddFacultyImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$AddFacultyImpl implements AddFaculty {
-  const _$AddFacultyImpl(this.name);
+  const _$AddFacultyImpl({required this.facultyCreateBody});
 
   @override
-  final String name;
+  final FacultyCreateBody facultyCreateBody;
 
   @override
   String toString() {
-    return 'FacultyEvent.addFaculty(name: $name)';
+    return 'FacultyEvent.addFaculty(facultyCreateBody: $facultyCreateBody)';
   }
 
   @override
@@ -245,11 +246,12 @@ class _$AddFacultyImpl implements AddFaculty {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AddFacultyImpl &&
-            (identical(other.name, name) || other.name == name));
+            (identical(other.facultyCreateBody, facultyCreateBody) ||
+                other.facultyCreateBody == facultyCreateBody));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, name);
+  int get hashCode => Object.hash(runtimeType, facultyCreateBody);
 
   /// Create a copy of FacultyEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -263,32 +265,32 @@ class _$AddFacultyImpl implements AddFaculty {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() fetchFaculties,
-    required TResult Function(String name) addFaculty,
+    required TResult Function(FacultyCreateBody facultyCreateBody) addFaculty,
     required TResult Function(Faculty faculty) updateFaculty,
   }) {
-    return addFaculty(name);
+    return addFaculty(facultyCreateBody);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? fetchFaculties,
-    TResult? Function(String name)? addFaculty,
+    TResult? Function(FacultyCreateBody facultyCreateBody)? addFaculty,
     TResult? Function(Faculty faculty)? updateFaculty,
   }) {
-    return addFaculty?.call(name);
+    return addFaculty?.call(facultyCreateBody);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? fetchFaculties,
-    TResult Function(String name)? addFaculty,
+    TResult Function(FacultyCreateBody facultyCreateBody)? addFaculty,
     TResult Function(Faculty faculty)? updateFaculty,
     required TResult orElse(),
   }) {
     if (addFaculty != null) {
-      return addFaculty(name);
+      return addFaculty(facultyCreateBody);
     }
     return orElse();
   }
@@ -329,9 +331,11 @@ class _$AddFacultyImpl implements AddFaculty {
 }
 
 abstract class AddFaculty implements FacultyEvent {
-  const factory AddFaculty(final String name) = _$AddFacultyImpl;
+  const factory AddFaculty({
+    required final FacultyCreateBody facultyCreateBody,
+  }) = _$AddFacultyImpl;
 
-  String get name;
+  FacultyCreateBody get facultyCreateBody;
 
   /// Create a copy of FacultyEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -423,7 +427,7 @@ class _$UpdateFacultyImpl implements UpdateFaculty {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() fetchFaculties,
-    required TResult Function(String name) addFaculty,
+    required TResult Function(FacultyCreateBody facultyCreateBody) addFaculty,
     required TResult Function(Faculty faculty) updateFaculty,
   }) {
     return updateFaculty(faculty);
@@ -433,7 +437,7 @@ class _$UpdateFacultyImpl implements UpdateFaculty {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? fetchFaculties,
-    TResult? Function(String name)? addFaculty,
+    TResult? Function(FacultyCreateBody facultyCreateBody)? addFaculty,
     TResult? Function(Faculty faculty)? updateFaculty,
   }) {
     return updateFaculty?.call(faculty);
@@ -443,7 +447,7 @@ class _$UpdateFacultyImpl implements UpdateFaculty {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? fetchFaculties,
-    TResult Function(String name)? addFaculty,
+    TResult Function(FacultyCreateBody facultyCreateBody)? addFaculty,
     TResult Function(Faculty faculty)? updateFaculty,
     required TResult orElse(),
   }) {
@@ -503,6 +507,7 @@ abstract class UpdateFaculty implements FacultyEvent {
 /// @nodoc
 mixin _$FacultyState {
   Status get status => throw _privateConstructorUsedError;
+  Status get createStatus => throw _privateConstructorUsedError;
   List<Faculty> get faculties => throw _privateConstructorUsedError;
   String? get message => throw _privateConstructorUsedError;
 
@@ -520,9 +525,15 @@ abstract class $FacultyStateCopyWith<$Res> {
     $Res Function(FacultyState) then,
   ) = _$FacultyStateCopyWithImpl<$Res, FacultyState>;
   @useResult
-  $Res call({Status status, List<Faculty> faculties, String? message});
+  $Res call({
+    Status status,
+    Status createStatus,
+    List<Faculty> faculties,
+    String? message,
+  });
 
   $StatusCopyWith<$Res> get status;
+  $StatusCopyWith<$Res> get createStatus;
 }
 
 /// @nodoc
@@ -541,6 +552,7 @@ class _$FacultyStateCopyWithImpl<$Res, $Val extends FacultyState>
   @override
   $Res call({
     Object? status = null,
+    Object? createStatus = null,
     Object? faculties = null,
     Object? message = freezed,
   }) {
@@ -550,6 +562,11 @@ class _$FacultyStateCopyWithImpl<$Res, $Val extends FacultyState>
                 null == status
                     ? _value.status
                     : status // ignore: cast_nullable_to_non_nullable
+                        as Status,
+            createStatus:
+                null == createStatus
+                    ? _value.createStatus
+                    : createStatus // ignore: cast_nullable_to_non_nullable
                         as Status,
             faculties:
                 null == faculties
@@ -575,6 +592,16 @@ class _$FacultyStateCopyWithImpl<$Res, $Val extends FacultyState>
       return _then(_value.copyWith(status: value) as $Val);
     });
   }
+
+  /// Create a copy of FacultyState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $StatusCopyWith<$Res> get createStatus {
+    return $StatusCopyWith<$Res>(_value.createStatus, (value) {
+      return _then(_value.copyWith(createStatus: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -586,10 +613,17 @@ abstract class _$$FacultyStateImplCopyWith<$Res>
   ) = __$$FacultyStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Status status, List<Faculty> faculties, String? message});
+  $Res call({
+    Status status,
+    Status createStatus,
+    List<Faculty> faculties,
+    String? message,
+  });
 
   @override
   $StatusCopyWith<$Res> get status;
+  @override
+  $StatusCopyWith<$Res> get createStatus;
 }
 
 /// @nodoc
@@ -607,6 +641,7 @@ class __$$FacultyStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? status = null,
+    Object? createStatus = null,
     Object? faculties = null,
     Object? message = freezed,
   }) {
@@ -616,6 +651,11 @@ class __$$FacultyStateImplCopyWithImpl<$Res>
             null == status
                 ? _value.status
                 : status // ignore: cast_nullable_to_non_nullable
+                    as Status,
+        createStatus:
+            null == createStatus
+                ? _value.createStatus
+                : createStatus // ignore: cast_nullable_to_non_nullable
                     as Status,
         faculties:
             null == faculties
@@ -637,6 +677,7 @@ class __$$FacultyStateImplCopyWithImpl<$Res>
 class _$FacultyStateImpl implements _FacultyState {
   const _$FacultyStateImpl({
     this.status = const Status.initial(),
+    this.createStatus = const Status.initial(),
     final List<Faculty> faculties = const [],
     this.message,
   }) : _faculties = faculties;
@@ -644,6 +685,9 @@ class _$FacultyStateImpl implements _FacultyState {
   @override
   @JsonKey()
   final Status status;
+  @override
+  @JsonKey()
+  final Status createStatus;
   final List<Faculty> _faculties;
   @override
   @JsonKey()
@@ -658,7 +702,7 @@ class _$FacultyStateImpl implements _FacultyState {
 
   @override
   String toString() {
-    return 'FacultyState(status: $status, faculties: $faculties, message: $message)';
+    return 'FacultyState(status: $status, createStatus: $createStatus, faculties: $faculties, message: $message)';
   }
 
   @override
@@ -667,6 +711,8 @@ class _$FacultyStateImpl implements _FacultyState {
         (other.runtimeType == runtimeType &&
             other is _$FacultyStateImpl &&
             (identical(other.status, status) || other.status == status) &&
+            (identical(other.createStatus, createStatus) ||
+                other.createStatus == createStatus) &&
             const DeepCollectionEquality().equals(
               other._faculties,
               _faculties,
@@ -678,6 +724,7 @@ class _$FacultyStateImpl implements _FacultyState {
   int get hashCode => Object.hash(
     runtimeType,
     status,
+    createStatus,
     const DeepCollectionEquality().hash(_faculties),
     message,
   );
@@ -694,12 +741,15 @@ class _$FacultyStateImpl implements _FacultyState {
 abstract class _FacultyState implements FacultyState {
   const factory _FacultyState({
     final Status status,
+    final Status createStatus,
     final List<Faculty> faculties,
     final String? message,
   }) = _$FacultyStateImpl;
 
   @override
   Status get status;
+  @override
+  Status get createStatus;
   @override
   List<Faculty> get faculties;
   @override

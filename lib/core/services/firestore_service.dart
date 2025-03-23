@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../dependency_injection.dart';
 import '../../features/auth/data/models/user_model.dart';
+import '../../features/members/data/models/member_create_body.dart';
 import '../utils/enums/activity_status.dart';
 import '../utils/enums/role.dart';
 import 'firebase_auth_service.dart';
@@ -181,15 +182,16 @@ class FirestoreService {
     required String password,
   }) async {
     try {
-        final notificationService = getIt<NotificationService>();
-        final token=await notificationService.getDeviceToken();
+      final notificationService = getIt<NotificationService>();
+      final token = await notificationService.getDeviceToken();
       final userCredential = await _firebaseAuthService
           .signInWithEmailAndPassword(email: email, password: password);
+      final timestamp = FieldValue.serverTimestamp();
 
       await updateDocument(
         collectionName: 'users',
         documentId: userCredential.user!.uid,
-        data: {'lastLogin': DateTime.now(),'fcmToken': token},
+        data: {'lastLogin': timestamp, 'fcmToken': token},
       );
 
       return await getUserData();
@@ -207,8 +209,9 @@ class FirestoreService {
       email: email,
       password: password,
     );
-      final notificationService = getIt<NotificationService>();
-      final token=await notificationService.getDeviceToken();
+    final notificationService = getIt<NotificationService>();
+    final token = await notificationService.getDeviceToken();
+    final timestamp = FieldValue.serverTimestamp();
 
     final docRef = await addDocumentById(
       collection: 'users',
@@ -219,9 +222,10 @@ class FirestoreService {
         'role': Role.teacher.name,
         'activityStatus': ActivityStatus.unknown.name,
         'fcmToken': token,
-        'createdAt': DateTime.now(),
-        'updatedAt': DateTime.now(),
-        'lastLogin': DateTime.now(),
+        'isActivate': true,
+        'createdAt': timestamp,
+        'updatedAt': timestamp,
+        'lastLogin': timestamp,
       },
     );
 
@@ -317,24 +321,61 @@ class FirestoreService {
       throw Exception('No document found with the provided email');
     }
   }
+
   Future<bool> updateSubDocument({
-required String mainCollection,
+    required String mainCollection,
     required String subCollection,
-  required String mainDocumentId,
-  required String subDocumentId,
-  required Map<String, dynamic> data,
-}) async {
-  try {
-    data['updatedAt'] = FieldValue.serverTimestamp();
-   await firestore
+    required String mainDocumentId,
+    required String subDocumentId,
+    required Map<String, dynamic> data,
+  }) async {
+    try {
+      data['updatedAt'] = FieldValue.serverTimestamp();
+      await firestore
           .collection(mainCollection)
           .doc(mainDocumentId)
           .collection(subCollection)
           .doc(subDocumentId)
           .update(data);
-    return true;
-  } catch (_) {
-    return false;
+      return true;
+    } catch (_) {
+      return false;
+    }
   }
-}
+
+  Future<String> signUpOtherUser(MemberCreateBody member) async {
+    try {
+      FirebaseAuth auth = FirebaseAuth.instance;
+      User? currentUser = _firebaseAuthService.currentUser;
+      String? currentUserEmail = currentUser?.email;
+      String? currentUserPassword = 'admin1234';
+      // Create user with email and password
+      final userCredential = await auth.createUserWithEmailAndPassword(
+        email: member.email,
+
+        password: '12345678',
+      );
+
+      // Store user details in Firestore
+      final docRef = await addDocumentById(
+        collection: 'users',
+        docId: userCredential.user!.uid,
+        data: member.toJson(),
+      );
+
+      final doc =
+          await getDocumentById(collection: 'users', docId: docRef.id).first;
+      if (currentUserEmail != null) {
+        await auth.signInWithEmailAndPassword(
+          email: currentUserEmail,
+          password: currentUserPassword,
+        );
+        print("Re-authenticated as the original user");
+      }
+
+      return doc.id;
+    } catch (e) {
+      return Future.error(e);
+    }
+  }
 }

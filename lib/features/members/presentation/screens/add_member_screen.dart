@@ -11,7 +11,7 @@ import '../../../../core/widgets/app_bar_widget.dart';
 import '../../../../core/widgets/button_widget.dart';
 import '../../../../core/widgets/drop_down_widget.dart';
 import '../../../../core/widgets/text_field_widget.dart';
-import '../../../auth/data/models/user_model.dart';
+import '../../data/models/member_create_body.dart';
 import '../bloc/member_bloc.dart';
 
 class AddMemberScreen extends StatelessWidget {
@@ -120,6 +120,7 @@ class AddMemberScreen extends StatelessWidget {
     bool isEmail = false,
   }) {
     return TextFieldWidget(
+      keyboardType: isEmail ? TextInputType.emailAddress : TextInputType.text,
       controller: controller,
       hint: hint,
       validator: (value) {
@@ -162,7 +163,7 @@ class AddMemberScreen extends StatelessWidget {
   ) {
     return BlocConsumer<MemberBloc, MemberState>(
       listener: (context, state) {
-        state.status.when(
+        state.createStatus.when(
           initial: () {},
           loading: () => _showLoadingDialog(context),
           success: () {
@@ -189,20 +190,19 @@ class AddMemberScreen extends StatelessWidget {
           text: 'حفظ',
           onPressed: () {
             if (formKey.currentState!.validate()) {
-              final user = UserModel(
+              final user = MemberCreateBody(
                 email: emailController.text,
                 name: nameController.text,
-                role: Role.fromJson(roleController.text),
-                activityStatus: ActivityStatus.fromJson(
-                  activityStatusController.text,
-                ),
+                role: roleController.text,
+                activityStatus: activityStatusController.text,
+
                 specialization: specializationController.text,
                 academicRank: academicRankController.text,
               );
               context.read<MemberBloc>().add(MemberEvent.saveMember(user));
             }
           },
-          isSubmitting: state.status == Status.loading(),
+          isSubmitting: state.createStatus == Status.loading(),
         );
       },
     );

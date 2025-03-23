@@ -25,7 +25,8 @@ mixin _$Faculty {
   dynamic get id => throw _privateConstructorUsedError;
   @JsonKey(name: 'name')
   String get name => throw _privateConstructorUsedError;
-  List<Department> get departments => throw _privateConstructorUsedError;
+  @JsonKey(name: 'departments')
+  List<Department>? get departments => throw _privateConstructorUsedError;
   @TimestampConverter()
   @JsonKey(name: 'createdAt')
   Timestamp? get createdAt => throw _privateConstructorUsedError;
@@ -50,7 +51,7 @@ abstract class $FacultyCopyWith<$Res> {
   $Res call({
     @JsonKey(name: 'id') dynamic id,
     @JsonKey(name: 'name') String name,
-    List<Department> departments,
+    @JsonKey(name: 'departments') List<Department>? departments,
     @TimestampConverter() @JsonKey(name: 'createdAt') Timestamp? createdAt,
     @TimestampConverter() @JsonKey(name: 'updatedAt') Timestamp? updatedAt,
   });
@@ -73,7 +74,7 @@ class _$FacultyCopyWithImpl<$Res, $Val extends Faculty>
   $Res call({
     Object? id = freezed,
     Object? name = null,
-    Object? departments = null,
+    Object? departments = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
   }) {
@@ -90,10 +91,10 @@ class _$FacultyCopyWithImpl<$Res, $Val extends Faculty>
                     : name // ignore: cast_nullable_to_non_nullable
                         as String,
             departments:
-                null == departments
+                freezed == departments
                     ? _value.departments
                     : departments // ignore: cast_nullable_to_non_nullable
-                        as List<Department>,
+                        as List<Department>?,
             createdAt:
                 freezed == createdAt
                     ? _value.createdAt
@@ -121,7 +122,7 @@ abstract class _$$FacultyImplCopyWith<$Res> implements $FacultyCopyWith<$Res> {
   $Res call({
     @JsonKey(name: 'id') dynamic id,
     @JsonKey(name: 'name') String name,
-    List<Department> departments,
+    @JsonKey(name: 'departments') List<Department>? departments,
     @TimestampConverter() @JsonKey(name: 'createdAt') Timestamp? createdAt,
     @TimestampConverter() @JsonKey(name: 'updatedAt') Timestamp? updatedAt,
   });
@@ -143,7 +144,7 @@ class __$$FacultyImplCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? name = null,
-    Object? departments = null,
+    Object? departments = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
   }) {
@@ -160,10 +161,10 @@ class __$$FacultyImplCopyWithImpl<$Res>
                 : name // ignore: cast_nullable_to_non_nullable
                     as String,
         departments:
-            null == departments
+            freezed == departments
                 ? _value._departments
                 : departments // ignore: cast_nullable_to_non_nullable
-                    as List<Department>,
+                    as List<Department>?,
         createdAt:
             freezed == createdAt
                 ? _value.createdAt
@@ -185,7 +186,8 @@ class _$FacultyImpl implements _Faculty {
   const _$FacultyImpl({
     @JsonKey(name: 'id') this.id,
     @JsonKey(name: 'name') required this.name,
-    final List<Department> departments = const [],
+    @JsonKey(name: 'departments')
+    final List<Department>? departments = const [],
     @TimestampConverter() @JsonKey(name: 'createdAt') this.createdAt,
     @TimestampConverter() @JsonKey(name: 'updatedAt') this.updatedAt,
   }) : _departments = departments;
@@ -199,13 +201,15 @@ class _$FacultyImpl implements _Faculty {
   @override
   @JsonKey(name: 'name')
   final String name;
-  final List<Department> _departments;
+  final List<Department>? _departments;
   @override
-  @JsonKey()
-  List<Department> get departments {
+  @JsonKey(name: 'departments')
+  List<Department>? get departments {
+    final value = _departments;
+    if (value == null) return null;
     if (_departments is EqualUnmodifiableListView) return _departments;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_departments);
+    return EqualUnmodifiableListView(value);
   }
 
   @override
@@ -268,7 +272,7 @@ abstract class _Faculty implements Faculty {
   const factory _Faculty({
     @JsonKey(name: 'id') final dynamic id,
     @JsonKey(name: 'name') required final String name,
-    final List<Department> departments,
+    @JsonKey(name: 'departments') final List<Department>? departments,
     @TimestampConverter()
     @JsonKey(name: 'createdAt')
     final Timestamp? createdAt,
@@ -286,7 +290,8 @@ abstract class _Faculty implements Faculty {
   @JsonKey(name: 'name')
   String get name;
   @override
-  List<Department> get departments;
+  @JsonKey(name: 'departments')
+  List<Department>? get departments;
   @override
   @TimestampConverter()
   @JsonKey(name: 'createdAt')

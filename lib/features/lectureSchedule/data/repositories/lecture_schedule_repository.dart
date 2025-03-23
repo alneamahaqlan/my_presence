@@ -19,7 +19,7 @@ class LectureScheduleRepository {
       final snapshot =
           await _firestoreService.firestore
               .collection('faculties')
-              .doc(department.facultyId)
+              .doc(department.faculty.id)
               .collection('departments')
               .doc(department.id)
               .collection('schedules')
@@ -30,36 +30,7 @@ class LectureScheduleRepository {
             return schedule.copyWith(id: doc.id);
           }).toList();
 
-      // final snapshot =
-      //     await _firestoreService
-      //         .getWithSubDocuments(
-      //           mainCollection: 'lecture_schedules',
-      //           subCollection: 'lectures',
-      //         )
-      //         .first;
-
-      // final schedules =
-      //     snapshot.map((doc) {
-      //       // Extract main document data with ID
-      //       final Map<String, dynamic> mainData = {
-      //         'id': doc['mainDocument']['id'], // Ensure main doc ID is included
-      //         ...doc['mainDocument'],
-      //       };
-
-      //       // Extract and transform subcollection data with IDs
-      //       final List<Lecture> lectures =
-      //           (doc['subCollection'] as List)
-      //               .map(
-      //                 (subDoc) => Lecture.fromJson({
-      //                   'id': subDoc['id'], // Ensure subdoc ID is included
-      //                   ...subDoc,
-      //                 }),
-      //               )
-      //               .toList();
-
-      //       // Convert to LectureSchedule model
-      //       return Schedule.fromJson(mainData).copyWith(lectures: lectures);
-      //     }).toList();
+  
 
       return ApiResult.success(schedules);
     } catch (error) {
@@ -73,18 +44,14 @@ class LectureScheduleRepository {
     required ScheduleCreateBody scheduleCreateBody,
   }) async {
     try {
-      final subCollectionData = {
-        ...scheduleCreateBody.toJson(),
-        'createdAt': Timestamp.now(),
-        'updatedAt': Timestamp.now(),
-      };
+      
       final docRef = await _firestoreService.firestore
       .collection('faculties')
-          .doc(department.facultyId)
+          .doc(department.faculty.id)
           .collection('departments')
           .doc(department.id)
           .collection('schedules')
-          .add(subCollectionData);
+          .add(scheduleCreateBody.toJson());
       return ApiResult.success(docRef.id);
     } catch (e) {
       return ApiResult.failure(ApiErrorHandler.handle(e));

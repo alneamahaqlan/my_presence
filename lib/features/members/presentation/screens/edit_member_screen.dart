@@ -22,9 +22,7 @@ class EditMemberScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
+    
     final formKey = GlobalKey<FormState>();
     final nameController = TextEditingController(text: member.name);
     final emailController = TextEditingController(text: member.email);
@@ -106,6 +104,9 @@ class EditMemberScreen extends StatelessWidget {
                     context,
                     controller: specializationController,
                     hint: "التخصص",
+                    validator: (value) {
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 16),
 
@@ -114,6 +115,9 @@ class EditMemberScreen extends StatelessWidget {
                     context,
                     controller: academicRankController,
                     hint: "الرتبة الأكاديمية",
+                    validator: (value) {
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 24),
 
@@ -143,17 +147,20 @@ class EditMemberScreen extends StatelessWidget {
     required TextEditingController controller,
     required String hint,
     bool isEmail = false,
+    String? Function(String?)? validator,
   }) {
     return TextFieldWidget(
       controller: controller,
       hint: hint,
-      validator: (value) {
-        if (value == null || value.isEmpty) return 'يرجى إدخال $hint';
-        if (isEmail && !value.contains('@')) {
-          return 'يرجى إدخال بريد إلكتروني صالح';
-        }
-        return null;
-      },
+      validator:
+          validator ??
+          (value) {
+            if (value == null || value.isEmpty) return 'يرجى إدخال $hint';
+            if (isEmail && !value.contains('@')) {
+              return 'يرجى إدخال بريد إلكتروني صالح';
+            }
+            return null;
+          },
     );
   }
 
@@ -188,7 +195,7 @@ class EditMemberScreen extends StatelessWidget {
   ) {
     return BlocConsumer<MemberBloc, MemberState>(
       listener: (context, state) {
-        state.status.maybeWhen(
+        state.editStatus.maybeWhen(
           initial: () {},
           loading: () => _showLoadingDialog(context),
           success: () {
@@ -223,7 +230,7 @@ class EditMemberScreen extends StatelessWidget {
               );
             }
           },
-          isSubmitting: state.status == Status.loading(),
+          isSubmitting: state.editStatus == Status.loading(),
         );
       },
     );

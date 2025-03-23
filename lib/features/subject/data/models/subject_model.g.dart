@@ -12,6 +12,7 @@ _$SubjectImpl _$$SubjectImplFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String,
       code: json['code'] as String,
       number: json['number'] as String,
+      units: (json['units'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$SubjectImplToJson(_$SubjectImpl instance) =>
@@ -20,4 +21,5 @@ Map<String, dynamic> _$$SubjectImplToJson(_$SubjectImpl instance) =>
       'name': instance.name,
       'code': instance.code,
       'number': instance.number,
+      'units': instance.units,
     };

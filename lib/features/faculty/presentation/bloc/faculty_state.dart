@@ -4,6 +4,7 @@ part of 'faculty_bloc.dart';
 class FacultyState with _$FacultyState {
   const factory FacultyState({
     @Default(Status.initial()) Status status,
+        @Default(Status.initial()) Status createStatus,
     @Default([]) List<Faculty> faculties,
     String? message,
   }) = _FacultyState;

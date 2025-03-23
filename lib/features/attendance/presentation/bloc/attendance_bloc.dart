@@ -20,8 +20,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
       );
     });
   }
-
-  Future<void> _addAttendance(
+Future<void> _addAttendance(
     AddAttendance event,
     Emitter<AttendanceState> emit,
   ) async {

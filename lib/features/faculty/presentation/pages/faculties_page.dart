@@ -84,7 +84,7 @@ class FacultiesPage extends StatelessWidget {
                             ), // إضافة مسافة بين النص والأيقونة
                             // تفاصيل إضافية (مثل الوصف أو الإحصائيات)
                             Text(
-                              '${faculty.departments.length} أقسام',
+                              '${faculty.departments?.length ?? 0} أقسام',
                               style: theme.textTheme.bodyMedium?.copyWith(
                                 color: colorScheme.onSurface.withOpacity(0.7),
                               ),

@@ -1,15 +1,28 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-part 'department_create_body.freezed.dart';
+import '../../../faculty/data/models/faculty_model.dart';
+
 part 'department_create_body.g.dart';
 
-@freezed
-class DepartmentCreateBody with _$DepartmentCreateBody {
-  const factory DepartmentCreateBody({
-    @JsonKey(name: 'name')  required String name,
-    @JsonKey(name: 'facultyId') required String facultyId,
-  }) = _DepartmentCreateBody;
+@JsonSerializable()
+class DepartmentCreateBody {
+  @JsonKey(name: 'name')
+  final String name;
+
+  @JsonKey(name: 'faculty')
+  final Faculty faculty;
+
+  const DepartmentCreateBody({required this.name, required this.faculty});
 
   factory DepartmentCreateBody.fromJson(Map<String, dynamic> json) =>
       _$DepartmentCreateBodyFromJson(json);
+
+  Map<String, dynamic> toJson() => {
+    'name': name,
+    'faculty': faculty.toJson(),
+    'schedules': [],
+    'createdAt': Timestamp.now(),
+    'updatedAt': Timestamp.now(),
+  };
 }

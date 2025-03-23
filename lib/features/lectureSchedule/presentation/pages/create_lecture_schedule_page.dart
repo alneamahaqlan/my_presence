@@ -1,14 +1,13 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_presence/features/lectureSchedule/presentation/bloc/lecture_schedule_bloc.dart';
 
 import '../../../../core/models/status.dart';
 import '../../../../core/utils/ui.dart';
-import '../../../../core/widgets/button_widget.dart'; // استيراد ButtonWidget
-import '../../../../core/widgets/text_field_widget.dart'; // استيراد TextFieldWidget
+import '../../../../core/widgets/button_widget.dart';
+import '../../../../core/widgets/text_field_widget.dart';
 import '../../../department/data/models/department_model.dart';
 import '../../data/models/schedule_create_body.dart';
+import '../bloc/lecture_schedule_bloc.dart';
 
 class CreateLectureSchedulePage extends StatefulWidget {
   final Department department;
@@ -25,6 +24,8 @@ class _CreateLectureSchedulePageState extends State<CreateLectureSchedulePage> {
   final _titleController = TextEditingController();
   final _startDateController = TextEditingController();
   final _endDateController = TextEditingController();
+  final _divisionController = TextEditingController();
+  final _levelController = TextEditingController();
 
   Future<void> _selectStartDate(BuildContext context) async {
     final DateTime? date = await Ui.selectDate(context);
@@ -76,6 +77,36 @@ class _CreateLectureSchedulePageState extends State<CreateLectureSchedulePage> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'يرجى إدخال عنوان';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+
+                // حقل المستوى (Level)
+                TextFieldWidget(
+                  hint: 'المستوى (رقم)',
+                  controller: _levelController,
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'يرجى إدخال مستوى';
+                    }
+                    if (int.tryParse(value) == null) {
+                      return 'يرجى إدخال رقم صحيح';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+
+                // حقل القسم (Division)
+                TextFieldWidget(
+                  hint: 'القسم',
+                  controller: _divisionController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'يرجى إدخال القسم';
                     }
                     return null;
                   },
@@ -150,9 +181,13 @@ class _CreateLectureSchedulePageState extends State<CreateLectureSchedulePage> {
                           // إنشاء الجدول بالمعلومات المطلوبة
                           final schedule = ScheduleCreateBody(
                             title: _titleController.text,
-                            departmentId: widget.department.id,
-                            termStart: Timestamp.fromDate(newStart),
-                            termEnd: Timestamp.fromDate(newEnd),
+                            department: widget.department,
+                            level: int.parse(
+                              _levelController.text,
+                            ), // Parse level as int
+                            division: _divisionController.text,
+                            termStart: newStart,
+                            termEnd: newEnd,
                           );
 
                           // إرسال الحدث لإضافة الجدول

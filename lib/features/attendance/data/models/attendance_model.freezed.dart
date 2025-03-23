@@ -32,6 +32,8 @@ mixin _$Attendance {
   Timestamp? get arrivalDate => throw _privateConstructorUsedError;
   @JsonKey(name: 'status')
   String get status => throw _privateConstructorUsedError;
+  @JsonKey(name: 'meet')
+  Meet get meet => throw _privateConstructorUsedError;
 
   /// Serializes this Attendance to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -56,10 +58,12 @@ abstract class $AttendanceCopyWith<$Res> {
     @JsonKey(name: 'lecture') Lecture lecture,
     @TimestampConverter() @JsonKey(name: 'arrivalDate') Timestamp? arrivalDate,
     @JsonKey(name: 'status') String status,
+    @JsonKey(name: 'meet') Meet meet,
   });
 
   $UserModelCopyWith<$Res> get byUser;
   $LectureCopyWith<$Res> get lecture;
+  $MeetCopyWith<$Res> get meet;
 }
 
 /// @nodoc
@@ -82,6 +86,7 @@ class _$AttendanceCopyWithImpl<$Res, $Val extends Attendance>
     Object? lecture = null,
     Object? arrivalDate = freezed,
     Object? status = null,
+    Object? meet = null,
   }) {
     return _then(
       _value.copyWith(
@@ -110,6 +115,11 @@ class _$AttendanceCopyWithImpl<$Res, $Val extends Attendance>
                     ? _value.status
                     : status // ignore: cast_nullable_to_non_nullable
                         as String,
+            meet:
+                null == meet
+                    ? _value.meet
+                    : meet // ignore: cast_nullable_to_non_nullable
+                        as Meet,
           )
           as $Val,
     );
@@ -134,6 +144,16 @@ class _$AttendanceCopyWithImpl<$Res, $Val extends Attendance>
       return _then(_value.copyWith(lecture: value) as $Val);
     });
   }
+
+  /// Create a copy of Attendance
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $MeetCopyWith<$Res> get meet {
+    return $MeetCopyWith<$Res>(_value.meet, (value) {
+      return _then(_value.copyWith(meet: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -151,12 +171,15 @@ abstract class _$$AttendanceImplCopyWith<$Res>
     @JsonKey(name: 'lecture') Lecture lecture,
     @TimestampConverter() @JsonKey(name: 'arrivalDate') Timestamp? arrivalDate,
     @JsonKey(name: 'status') String status,
+    @JsonKey(name: 'meet') Meet meet,
   });
 
   @override
   $UserModelCopyWith<$Res> get byUser;
   @override
   $LectureCopyWith<$Res> get lecture;
+  @override
+  $MeetCopyWith<$Res> get meet;
 }
 
 /// @nodoc
@@ -178,6 +201,7 @@ class __$$AttendanceImplCopyWithImpl<$Res>
     Object? lecture = null,
     Object? arrivalDate = freezed,
     Object? status = null,
+    Object? meet = null,
   }) {
     return _then(
       _$AttendanceImpl(
@@ -206,6 +230,11 @@ class __$$AttendanceImplCopyWithImpl<$Res>
                 ? _value.status
                 : status // ignore: cast_nullable_to_non_nullable
                     as String,
+        meet:
+            null == meet
+                ? _value.meet
+                : meet // ignore: cast_nullable_to_non_nullable
+                    as Meet,
       ),
     );
   }
@@ -220,6 +249,7 @@ class _$AttendanceImpl implements _Attendance {
     @JsonKey(name: 'lecture') required this.lecture,
     @TimestampConverter() @JsonKey(name: 'arrivalDate') this.arrivalDate,
     @JsonKey(name: 'status') required this.status,
+    @JsonKey(name: 'meet') required this.meet,
   });
 
   factory _$AttendanceImpl.fromJson(Map<String, dynamic> json) =>
@@ -241,10 +271,13 @@ class _$AttendanceImpl implements _Attendance {
   @override
   @JsonKey(name: 'status')
   final String status;
+  @override
+  @JsonKey(name: 'meet')
+  final Meet meet;
 
   @override
   String toString() {
-    return 'Attendance(id: $id, byUser: $byUser, lecture: $lecture, arrivalDate: $arrivalDate, status: $status)';
+    return 'Attendance(id: $id, byUser: $byUser, lecture: $lecture, arrivalDate: $arrivalDate, status: $status, meet: $meet)';
   }
 
   @override
@@ -257,7 +290,8 @@ class _$AttendanceImpl implements _Attendance {
             (identical(other.lecture, lecture) || other.lecture == lecture) &&
             (identical(other.arrivalDate, arrivalDate) ||
                 other.arrivalDate == arrivalDate) &&
-            (identical(other.status, status) || other.status == status));
+            (identical(other.status, status) || other.status == status) &&
+            (identical(other.meet, meet) || other.meet == meet));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -269,6 +303,7 @@ class _$AttendanceImpl implements _Attendance {
     lecture,
     arrivalDate,
     status,
+    meet,
   );
 
   /// Create a copy of Attendance
@@ -294,6 +329,7 @@ abstract class _Attendance implements Attendance {
     @JsonKey(name: 'arrivalDate')
     final Timestamp? arrivalDate,
     @JsonKey(name: 'status') required final String status,
+    @JsonKey(name: 'meet') required final Meet meet,
   }) = _$AttendanceImpl;
 
   factory _Attendance.fromJson(Map<String, dynamic> json) =
@@ -315,6 +351,9 @@ abstract class _Attendance implements Attendance {
   @override
   @JsonKey(name: 'status')
   String get status;
+  @override
+  @JsonKey(name: 'meet')
+  Meet get meet;
 
   /// Create a copy of Attendance
   /// with the given fields replaced by the non-null parameter values.

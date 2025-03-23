@@ -83,19 +83,24 @@
     "teachingPerformance": "أداء التدريس",
     "interactionWithStudents": "التفاعل مع الطلاب",
     "management": "الإدارة",
-    "teacher": "المعلم",
+    "teacher": "استاذ",
     "admin": "الادارة",
     "present": "حاضر",
     "absent": "غائب",
     "late": "متاخر",
-    "excused": "محذوف",
+    "excused": "عذر",
     "faculties": "الكليات",
     "departments": "الاقسام",
     "subjects": "المواد",
     "busy": "مشغول",
     "available": "متاح",
     "inLecture": "في المحاضرة",
-    "unknown": "غير معروف"
+    "unknown": "غير معروف",
+    "teachingAssistant": "معيد",
+    "lecturer": "محاضر",
+    "assistantProfessor": "أستاذ مساعد",
+    "associateProfessor": "أستاذ مشارك",
+    "professor": "أستاذ"
 
   }
   

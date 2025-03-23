@@ -4,6 +4,7 @@ part of 'subject_bloc.dart';
 class SubjectState with _$SubjectState {
     const factory SubjectState({
     @Default(Status.initial()) Status status,
+      @Default(Status.initial()) Status createStatus,
    
      @Default([]) List<Subject> subjects,
     String? message,

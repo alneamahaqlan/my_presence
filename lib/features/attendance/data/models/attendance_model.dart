@@ -4,6 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../../core/converters/timestamp_converter.dart';
 import '../../../auth/data/models/user_model.dart';
 import '../../../lecture/data/models/lecture_model.dart';
+import '../../../lecture/data/models/meet_model.dart';
 
 part 'attendance_model.freezed.dart';
 part 'attendance_model.g.dart';
@@ -15,8 +16,9 @@ class Attendance with _$Attendance {
 
     @JsonKey(name: 'byUser') required UserModel byUser,
      @JsonKey(name: 'lecture') required Lecture lecture,
-    @TimestampConverter() @JsonKey(name: 'arrivalDate') Timestamp? arrivalDate,
+    @TimestampConverter() @JsonKey(name: 'arrivalDate')  Timestamp? arrivalDate,
     @JsonKey(name: 'status') required String status,
+     @JsonKey(name: 'meet') required Meet meet,
   }) = _Attendance;
 
   factory Attendance.fromJson(Map<String, dynamic> json) =>

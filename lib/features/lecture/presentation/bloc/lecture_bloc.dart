@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:go_router/go_router.dart';
-
 import '../../../../core/models/status.dart';
 import '../../../../dependency_injection.dart';
 import '../../../department/data/models/department_model.dart';
@@ -14,24 +13,26 @@ part 'lecture_event.dart';
 part 'lecture_state.dart';
 
 class LectureBloc extends Bloc<LectureEvent, LectureState> {
-  final LectureRepository _repository;
+    final LectureRepository _repository;
 
+ 
   LectureBloc(this._repository) : super(LectureState.initial()) {
     on<FetchLectures>(_onFetchLectures);
     on<AddLecture>(_onAddLecture);
     on<UpdateLecture>(_onUpdateLecture);
     on<DeleteLecture>(_onDeleteLecture);
     on<SetSchedule>(_onSetSchedule);
+//     final router = getIt<GoRouter>();
+//     final schedule =
+//         (router.state.extra as Map<String, dynamic>?)?['schedule'] as Schedule;
+//     final department =
+//         (router.state.extra as Map<String, dynamic>?)?['department']
+//             as Department;
 
-    // final router = getIt.call<GoRouter>();
-    // final schedule =
-    //     (router.state.extra as Map<String, dynamic>?)?['schedule'] as Schedule;
-    // final department =
-    //     (router.state.extra as Map<String, dynamic>?)?['department']
-    //         as Department;
-
-    // add(SetSchedule(schedule: schedule, department: department));
-   
+//  add(
+//       SetSchedule(schedule: schedule, department: department),
+//     );
+  
   }
 
   Future<void> _onSetSchedule(
@@ -75,7 +76,7 @@ class LectureBloc extends Bloc<LectureEvent, LectureState> {
     AddLecture event,
     Emitter<LectureState> emit,
   ) async {
-    emit(state.copyWith(status: const Status.loading()));
+    emit(state.copyWith(createStatus: const Status.loading()));
 
     final result = await _repository.addLecture(
       lecture: event.lecture,
@@ -85,13 +86,13 @@ class LectureBloc extends Bloc<LectureEvent, LectureState> {
 
     result.when(
       success: (_) {
-        emit(state.copyWith(status: const Status.success()));
-        add(const FetchLectures()); // Refresh the list
+        emit(state.copyWith(createStatus: const Status.success()));
+        // add(const FetchLectures()); // Refresh the list
       },
       failure: (error) {
         emit(
           state.copyWith(
-            status: const Status.failed(),
+            createStatus: const Status.failed(),
             errorMessage: error.message,
           ),
         );

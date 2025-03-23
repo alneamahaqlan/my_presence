@@ -10,6 +10,7 @@ class Subject with _$Subject {
     @JsonKey(name: 'name') required String name,
     @JsonKey(name: 'code') required String code,
     @JsonKey(name: 'number') required String number,
+        @JsonKey(name: 'units') required int units,
   }) = _Subject;
 
   factory Subject.fromJson(Map<String, dynamic> json) =>

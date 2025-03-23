@@ -10,7 +10,7 @@ _$DepartmentImpl _$$DepartmentImplFromJson(Map<String, dynamic> json) =>
     _$DepartmentImpl(
       id: json['id'],
       name: json['name'] as String,
-      facultyId: json['facultyId'] as String,
+      faculty: Faculty.fromJson(json['faculty'] as Map<String, dynamic>),
       schedules:
           (json['schedules'] as List<dynamic>?)
               ?.map((e) => Schedule.fromJson(e as Map<String, dynamic>))
@@ -24,7 +24,7 @@ Map<String, dynamic> _$$DepartmentImplToJson(_$DepartmentImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'facultyId': instance.facultyId,
+      'faculty': instance.faculty,
       'schedules': instance.schedules,
       'createdAt': _$JsonConverterToJson<dynamic, Timestamp>(
         instance.createdAt,

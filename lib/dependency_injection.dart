@@ -8,6 +8,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 import '../../firebase_options.dart';
 import 'core/repositories/firestore_repository.dart';
@@ -38,24 +39,25 @@ import 'features/root/data/repositories/root_repository.dart';
 import 'features/root/presentation/pages/bloc/root_bloc.dart';
 import 'features/subject/data/repositories/subject_repository.dart';
 import 'features/subject/presentation/bloc/subject_bloc.dart';
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
 
 final getIt = GetIt.instance;
 String initial = AppRoutes.root;
 
 Future<void> setup() async {
-    tz.initializeTimeZones();
+  tz.initializeTimeZones();
   // Initialize EasyLocalization
   await EasyLocalization.ensureInitialized();
 
   // Initialize Firebase
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
+   // Register GoRouter
+  getIt.registerSingleton<GoRouter>( AppPages.router);
+
+
+
   // Register FirebaseAuth instance
   getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
-
-   
 
   getIt.registerLazySingleton(() => FirebaseAuthService(getIt<FirebaseAuth>()));
 
@@ -63,6 +65,8 @@ Future<void> setup() async {
   getIt.registerLazySingleton<FirebaseFirestore>(
     () => FirebaseFirestore.instance,
   );
+
+  
 
   // Register FirestoreService
   getIt.registerLazySingleton<FirestoreService>(
@@ -91,9 +95,13 @@ Future<void> setup() async {
   // Register RootBloc
   getIt.registerLazySingleton<RootBloc>(() => RootBloc());
 
-   // Register NotificationService
-  getIt.registerLazySingleton<FlutterLocalNotificationsPlugin>(() => FlutterLocalNotificationsPlugin());
-  getIt.registerLazySingleton<NotificationService>(() => NotificationService(getIt()));
+  // Register NotificationService
+  getIt.registerLazySingleton<FlutterLocalNotificationsPlugin>(
+    () => FlutterLocalNotificationsPlugin(),
+  );
+  getIt.registerLazySingleton<NotificationService>(
+    () => NotificationService(getIt()),
+  );
 
   // Register MemberRepository
   getIt.registerFactory<MemberRepository>(
@@ -101,9 +109,7 @@ Future<void> setup() async {
   );
 
   // Register MemberBloc
-  getIt.registerFactory<MemberBloc>(
-    () => MemberBloc(getIt<MemberRepository>()),
-  );
+  getIt.registerSingleton<MemberBloc>(MemberBloc(getIt<MemberRepository>()));
 
   // Register IncomeRepository
   getIt.registerFactory<IncomeRepository>(
@@ -136,42 +142,37 @@ Future<void> setup() async {
   // Register FacultyRepository
   getIt.registerSingleton<FacultyRepository>(
     FacultyRepository(getIt<FirestoreService>()),
-  ); 
+  );
   getIt.registerSingleton<DepartmentRepository>(
     DepartmentRepository(getIt<FirestoreService>()),
   );
   getIt.registerSingleton<SubjectRepository>(
     SubjectRepository(getIt<FirestoreService>()),
   );
-   getIt.registerFactory<LectureRepository>(
+  getIt.registerFactory<LectureRepository>(
     () => LectureRepository(getIt<FirestoreService>()),
   );
-  
 
-
-
-  
-
-  getIt.registerSingleton<FacultyBloc>(
-    FacultyBloc( getIt<FacultyRepository>()),
-  );
+  getIt.registerSingleton<FacultyBloc>(FacultyBloc(getIt<FacultyRepository>()));
   getIt.registerSingleton<DepartmentBloc>(
     DepartmentBloc(getIt<DepartmentRepository>()),
   );
-  
-  getIt.registerSingleton<SubjectBloc>(SubjectBloc(getIt<SubjectRepository>())); 
-   getIt.registerFactory<LectureBloc>( () => LectureBloc(getIt<LectureRepository>())); 
- getIt.registerFactory<AttendanceRepository>(
+
+  getIt.registerSingleton<SubjectBloc>(SubjectBloc(getIt<SubjectRepository>()));
+     getIt.registerSingleton<LectureBloc>(
+                      LectureBloc(getIt<LectureRepository>()),
+                    );
+  getIt.registerFactory<AttendanceRepository>(
     () => AttendanceRepository(getIt<FirestoreService>()),
   );
-   getIt.registerFactory<AttendanceBloc>( () => AttendanceBloc(getIt<AttendanceRepository>()));
+  getIt.registerFactory<AttendanceBloc>(
+    () => AttendanceBloc(getIt<AttendanceRepository>()),
+  );
 
-  // Register GoRouter
-  getIt.registerLazySingleton<GoRouter>(() => AppPages.router);
+   
 
   // Start the app
   await startApp();
-  
 }
 
 Future<UserModel?> startApp() async {

@@ -37,6 +37,8 @@ mixin _$Lecture {
   Timestamp get endTime => throw _privateConstructorUsedError;
   @JsonKey(name: 'hall')
   String get hall => throw _privateConstructorUsedError;
+  @JsonKey(name: 'meetings')
+  List<Meet> get meetings => throw _privateConstructorUsedError;
   @TimestampConverter()
   @JsonKey(name: 'createdAt')
   Timestamp? get createdAt => throw _privateConstructorUsedError;
@@ -66,6 +68,7 @@ abstract class $LectureCopyWith<$Res> {
     @TimestampConverter() @JsonKey(name: 'startTime') Timestamp startTime,
     @TimestampConverter() @JsonKey(name: 'endTime') Timestamp endTime,
     @JsonKey(name: 'hall') String hall,
+    @JsonKey(name: 'meetings') List<Meet> meetings,
     @TimestampConverter() @JsonKey(name: 'createdAt') Timestamp? createdAt,
     @TimestampConverter() @JsonKey(name: 'updatedAt') Timestamp? updatedAt,
   });
@@ -96,6 +99,7 @@ class _$LectureCopyWithImpl<$Res, $Val extends Lecture>
     Object? startTime = null,
     Object? endTime = null,
     Object? hall = null,
+    Object? meetings = null,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
   }) {
@@ -136,6 +140,11 @@ class _$LectureCopyWithImpl<$Res, $Val extends Lecture>
                     ? _value.hall
                     : hall // ignore: cast_nullable_to_non_nullable
                         as String,
+            meetings:
+                null == meetings
+                    ? _value.meetings
+                    : meetings // ignore: cast_nullable_to_non_nullable
+                        as List<Meet>,
             createdAt:
                 freezed == createdAt
                     ? _value.createdAt
@@ -188,6 +197,7 @@ abstract class _$$LectureImplCopyWith<$Res> implements $LectureCopyWith<$Res> {
     @TimestampConverter() @JsonKey(name: 'startTime') Timestamp startTime,
     @TimestampConverter() @JsonKey(name: 'endTime') Timestamp endTime,
     @JsonKey(name: 'hall') String hall,
+    @JsonKey(name: 'meetings') List<Meet> meetings,
     @TimestampConverter() @JsonKey(name: 'createdAt') Timestamp? createdAt,
     @TimestampConverter() @JsonKey(name: 'updatedAt') Timestamp? updatedAt,
   });
@@ -219,6 +229,7 @@ class __$$LectureImplCopyWithImpl<$Res>
     Object? startTime = null,
     Object? endTime = null,
     Object? hall = null,
+    Object? meetings = null,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
   }) {
@@ -259,6 +270,11 @@ class __$$LectureImplCopyWithImpl<$Res>
                 ? _value.hall
                 : hall // ignore: cast_nullable_to_non_nullable
                     as String,
+        meetings:
+            null == meetings
+                ? _value._meetings
+                : meetings // ignore: cast_nullable_to_non_nullable
+                    as List<Meet>,
         createdAt:
             freezed == createdAt
                 ? _value.createdAt
@@ -285,9 +301,10 @@ class _$LectureImpl implements _Lecture {
     @TimestampConverter() @JsonKey(name: 'startTime') required this.startTime,
     @TimestampConverter() @JsonKey(name: 'endTime') required this.endTime,
     @JsonKey(name: 'hall') required this.hall,
+    @JsonKey(name: 'meetings') final List<Meet> meetings = const [],
     @TimestampConverter() @JsonKey(name: 'createdAt') this.createdAt,
     @TimestampConverter() @JsonKey(name: 'updatedAt') this.updatedAt,
-  });
+  }) : _meetings = meetings;
 
   factory _$LectureImpl.fromJson(Map<String, dynamic> json) =>
       _$$LectureImplFromJson(json);
@@ -315,6 +332,15 @@ class _$LectureImpl implements _Lecture {
   @override
   @JsonKey(name: 'hall')
   final String hall;
+  final List<Meet> _meetings;
+  @override
+  @JsonKey(name: 'meetings')
+  List<Meet> get meetings {
+    if (_meetings is EqualUnmodifiableListView) return _meetings;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_meetings);
+  }
+
   @override
   @TimestampConverter()
   @JsonKey(name: 'createdAt')
@@ -326,7 +352,7 @@ class _$LectureImpl implements _Lecture {
 
   @override
   String toString() {
-    return 'Lecture(id: $id, subject: $subject, user: $user, scheduleId: $scheduleId, startTime: $startTime, endTime: $endTime, hall: $hall, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'Lecture(id: $id, subject: $subject, user: $user, scheduleId: $scheduleId, startTime: $startTime, endTime: $endTime, hall: $hall, meetings: $meetings, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -343,6 +369,7 @@ class _$LectureImpl implements _Lecture {
                 other.startTime == startTime) &&
             (identical(other.endTime, endTime) || other.endTime == endTime) &&
             (identical(other.hall, hall) || other.hall == hall) &&
+            const DeepCollectionEquality().equals(other._meetings, _meetings) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
@@ -360,6 +387,7 @@ class _$LectureImpl implements _Lecture {
     startTime,
     endTime,
     hall,
+    const DeepCollectionEquality().hash(_meetings),
     createdAt,
     updatedAt,
   );
@@ -391,6 +419,7 @@ abstract class _Lecture implements Lecture {
     @JsonKey(name: 'endTime')
     required final Timestamp endTime,
     @JsonKey(name: 'hall') required final String hall,
+    @JsonKey(name: 'meetings') final List<Meet> meetings,
     @TimestampConverter()
     @JsonKey(name: 'createdAt')
     final Timestamp? createdAt,
@@ -424,6 +453,9 @@ abstract class _Lecture implements Lecture {
   @override
   @JsonKey(name: 'hall')
   String get hall;
+  @override
+  @JsonKey(name: 'meetings')
+  List<Meet> get meetings;
   @override
   @TimestampConverter()
   @JsonKey(name: 'createdAt')

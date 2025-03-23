@@ -928,6 +928,7 @@ abstract class SetSchedule implements LectureEvent {
 /// @nodoc
 mixin _$LectureState {
   Status get status => throw _privateConstructorUsedError;
+  Status get createStatus => throw _privateConstructorUsedError;
   List<Lecture> get lectures => throw _privateConstructorUsedError;
   Schedule? get schedule => throw _privateConstructorUsedError;
   Department? get department => throw _privateConstructorUsedError;
@@ -949,6 +950,7 @@ abstract class $LectureStateCopyWith<$Res> {
   @useResult
   $Res call({
     Status status,
+    Status createStatus,
     List<Lecture> lectures,
     Schedule? schedule,
     Department? department,
@@ -956,6 +958,7 @@ abstract class $LectureStateCopyWith<$Res> {
   });
 
   $StatusCopyWith<$Res> get status;
+  $StatusCopyWith<$Res> get createStatus;
   $ScheduleCopyWith<$Res>? get schedule;
   $DepartmentCopyWith<$Res>? get department;
 }
@@ -976,6 +979,7 @@ class _$LectureStateCopyWithImpl<$Res, $Val extends LectureState>
   @override
   $Res call({
     Object? status = null,
+    Object? createStatus = null,
     Object? lectures = null,
     Object? schedule = freezed,
     Object? department = freezed,
@@ -987,6 +991,11 @@ class _$LectureStateCopyWithImpl<$Res, $Val extends LectureState>
                 null == status
                     ? _value.status
                     : status // ignore: cast_nullable_to_non_nullable
+                        as Status,
+            createStatus:
+                null == createStatus
+                    ? _value.createStatus
+                    : createStatus // ignore: cast_nullable_to_non_nullable
                         as Status,
             lectures:
                 null == lectures
@@ -1020,6 +1029,16 @@ class _$LectureStateCopyWithImpl<$Res, $Val extends LectureState>
   $StatusCopyWith<$Res> get status {
     return $StatusCopyWith<$Res>(_value.status, (value) {
       return _then(_value.copyWith(status: value) as $Val);
+    });
+  }
+
+  /// Create a copy of LectureState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $StatusCopyWith<$Res> get createStatus {
+    return $StatusCopyWith<$Res>(_value.createStatus, (value) {
+      return _then(_value.copyWith(createStatus: value) as $Val);
     });
   }
 
@@ -1063,6 +1082,7 @@ abstract class _$$LectureStateImplCopyWith<$Res>
   @useResult
   $Res call({
     Status status,
+    Status createStatus,
     List<Lecture> lectures,
     Schedule? schedule,
     Department? department,
@@ -1071,6 +1091,8 @@ abstract class _$$LectureStateImplCopyWith<$Res>
 
   @override
   $StatusCopyWith<$Res> get status;
+  @override
+  $StatusCopyWith<$Res> get createStatus;
   @override
   $ScheduleCopyWith<$Res>? get schedule;
   @override
@@ -1092,6 +1114,7 @@ class __$$LectureStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? status = null,
+    Object? createStatus = null,
     Object? lectures = null,
     Object? schedule = freezed,
     Object? department = freezed,
@@ -1103,6 +1126,11 @@ class __$$LectureStateImplCopyWithImpl<$Res>
             null == status
                 ? _value.status
                 : status // ignore: cast_nullable_to_non_nullable
+                    as Status,
+        createStatus:
+            null == createStatus
+                ? _value.createStatus
+                : createStatus // ignore: cast_nullable_to_non_nullable
                     as Status,
         lectures:
             null == lectures
@@ -1134,6 +1162,7 @@ class __$$LectureStateImplCopyWithImpl<$Res>
 class _$LectureStateImpl implements _LectureState {
   const _$LectureStateImpl({
     this.status = const Status.initial(),
+    this.createStatus = const Status.initial(),
     final List<Lecture> lectures = const [],
     this.schedule,
     this.department,
@@ -1143,6 +1172,9 @@ class _$LectureStateImpl implements _LectureState {
   @override
   @JsonKey()
   final Status status;
+  @override
+  @JsonKey()
+  final Status createStatus;
   final List<Lecture> _lectures;
   @override
   @JsonKey()
@@ -1161,7 +1193,7 @@ class _$LectureStateImpl implements _LectureState {
 
   @override
   String toString() {
-    return 'LectureState(status: $status, lectures: $lectures, schedule: $schedule, department: $department, errorMessage: $errorMessage)';
+    return 'LectureState(status: $status, createStatus: $createStatus, lectures: $lectures, schedule: $schedule, department: $department, errorMessage: $errorMessage)';
   }
 
   @override
@@ -1170,6 +1202,8 @@ class _$LectureStateImpl implements _LectureState {
         (other.runtimeType == runtimeType &&
             other is _$LectureStateImpl &&
             (identical(other.status, status) || other.status == status) &&
+            (identical(other.createStatus, createStatus) ||
+                other.createStatus == createStatus) &&
             const DeepCollectionEquality().equals(other._lectures, _lectures) &&
             (identical(other.schedule, schedule) ||
                 other.schedule == schedule) &&
@@ -1183,6 +1217,7 @@ class _$LectureStateImpl implements _LectureState {
   int get hashCode => Object.hash(
     runtimeType,
     status,
+    createStatus,
     const DeepCollectionEquality().hash(_lectures),
     schedule,
     department,
@@ -1201,6 +1236,7 @@ class _$LectureStateImpl implements _LectureState {
 abstract class _LectureState implements LectureState {
   const factory _LectureState({
     final Status status,
+    final Status createStatus,
     final List<Lecture> lectures,
     final Schedule? schedule,
     final Department? department,
@@ -1209,6 +1245,8 @@ abstract class _LectureState implements LectureState {
 
   @override
   Status get status;
+  @override
+  Status get createStatus;
   @override
   List<Lecture> get lectures;
   @override

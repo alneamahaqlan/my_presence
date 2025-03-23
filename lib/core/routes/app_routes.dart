@@ -46,7 +46,7 @@ abstract class AppRoutes {
 
   //lectures
   static const String lectures = '/lectures';
-  static const String createLecture = '/create-lecture';
+  static const String createLecture = 'lectures.create';
   static const String editLecture = '/edit-lecture';
   static const String viewLecture = '/view-lecture';
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // For date formatting
 
 import '../../data/models/lecture_model.dart';
+import 'lecture_meetings_widget.dart';
 
 class LectureCard extends StatelessWidget {
   final Lecture lecture;
@@ -42,6 +43,7 @@ class LectureCard extends StatelessWidget {
                   color: Colors.blue,
                 ),
               ),
+
               const SizedBox(height: 8),
               Text(
                 'عضو التدريس: ${lecture.user.name}',
@@ -101,6 +103,7 @@ class LectureCard extends StatelessWidget {
                   ),
                 ],
               ),
+              LectureMeetingsWidget(lecture: lecture),
             ],
           ),
         ),

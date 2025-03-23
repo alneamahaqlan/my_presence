@@ -18,10 +18,10 @@ part 'user_model.g.dart';
 class UserModel with _$UserModel {
   const factory UserModel({
     @JsonKey(name: 'id') dynamic id,
-    required String email,
-    required String name,
-    required Role role,
-    required ActivityStatus activityStatus,
+    @JsonKey(name: 'email') required String email,
+    @JsonKey(name: 'name') required String name,
+    @JsonKey(name: 'role') required Role role,
+    @JsonKey(name: 'activityStatus') required ActivityStatus activityStatus,
     @JsonKey(name: 'isActive') @Default(true) bool isActive,
     @JsonKey(name: 'specialization') String? specialization,
     @JsonKey(name: 'academic_rank') String? academicRank,

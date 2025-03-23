@@ -18,7 +18,7 @@ class LecturesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final router = getIt.call<GoRouter>();
+    final router = getIt<GoRouter>();
     final schedule =
         (router.state.extra as Map<String, dynamic>?)?['schedule'] as Schedule;
     final department =
@@ -61,7 +61,24 @@ class LecturesPage extends StatelessWidget {
           ),
         ],
       ),
-      body: BlocBuilder<LectureBloc, LectureState>(
+      body: BlocConsumer<LectureBloc, LectureState>(
+        listener: (context, state) {
+          state.createStatus.maybeWhen(
+            orElse: () {},
+            success: () {
+              // context.read<MemberBloc>().add(LoadMembers());
+              context.read<LectureBloc>().add(const FetchLectures());
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('تم إنشاء المحاضرة بنجاح')),
+              );
+            },
+            failed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('فشل إنشاء المحاضرة')),
+              );
+            },
+          );
+        },
         builder: (context, state) {
           if (state.status == Status.loading()) {
             return const Center(child: CircularProgressIndicator());

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:go_router/go_router.dart';
@@ -30,8 +28,8 @@ class LectureScheduleBloc
     on<UpdateAttendance>(_onUpdateAttendance);
     on<SetDepartment>(_onSetDepartment);
 
-    final router = getIt.call<GoRouter>();
-  final  department = router.state.extra as Department;
+    final router = getIt<GoRouter>();
+    final department = router.state.extra as Department;
     add(SetDepartment(department: department));
     add(FetchLectureSchedules(department: department));
   }
@@ -80,7 +78,7 @@ class LectureScheduleBloc
     emit(state.copyWith(status: const Status.loading())); // Set loading state
 
     final result = await _repository.fetchLectureSchedules(
-     department: state.department!
+      department: state.department!,
     );
 
     result.when(

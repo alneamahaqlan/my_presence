@@ -8,7 +8,19 @@ enum Role {
   admin,
 
   @JsonValue('teacher')
-  teacher;
+  teacher,
+
+  @JsonValue('teaching_assistant')
+  teachingAssistant,
+
+  @JsonValue('lecturer')
+  lecturer,
+
+  @JsonValue('assistant_professor')
+  assistantProfessor,
+
+  @JsonValue('associate_professor')
+  associateProfessor;
 
   const Role();
 

@@ -19,7 +19,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$MemberEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(UserModel user) saveMember,
+    required TResult Function(MemberCreateBody memberCreateBody) saveMember,
     required TResult Function() loadMembers,
     required TResult Function(String userId, bool isActive) deleteMember,
     required TResult Function(String userId, MemberEditBody memberEditBody)
@@ -30,7 +30,7 @@ mixin _$MemberEvent {
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(UserModel user)? saveMember,
+    TResult? Function(MemberCreateBody memberCreateBody)? saveMember,
     TResult? Function()? loadMembers,
     TResult? Function(String userId, bool isActive)? deleteMember,
     TResult? Function(String userId, MemberEditBody memberEditBody)? editMember,
@@ -39,7 +39,7 @@ mixin _$MemberEvent {
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(UserModel user)? saveMember,
+    TResult Function(MemberCreateBody memberCreateBody)? saveMember,
     TResult Function()? loadMembers,
     TResult Function(String userId, bool isActive)? deleteMember,
     TResult Function(String userId, MemberEditBody memberEditBody)? editMember,
@@ -106,9 +106,9 @@ abstract class _$$SaveMemberImplCopyWith<$Res> {
     $Res Function(_$SaveMemberImpl) then,
   ) = __$$SaveMemberImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({UserModel user});
+  $Res call({MemberCreateBody memberCreateBody});
 
-  $UserModelCopyWith<$Res> get user;
+  $MemberCreateBodyCopyWith<$Res> get memberCreateBody;
 }
 
 /// @nodoc
@@ -124,13 +124,13 @@ class __$$SaveMemberImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? user = null}) {
+  $Res call({Object? memberCreateBody = null}) {
     return _then(
       _$SaveMemberImpl(
-        null == user
-            ? _value.user
-            : user // ignore: cast_nullable_to_non_nullable
-                as UserModel,
+        null == memberCreateBody
+            ? _value.memberCreateBody
+            : memberCreateBody // ignore: cast_nullable_to_non_nullable
+                as MemberCreateBody,
       ),
     );
   }
@@ -139,9 +139,9 @@ class __$$SaveMemberImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $UserModelCopyWith<$Res> get user {
-    return $UserModelCopyWith<$Res>(_value.user, (value) {
-      return _then(_value.copyWith(user: value));
+  $MemberCreateBodyCopyWith<$Res> get memberCreateBody {
+    return $MemberCreateBodyCopyWith<$Res>(_value.memberCreateBody, (value) {
+      return _then(_value.copyWith(memberCreateBody: value));
     });
   }
 }
@@ -149,14 +149,14 @@ class __$$SaveMemberImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$SaveMemberImpl implements SaveMember {
-  const _$SaveMemberImpl(this.user);
+  const _$SaveMemberImpl(this.memberCreateBody);
 
   @override
-  final UserModel user;
+  final MemberCreateBody memberCreateBody;
 
   @override
   String toString() {
-    return 'MemberEvent.saveMember(user: $user)';
+    return 'MemberEvent.saveMember(memberCreateBody: $memberCreateBody)';
   }
 
   @override
@@ -164,11 +164,12 @@ class _$SaveMemberImpl implements SaveMember {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SaveMemberImpl &&
-            (identical(other.user, user) || other.user == user));
+            (identical(other.memberCreateBody, memberCreateBody) ||
+                other.memberCreateBody == memberCreateBody));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, user);
+  int get hashCode => Object.hash(runtimeType, memberCreateBody);
 
   /// Create a copy of MemberEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -181,7 +182,7 @@ class _$SaveMemberImpl implements SaveMember {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(UserModel user) saveMember,
+    required TResult Function(MemberCreateBody memberCreateBody) saveMember,
     required TResult Function() loadMembers,
     required TResult Function(String userId, bool isActive) deleteMember,
     required TResult Function(String userId, MemberEditBody memberEditBody)
@@ -190,26 +191,26 @@ class _$SaveMemberImpl implements SaveMember {
     addEvaluation,
     required TResult Function(String userId, Research research) addResearch,
   }) {
-    return saveMember(user);
+    return saveMember(memberCreateBody);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(UserModel user)? saveMember,
+    TResult? Function(MemberCreateBody memberCreateBody)? saveMember,
     TResult? Function()? loadMembers,
     TResult? Function(String userId, bool isActive)? deleteMember,
     TResult? Function(String userId, MemberEditBody memberEditBody)? editMember,
     TResult? Function(String userId, Evaluation evaluation)? addEvaluation,
     TResult? Function(String userId, Research research)? addResearch,
   }) {
-    return saveMember?.call(user);
+    return saveMember?.call(memberCreateBody);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(UserModel user)? saveMember,
+    TResult Function(MemberCreateBody memberCreateBody)? saveMember,
     TResult Function()? loadMembers,
     TResult Function(String userId, bool isActive)? deleteMember,
     TResult Function(String userId, MemberEditBody memberEditBody)? editMember,
@@ -218,7 +219,7 @@ class _$SaveMemberImpl implements SaveMember {
     required TResult orElse(),
   }) {
     if (saveMember != null) {
-      return saveMember(user);
+      return saveMember(memberCreateBody);
     }
     return orElse();
   }
@@ -268,9 +269,10 @@ class _$SaveMemberImpl implements SaveMember {
 }
 
 abstract class SaveMember implements MemberEvent {
-  const factory SaveMember(final UserModel user) = _$SaveMemberImpl;
+  const factory SaveMember(final MemberCreateBody memberCreateBody) =
+      _$SaveMemberImpl;
 
-  UserModel get user;
+  MemberCreateBody get memberCreateBody;
 
   /// Create a copy of MemberEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -322,7 +324,7 @@ class _$LoadMembersImpl implements LoadMembers {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(UserModel user) saveMember,
+    required TResult Function(MemberCreateBody memberCreateBody) saveMember,
     required TResult Function() loadMembers,
     required TResult Function(String userId, bool isActive) deleteMember,
     required TResult Function(String userId, MemberEditBody memberEditBody)
@@ -337,7 +339,7 @@ class _$LoadMembersImpl implements LoadMembers {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(UserModel user)? saveMember,
+    TResult? Function(MemberCreateBody memberCreateBody)? saveMember,
     TResult? Function()? loadMembers,
     TResult? Function(String userId, bool isActive)? deleteMember,
     TResult? Function(String userId, MemberEditBody memberEditBody)? editMember,
@@ -350,7 +352,7 @@ class _$LoadMembersImpl implements LoadMembers {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(UserModel user)? saveMember,
+    TResult Function(MemberCreateBody memberCreateBody)? saveMember,
     TResult Function()? loadMembers,
     TResult Function(String userId, bool isActive)? deleteMember,
     TResult Function(String userId, MemberEditBody memberEditBody)? editMember,
@@ -492,7 +494,7 @@ class _$DeleteMemberImpl implements DeleteMember {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(UserModel user) saveMember,
+    required TResult Function(MemberCreateBody memberCreateBody) saveMember,
     required TResult Function() loadMembers,
     required TResult Function(String userId, bool isActive) deleteMember,
     required TResult Function(String userId, MemberEditBody memberEditBody)
@@ -507,7 +509,7 @@ class _$DeleteMemberImpl implements DeleteMember {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(UserModel user)? saveMember,
+    TResult? Function(MemberCreateBody memberCreateBody)? saveMember,
     TResult? Function()? loadMembers,
     TResult? Function(String userId, bool isActive)? deleteMember,
     TResult? Function(String userId, MemberEditBody memberEditBody)? editMember,
@@ -520,7 +522,7 @@ class _$DeleteMemberImpl implements DeleteMember {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(UserModel user)? saveMember,
+    TResult Function(MemberCreateBody memberCreateBody)? saveMember,
     TResult Function()? loadMembers,
     TResult Function(String userId, bool isActive)? deleteMember,
     TResult Function(String userId, MemberEditBody memberEditBody)? editMember,
@@ -686,7 +688,7 @@ class _$EditMemberImpl implements EditMember {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(UserModel user) saveMember,
+    required TResult Function(MemberCreateBody memberCreateBody) saveMember,
     required TResult Function() loadMembers,
     required TResult Function(String userId, bool isActive) deleteMember,
     required TResult Function(String userId, MemberEditBody memberEditBody)
@@ -701,7 +703,7 @@ class _$EditMemberImpl implements EditMember {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(UserModel user)? saveMember,
+    TResult? Function(MemberCreateBody memberCreateBody)? saveMember,
     TResult? Function()? loadMembers,
     TResult? Function(String userId, bool isActive)? deleteMember,
     TResult? Function(String userId, MemberEditBody memberEditBody)? editMember,
@@ -714,7 +716,7 @@ class _$EditMemberImpl implements EditMember {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(UserModel user)? saveMember,
+    TResult Function(MemberCreateBody memberCreateBody)? saveMember,
     TResult Function()? loadMembers,
     TResult Function(String userId, bool isActive)? deleteMember,
     TResult Function(String userId, MemberEditBody memberEditBody)? editMember,
@@ -878,7 +880,7 @@ class _$AddEvaluationImpl implements AddEvaluation {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(UserModel user) saveMember,
+    required TResult Function(MemberCreateBody memberCreateBody) saveMember,
     required TResult Function() loadMembers,
     required TResult Function(String userId, bool isActive) deleteMember,
     required TResult Function(String userId, MemberEditBody memberEditBody)
@@ -893,7 +895,7 @@ class _$AddEvaluationImpl implements AddEvaluation {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(UserModel user)? saveMember,
+    TResult? Function(MemberCreateBody memberCreateBody)? saveMember,
     TResult? Function()? loadMembers,
     TResult? Function(String userId, bool isActive)? deleteMember,
     TResult? Function(String userId, MemberEditBody memberEditBody)? editMember,
@@ -906,7 +908,7 @@ class _$AddEvaluationImpl implements AddEvaluation {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(UserModel user)? saveMember,
+    TResult Function(MemberCreateBody memberCreateBody)? saveMember,
     TResult Function()? loadMembers,
     TResult Function(String userId, bool isActive)? deleteMember,
     TResult Function(String userId, MemberEditBody memberEditBody)? editMember,
@@ -1072,7 +1074,7 @@ class _$AddResearchImpl implements AddResearch {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(UserModel user) saveMember,
+    required TResult Function(MemberCreateBody memberCreateBody) saveMember,
     required TResult Function() loadMembers,
     required TResult Function(String userId, bool isActive) deleteMember,
     required TResult Function(String userId, MemberEditBody memberEditBody)
@@ -1087,7 +1089,7 @@ class _$AddResearchImpl implements AddResearch {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(UserModel user)? saveMember,
+    TResult? Function(MemberCreateBody memberCreateBody)? saveMember,
     TResult? Function()? loadMembers,
     TResult? Function(String userId, bool isActive)? deleteMember,
     TResult? Function(String userId, MemberEditBody memberEditBody)? editMember,
@@ -1100,7 +1102,7 @@ class _$AddResearchImpl implements AddResearch {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(UserModel user)? saveMember,
+    TResult Function(MemberCreateBody memberCreateBody)? saveMember,
     TResult Function()? loadMembers,
     TResult Function(String userId, bool isActive)? deleteMember,
     TResult Function(String userId, MemberEditBody memberEditBody)? editMember,
@@ -1177,6 +1179,8 @@ abstract class AddResearch implements MemberEvent {
 /// @nodoc
 mixin _$MemberState {
   Status get status => throw _privateConstructorUsedError;
+  Status get createStatus => throw _privateConstructorUsedError;
+  Status get editStatus => throw _privateConstructorUsedError;
   List<UserModel> get members => throw _privateConstructorUsedError;
   String? get errorMessage => throw _privateConstructorUsedError;
 
@@ -1194,9 +1198,17 @@ abstract class $MemberStateCopyWith<$Res> {
     $Res Function(MemberState) then,
   ) = _$MemberStateCopyWithImpl<$Res, MemberState>;
   @useResult
-  $Res call({Status status, List<UserModel> members, String? errorMessage});
+  $Res call({
+    Status status,
+    Status createStatus,
+    Status editStatus,
+    List<UserModel> members,
+    String? errorMessage,
+  });
 
   $StatusCopyWith<$Res> get status;
+  $StatusCopyWith<$Res> get createStatus;
+  $StatusCopyWith<$Res> get editStatus;
 }
 
 /// @nodoc
@@ -1215,6 +1227,8 @@ class _$MemberStateCopyWithImpl<$Res, $Val extends MemberState>
   @override
   $Res call({
     Object? status = null,
+    Object? createStatus = null,
+    Object? editStatus = null,
     Object? members = null,
     Object? errorMessage = freezed,
   }) {
@@ -1224,6 +1238,16 @@ class _$MemberStateCopyWithImpl<$Res, $Val extends MemberState>
                 null == status
                     ? _value.status
                     : status // ignore: cast_nullable_to_non_nullable
+                        as Status,
+            createStatus:
+                null == createStatus
+                    ? _value.createStatus
+                    : createStatus // ignore: cast_nullable_to_non_nullable
+                        as Status,
+            editStatus:
+                null == editStatus
+                    ? _value.editStatus
+                    : editStatus // ignore: cast_nullable_to_non_nullable
                         as Status,
             members:
                 null == members
@@ -1249,6 +1273,26 @@ class _$MemberStateCopyWithImpl<$Res, $Val extends MemberState>
       return _then(_value.copyWith(status: value) as $Val);
     });
   }
+
+  /// Create a copy of MemberState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $StatusCopyWith<$Res> get createStatus {
+    return $StatusCopyWith<$Res>(_value.createStatus, (value) {
+      return _then(_value.copyWith(createStatus: value) as $Val);
+    });
+  }
+
+  /// Create a copy of MemberState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $StatusCopyWith<$Res> get editStatus {
+    return $StatusCopyWith<$Res>(_value.editStatus, (value) {
+      return _then(_value.copyWith(editStatus: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -1260,10 +1304,20 @@ abstract class _$$MemberStateImplCopyWith<$Res>
   ) = __$$MemberStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Status status, List<UserModel> members, String? errorMessage});
+  $Res call({
+    Status status,
+    Status createStatus,
+    Status editStatus,
+    List<UserModel> members,
+    String? errorMessage,
+  });
 
   @override
   $StatusCopyWith<$Res> get status;
+  @override
+  $StatusCopyWith<$Res> get createStatus;
+  @override
+  $StatusCopyWith<$Res> get editStatus;
 }
 
 /// @nodoc
@@ -1281,6 +1335,8 @@ class __$$MemberStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? status = null,
+    Object? createStatus = null,
+    Object? editStatus = null,
     Object? members = null,
     Object? errorMessage = freezed,
   }) {
@@ -1290,6 +1346,16 @@ class __$$MemberStateImplCopyWithImpl<$Res>
             null == status
                 ? _value.status
                 : status // ignore: cast_nullable_to_non_nullable
+                    as Status,
+        createStatus:
+            null == createStatus
+                ? _value.createStatus
+                : createStatus // ignore: cast_nullable_to_non_nullable
+                    as Status,
+        editStatus:
+            null == editStatus
+                ? _value.editStatus
+                : editStatus // ignore: cast_nullable_to_non_nullable
                     as Status,
         members:
             null == members
@@ -1311,6 +1377,8 @@ class __$$MemberStateImplCopyWithImpl<$Res>
 class _$MemberStateImpl implements _MemberState {
   const _$MemberStateImpl({
     this.status = const Status.initial(),
+    this.createStatus = const Status.initial(),
+    this.editStatus = const Status.initial(),
     final List<UserModel> members = const [],
     this.errorMessage,
   }) : _members = members;
@@ -1318,6 +1386,12 @@ class _$MemberStateImpl implements _MemberState {
   @override
   @JsonKey()
   final Status status;
+  @override
+  @JsonKey()
+  final Status createStatus;
+  @override
+  @JsonKey()
+  final Status editStatus;
   final List<UserModel> _members;
   @override
   @JsonKey()
@@ -1332,7 +1406,7 @@ class _$MemberStateImpl implements _MemberState {
 
   @override
   String toString() {
-    return 'MemberState(status: $status, members: $members, errorMessage: $errorMessage)';
+    return 'MemberState(status: $status, createStatus: $createStatus, editStatus: $editStatus, members: $members, errorMessage: $errorMessage)';
   }
 
   @override
@@ -1341,6 +1415,10 @@ class _$MemberStateImpl implements _MemberState {
         (other.runtimeType == runtimeType &&
             other is _$MemberStateImpl &&
             (identical(other.status, status) || other.status == status) &&
+            (identical(other.createStatus, createStatus) ||
+                other.createStatus == createStatus) &&
+            (identical(other.editStatus, editStatus) ||
+                other.editStatus == editStatus) &&
             const DeepCollectionEquality().equals(other._members, _members) &&
             (identical(other.errorMessage, errorMessage) ||
                 other.errorMessage == errorMessage));
@@ -1350,6 +1428,8 @@ class _$MemberStateImpl implements _MemberState {
   int get hashCode => Object.hash(
     runtimeType,
     status,
+    createStatus,
+    editStatus,
     const DeepCollectionEquality().hash(_members),
     errorMessage,
   );
@@ -1366,12 +1446,18 @@ class _$MemberStateImpl implements _MemberState {
 abstract class _MemberState implements MemberState {
   const factory _MemberState({
     final Status status,
+    final Status createStatus,
+    final Status editStatus,
     final List<UserModel> members,
     final String? errorMessage,
   }) = _$MemberStateImpl;
 
   @override
   Status get status;
+  @override
+  Status get createStatus;
+  @override
+  Status get editStatus;
   @override
   List<UserModel> get members;
   @override

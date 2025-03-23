@@ -3,8 +3,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_presence/features/members/presentation/bloc/member_bloc.dart';
-import 'package:my_presence/features/root/presentation/pages/bloc/root_bloc.dart';
 
 import 'core/utils/theme/app_theme.dart';
 import 'core/utils/theme/theme_bloc.dart';
@@ -15,6 +13,8 @@ import 'features/faculty/presentation/bloc/faculty_bloc.dart';
 import 'features/home/presentation/bloc/home_bloc.dart';
 import 'features/lecture/presentation/bloc/lecture_bloc.dart';
 import 'features/lectureSchedule/presentation/bloc/lecture_schedule_bloc.dart';
+import 'features/members/presentation/bloc/member_bloc.dart';
+import 'features/root/presentation/pages/bloc/root_bloc.dart';
 import 'features/subject/presentation/bloc/subject_bloc.dart';
 
 void main() async {

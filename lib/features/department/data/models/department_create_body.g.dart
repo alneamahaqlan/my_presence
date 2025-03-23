@@ -6,13 +6,13 @@ part of 'department_create_body.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$DepartmentCreateBodyImpl _$$DepartmentCreateBodyImplFromJson(
+DepartmentCreateBody _$DepartmentCreateBodyFromJson(
   Map<String, dynamic> json,
-) => _$DepartmentCreateBodyImpl(
+) => DepartmentCreateBody(
   name: json['name'] as String,
-  facultyId: json['facultyId'] as String,
+  faculty: Faculty.fromJson(json['faculty'] as Map<String, dynamic>),
 );
 
-Map<String, dynamic> _$$DepartmentCreateBodyImplToJson(
-  _$DepartmentCreateBodyImpl instance,
-) => <String, dynamic>{'name': instance.name, 'facultyId': instance.facultyId};
+Map<String, dynamic> _$DepartmentCreateBodyToJson(
+  DepartmentCreateBody instance,
+) => <String, dynamic>{'name': instance.name, 'faculty': instance.faculty};

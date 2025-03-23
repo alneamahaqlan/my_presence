@@ -23,9 +23,13 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) {
 mixin _$UserModel {
   @JsonKey(name: 'id')
   dynamic get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'email')
   String get email => throw _privateConstructorUsedError;
+  @JsonKey(name: 'name')
   String get name => throw _privateConstructorUsedError;
+  @JsonKey(name: 'role')
   Role get role => throw _privateConstructorUsedError;
+  @JsonKey(name: 'activityStatus')
   ActivityStatus get activityStatus => throw _privateConstructorUsedError;
   @JsonKey(name: 'isActive')
   bool get isActive => throw _privateConstructorUsedError;
@@ -72,10 +76,10 @@ abstract class $UserModelCopyWith<$Res> {
   @useResult
   $Res call({
     @JsonKey(name: 'id') dynamic id,
-    String email,
-    String name,
-    Role role,
-    ActivityStatus activityStatus,
+    @JsonKey(name: 'email') String email,
+    @JsonKey(name: 'name') String name,
+    @JsonKey(name: 'role') Role role,
+    @JsonKey(name: 'activityStatus') ActivityStatus activityStatus,
     @JsonKey(name: 'isActive') bool isActive,
     @JsonKey(name: 'specialization') String? specialization,
     @JsonKey(name: 'academic_rank') String? academicRank,
@@ -228,10 +232,10 @@ abstract class _$$UserModelImplCopyWith<$Res>
   @useResult
   $Res call({
     @JsonKey(name: 'id') dynamic id,
-    String email,
-    String name,
-    Role role,
-    ActivityStatus activityStatus,
+    @JsonKey(name: 'email') String email,
+    @JsonKey(name: 'name') String name,
+    @JsonKey(name: 'role') Role role,
+    @JsonKey(name: 'activityStatus') ActivityStatus activityStatus,
     @JsonKey(name: 'isActive') bool isActive,
     @JsonKey(name: 'specialization') String? specialization,
     @JsonKey(name: 'academic_rank') String? academicRank,
@@ -376,10 +380,10 @@ class __$$UserModelImplCopyWithImpl<$Res>
 class _$UserModelImpl implements _UserModel {
   const _$UserModelImpl({
     @JsonKey(name: 'id') this.id,
-    required this.email,
-    required this.name,
-    required this.role,
-    required this.activityStatus,
+    @JsonKey(name: 'email') required this.email,
+    @JsonKey(name: 'name') required this.name,
+    @JsonKey(name: 'role') required this.role,
+    @JsonKey(name: 'activityStatus') required this.activityStatus,
     @JsonKey(name: 'isActive') this.isActive = true,
     @JsonKey(name: 'specialization') this.specialization,
     @JsonKey(name: 'academic_rank') this.academicRank,
@@ -407,12 +411,16 @@ class _$UserModelImpl implements _UserModel {
   @JsonKey(name: 'id')
   final dynamic id;
   @override
+  @JsonKey(name: 'email')
   final String email;
   @override
+  @JsonKey(name: 'name')
   final String name;
   @override
+  @JsonKey(name: 'role')
   final Role role;
   @override
+  @JsonKey(name: 'activityStatus')
   final ActivityStatus activityStatus;
   @override
   @JsonKey(name: 'isActive')
@@ -577,9 +585,10 @@ class _$UserModelImpl implements _UserModel {
 abstract class _UserModel implements UserModel {
   const factory _UserModel({
     @JsonKey(name: 'id') final dynamic id,
-    required final String email,
-    required final String name,
-    required final Role role,
+    @JsonKey(name: 'email') required final String email,
+    @JsonKey(name: 'name') required final String name,
+    @JsonKey(name: 'role') required final Role role,
+    @JsonKey(name: 'activityStatus')
     required final ActivityStatus activityStatus,
     @JsonKey(name: 'isActive') final bool isActive,
     @JsonKey(name: 'specialization') final String? specialization,
@@ -606,12 +615,16 @@ abstract class _UserModel implements UserModel {
   @JsonKey(name: 'id')
   dynamic get id;
   @override
+  @JsonKey(name: 'email')
   String get email;
   @override
+  @JsonKey(name: 'name')
   String get name;
   @override
+  @JsonKey(name: 'role')
   Role get role;
   @override
+  @JsonKey(name: 'activityStatus')
   ActivityStatus get activityStatus;
   @override
   @JsonKey(name: 'isActive')

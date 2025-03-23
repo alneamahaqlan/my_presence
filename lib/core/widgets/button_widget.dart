@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'text_widget.dart';
 
 class ButtonWidget extends StatelessWidget {
@@ -29,49 +30,50 @@ class ButtonWidget extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       height: height,
-      child: isOutlined
-          ? OutlinedButton(
-              style: OutlinedButton.styleFrom(
-                side: BorderSide(
-                  color: textColor ?? colorScheme.primary, // Use theme primary color
+      child:
+          isOutlined
+              ? OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(
+                    color:
+                        textColor ??
+                        colorScheme.primary, // Use theme primary color
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+                onPressed: isSubmitting ? null : onPressed,
+                child: TextWidget(
+                  text: text,
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                    color:
+                        textColor ??
+                        colorScheme.onPrimary, // Use theme onPrimary color
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              )
+              : ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      backgroundColor ??
+                      colorScheme.primary, // Use theme primary color
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                onPressed: isSubmitting ? null : onPressed,
+                child: TextWidget(
+                  text: text,
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                    color:
+                        textColor ??
+                        colorScheme.onPrimary, // Use theme onPrimary color
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
               ),
-              onPressed: isSubmitting ? null : onPressed,
-              child: isSubmitting
-                  ? CircularProgressIndicator(
-                      color: colorScheme.onPrimary, // Use theme onPrimary color
-                    )
-                  : TextWidget(
-                      text: text,
-                      style: theme.textTheme.bodyLarge?.copyWith(
-                        color: textColor ?? colorScheme.onPrimary, // Use theme onPrimary color
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-            )
-          : ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: backgroundColor ?? colorScheme.primary, // Use theme primary color
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              onPressed: isSubmitting ? null : onPressed,
-              child: isSubmitting
-                  ? CircularProgressIndicator(
-                      color: colorScheme.onPrimary, // Use theme onPrimary color
-                    )
-                  : TextWidget(
-                      text: text,
-                      style: theme.textTheme.bodyLarge?.copyWith(
-                        color: textColor ?? colorScheme.onPrimary, // Use theme onPrimary color
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-            ),
     );
   }
 }

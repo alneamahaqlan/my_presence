@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_presence/dependency_injection.dart';
 
-import '../../../../core/models/status.dart';
 import '../../../../core/utils/enums/role.dart';
 import '../../../../core/utils/ui.dart';
 import '../../../../core/widgets/button_widget.dart'; // Import ButtonWidget
@@ -54,7 +53,7 @@ class _CreateLecturePageState extends State<CreateLecturePage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                // قائمة المواد
+                // Subject Dropdown
                 BlocBuilder<SubjectBloc, SubjectState>(
                   builder: (context, subjectState) {
                     return DropDownWidget<Subject>(
@@ -78,7 +77,7 @@ class _CreateLecturePageState extends State<CreateLecturePage> {
                 ),
                 const SizedBox(height: 16),
 
-                // قائمة المدرسين
+                // Teacher Dropdown
                 BlocBuilder<MemberBloc, MemberState>(
                   builder: (context, state) {
                     return DropDownWidget<UserModel>(
@@ -105,7 +104,7 @@ class _CreateLecturePageState extends State<CreateLecturePage> {
                 ),
                 const SizedBox(height: 16),
 
-                // حقل اسم القاعة
+                // Hall TextField
                 TextFieldWidget(
                   hint: 'اسم القاعة',
                   controller: _hallController,
@@ -118,7 +117,7 @@ class _CreateLecturePageState extends State<CreateLecturePage> {
                 ),
                 const SizedBox(height: 16),
 
-                // تاريخ ووقت البداية
+                // Start Date Picker
                 TextFieldWidget(
                   hint: 'تاريخ ووقت البداية',
                   controller: _startDateController,
@@ -137,7 +136,7 @@ class _CreateLecturePageState extends State<CreateLecturePage> {
                 ),
                 const SizedBox(height: 16),
 
-                // تاريخ ووقت النهاية
+                // End Date Picker
                 TextFieldWidget(
                   hint: 'تاريخ ووقت النهاية',
                   controller: _endDateController,
@@ -156,52 +155,59 @@ class _CreateLecturePageState extends State<CreateLecturePage> {
                 ),
                 const SizedBox(height: 20),
 
-                // زر الإنشاء
-                BlocBuilder<LectureBloc, LectureState>(
+                // Create Button
+                BlocConsumer<LectureBloc, LectureState>(
+                  listener: (context, state) {
+                    state.createStatus.maybeWhen(
+                      orElse: () {},
+
+                      success: () {
+                        context.pop();
+                      },
+                      failed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('فشل إنشاء المحاضرة')),
+                        );
+                      },
+                    );
+                  },
                   builder: (context, state) {
                     return ButtonWidget(
                       text: 'إنشاء',
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          try {
-                            final newStart = DateTime.parse(
-                              _startDateController.text,
-                            );
-                            final newEnd = DateTime.parse(
-                              _endDateController.text,
-                            );
+                          final newStart = DateTime.parse(
+                            _startDateController.text,
+                          );
+                          final newEnd = DateTime.parse(
+                            _endDateController.text,
+                          );
 
-                            final router = getIt.call<GoRouter>();
-                            final schedule =
-                                (router.state.extra
-                                        as Map<String, dynamic>?)?['schedule']
-                                    as Schedule;
+                          final router = getIt.call<GoRouter>();
+                          final schedule =
+                              (router.state.extra
+                                      as Map<String, dynamic>?)?['schedule']
+                                  as Schedule;
 
-                            final lecture = Lecture(
-                              subject: _selectedSubject!,
-                              user: _selectedUser!,
-                              scheduleId: schedule.id,
-                              startTime: Timestamp.fromDate(newStart),
-                              endTime: Timestamp.fromDate(newEnd),
-                              hall: _hallController.text,
-                            );
+                          final lecture = Lecture(
+                            subject: _selectedSubject!,
+                            user: _selectedUser!,
+                            scheduleId: schedule.id,
+                            startTime: Timestamp.fromDate(newStart),
+                            endTime: Timestamp.fromDate(newEnd),
+                            hall: _hallController.text,
+                          );
 
-                            context.read<LectureBloc>().add(
-                              AddLecture(lecture),
-                            );
+                          context.read<LectureBloc>().add(AddLecture(lecture));
 
-                            Navigator.pop(context);
-                          } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('تنسيق التاريخ غير صحيح: $e'),
-                                backgroundColor: colorScheme.error,
-                              ),
-                            );
-                          }
+                   
                         }
                       },
-                      isSubmitting: state.status == Status.loading(),
+
+                      isSubmitting: state.createStatus.maybeWhen(
+                        loading: () => true,
+                        orElse: () => false,
+                      ),
                     );
                   },
                 ),

@@ -53,20 +53,21 @@ class DepartmentBloc extends Bloc<DepartmentEvent, DepartmentState> {
     AddDepartment event,
     Emitter<DepartmentState> emit,
   ) async {
-    // repository.test();
+    emit(state.copyWith(createStatus: const Status.loading()));
     final result = await repository.createDepartment(
       facultyId: event.facultyId,
       departmentCreateBody: event.departmentCreateBody,
     );
     result.when(
       success: (id) {
+        emit(state.copyWith(createStatus: const Status.success()));
         // Refresh the list of departments
         add(const FetchDepartments());
       },
       failure: (error) {
         emit(
           state.copyWith(
-            status: const Status.failed(),
+            createStatus: const Status.failed(),
             message: error.toString(),
           ),
         );

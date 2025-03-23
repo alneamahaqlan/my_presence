@@ -56,15 +56,16 @@ class SubjectBloc extends Bloc<SubjectEvent, SubjectState> {
     AddSubject event,
     Emitter<SubjectState> emit,
   ) async {
+    emit(state.copyWith(createStatus: const Status.loading()));
     final result = await repository.createSubject(event.subject);
     result.when(
       success: (id) {
-        // Refresh the list of subjects
-        add(const _FetchSubjects());
+           emit(state.copyWith(createStatus: const Status.success()));
+       
       },
       failure: (error) {
         emit(state.copyWith(
-          status: const Status.failed(),
+          createStatus: const Status.failed(),
           message: error.toString(),
         ));
       },

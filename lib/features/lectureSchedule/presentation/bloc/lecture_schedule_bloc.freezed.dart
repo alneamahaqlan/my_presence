@@ -350,7 +350,6 @@ abstract class _$$AddLectureScheduleImplCopyWith<$Res> {
   $Res call({Department department, ScheduleCreateBody scheduleCreateBody});
 
   $DepartmentCopyWith<$Res> get department;
-  $ScheduleCreateBodyCopyWith<$Res> get scheduleCreateBody;
 }
 
 /// @nodoc
@@ -390,18 +389,6 @@ class __$$AddLectureScheduleImplCopyWithImpl<$Res>
   $DepartmentCopyWith<$Res> get department {
     return $DepartmentCopyWith<$Res>(_value.department, (value) {
       return _then(_value.copyWith(department: value));
-    });
-  }
-
-  /// Create a copy of LectureScheduleEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $ScheduleCreateBodyCopyWith<$Res> get scheduleCreateBody {
-    return $ScheduleCreateBodyCopyWith<$Res>(_value.scheduleCreateBody, (
-      value,
-    ) {
-      return _then(_value.copyWith(scheduleCreateBody: value));
     });
   }
 }

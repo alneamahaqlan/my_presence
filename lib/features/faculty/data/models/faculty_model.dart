@@ -12,7 +12,7 @@ class Faculty with _$Faculty {
   const factory Faculty({
     @JsonKey(name: 'id') dynamic id,
     @JsonKey(name: 'name') required String name,
-    @Default([]) List<Department> departments,
+    @JsonKey(name: 'departments') @Default([]) List<Department>? departments,
     @TimestampConverter() @JsonKey(name: 'createdAt') Timestamp? createdAt,
     @TimestampConverter() @JsonKey(name: 'updatedAt') Timestamp? updatedAt,
   }) = _Faculty;

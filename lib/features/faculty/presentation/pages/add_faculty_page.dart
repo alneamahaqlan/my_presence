@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_presence/core/extensions/context_extensions.dart';
 import 'package:my_presence/features/faculty/presentation/bloc/faculty_bloc.dart';
 
 import '../../../../core/widgets/button_widget.dart';
 import '../../../../core/widgets/text_field_widget.dart';
+import '../../data/models/faculty_create_body.dart';
 
 class AddFacultyPage extends StatefulWidget {
   const AddFacultyPage({super.key});
@@ -15,7 +17,6 @@ class AddFacultyPage extends StatefulWidget {
 class _AddFacultyPageState extends State<AddFacultyPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
-  bool _isSubmitting = false;
 
   @override
   Widget build(BuildContext context) {
@@ -38,19 +39,45 @@ class _AddFacultyPageState extends State<AddFacultyPage> {
                 },
               ),
               const SizedBox(height: 20),
-              ButtonWidget(
-                text: 'إضافة كلية',
-                isSubmitting: _isSubmitting,
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    setState(() => _isSubmitting = true);
 
-                    context.read<FacultyBloc>().add(
-                      AddFaculty(_nameController.text),
-                    );
-                    setState(() => _isSubmitting = false);
-                    Navigator.pop(context);
-                  }
+              BlocConsumer<FacultyBloc, FacultyState>(
+                listener: (context, state) {
+                  // TODO: implement listener
+
+                  state.createStatus.maybeWhen(
+                    success: () {
+                      context.pop();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('تم الحفظ بنجاح')),
+                      );
+                    },
+                    failed: () {
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text(state.message!)));
+                    },
+                    orElse: () {},
+                  );
+                },
+                builder: (context, state) {
+                  return ButtonWidget(
+                    text: 'إضافة كلية',
+                    isSubmitting: state.createStatus.maybeWhen(
+                      orElse: () => false,
+                      loading: () => true,
+                    ),
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        context.read<FacultyBloc>().add(
+                          AddFaculty(
+                            facultyCreateBody: FacultyCreateBody(
+                              name: _nameController.text,
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                  );
                 },
               ),
             ],

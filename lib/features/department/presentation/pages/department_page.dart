@@ -83,7 +83,7 @@ class DepartmentPage extends StatelessWidget {
                   const Icon(Icons.schedule, size: 16, color: Colors.grey),
                   const SizedBox(width: 6),
                   Text(
-                    '${department.schedules.length} مواعيد',
+                    '${department.schedules?.length ?? 0} مواعيد',
                     style: Theme.of(
                       context,
                     ).textTheme.bodyMedium?.copyWith(color: Colors.grey[700]),

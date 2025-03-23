@@ -1,202 +1,49 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:intl/intl.dart';
-import 'package:easy_localization/easy_localization.dart';
 
-import '../../../auth/data/models/user_model.dart';
 import '../../../attendance/data/models/attendance_model.dart';
+import '../../../auth/data/models/user_model.dart';
+import '../../../lecture/data/models/lecture_model.dart';
 
 class PdfGenerator {
-  static Future<pw.Document> generatePdf(UserModel member) async {
+  final UserModel member;
+  final String fontPath;
+  final String dateFormat;
+  final String timeFormat;
+
+  PdfGenerator({
+    required this.member,
+    this.fontPath = "assets/fonts/Amiri-Regular.ttf",
+    this.dateFormat = 'yyyy-MM-dd',
+    this.timeFormat = 'hh:mm a',
+  });
+
+  Future<pw.Document> generatePdf() async {
     final pdf = pw.Document();
+    final ttf = await _loadFont(fontPath);
 
     pdf.addPage(
       pw.Page(
+        pageFormat: PdfPageFormat.a4,
+        margin: pw.EdgeInsets.all(16),
         build: (pw.Context context) {
           return pw.Column(
-            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            crossAxisAlignment: pw.CrossAxisAlignment.end,
             children: [
-              pw.Text(
-                'تفاصيل العضو',
-                style: pw.TextStyle(
-                  fontSize: 24,
-                  fontWeight: pw.FontWeight.bold,
-                ),
+              _buildTitle(ttf, "تفاصيل العضو"),
+              _buildDetailSection(ttf, member),
+              _buildDivider(),
+              _buildLectureTable(ttf, member.lectures),
+              _buildDivider(),
+              _buildAttendanceTable(ttf, member.attendances),
+              _buildDivider(),
+              _buildFooter(
+                ttf,
+                "تم الإنشاء في ${DateFormat(dateFormat).format(DateTime.now())}",
               ),
-              pw.SizedBox(height: 20),
-              pw.Table(
-                border: pw.TableBorder.all(),
-                children: [
-                  _buildPdfTableRow('الاسم', member.name),
-                  _buildPdfTableRow('البريد الإلكتروني', member.email),
-                  _buildPdfTableRow(
-                    'الدور',
-                    member.role.name == "teacher" ? "مدرس" : "طالب",
-                  ),
-                  _buildPdfTableRow(
-                    'حالة النشاط',
-                    member.activityStatus.name == "active" ? "نشط" : "غير نشط",
-                  ),
-                  _buildPdfTableRow(
-                    'التخصص',
-                    member.specialization ?? "غير متوفر",
-                  ),
-                  _buildPdfTableRow(
-                    'الرتبة الأكاديمية',
-                    member.academicRank ?? "غير متوفر",
-                  ),
-                ],
-              ),
-              pw.SizedBox(height: 20),
-              pw.Text(
-                'المواد التي يدرسها',
-                style: pw.TextStyle(
-                  fontSize: 18,
-                  fontWeight: pw.FontWeight.bold,
-                ),
-              ),
-              if (member.subjects.isNotEmpty)
-                pw.Wrap(
-                  children: member.subjects.map((subject) {
-                    return pw.Container(
-                      margin: pw.EdgeInsets.all(4),
-                      padding: pw.EdgeInsets.all(8),
-                      decoration: pw.BoxDecoration(
-                        border: pw.Border.all(color: PdfColors.teal),
-                        borderRadius: pw.BorderRadius.circular(4),
-                      ),
-                      child: pw.Text(
-                        subject.name,
-                        style: pw.TextStyle(color: PdfColors.teal),
-                      ),
-                    );
-                  }).toList(),
-                )
-              else
-                pw.Text(
-                  'لا توجد مواد',
-                  style: pw.TextStyle(color: PdfColors.grey),
-                ),
-              pw.SizedBox(height: 20),
-              pw.Text(
-                'التقييمات',
-                style: pw.TextStyle(
-                  fontSize: 18,
-                  fontWeight: pw.FontWeight.bold,
-                ),
-              ),
-              if (member.evaluations.isNotEmpty)
-                pw.Wrap(
-                  children: member.evaluations.map((evaluation) {
-                    return pw.Container(
-                      margin: pw.EdgeInsets.all(4),
-                      padding: pw.EdgeInsets.all(8),
-                      decoration: pw.BoxDecoration(
-                        border: pw.Border.all(color: PdfColors.blue),
-                        borderRadius: pw.BorderRadius.circular(4),
-                      ),
-                      child: pw.Text(
-                        "${evaluation.score} - ${evaluation.comment ?? "بدون تعليق"}",
-                        style: pw.TextStyle(color: PdfColors.blue),
-                      ),
-                    );
-                  }).toList(),
-                )
-              else
-                pw.Text(
-                  'لا توجد تقييمات',
-                  style: pw.TextStyle(color: PdfColors.grey),
-                ),
-              pw.SizedBox(height: 20),
-              pw.Text(
-                'الأبحاث',
-                style: pw.TextStyle(
-                  fontSize: 18,
-                  fontWeight: pw.FontWeight.bold,
-                ),
-              ),
-              if (member.researches.isNotEmpty)
-                pw.Wrap(
-                  children: member.researches.map((research) {
-                    return pw.Container(
-                      margin: pw.EdgeInsets.all(4),
-                      padding: pw.EdgeInsets.all(8),
-                      decoration: pw.BoxDecoration(
-                        border: pw.Border.all(color: PdfColors.purple),
-                        borderRadius: pw.BorderRadius.circular(4),
-                      ),
-                      child: pw.Text(
-                        research.name,
-                        style: pw.TextStyle(color: PdfColors.purple),
-                      ),
-                    );
-                  }).toList(),
-                )
-              else
-                pw.Text(
-                  'لا توجد أبحاث',
-                  style: pw.TextStyle(color: PdfColors.grey),
-                ),
-              pw.SizedBox(height: 20),
-              pw.Text(
-                'الحضور',
-                style: pw.TextStyle(
-                  fontSize: 18,
-                  fontWeight: pw.FontWeight.bold,
-                ),
-              ),
-              if (member.attendances.isNotEmpty)
-                pw.Wrap(
-                  children: member.attendances.map((attendance) {
-                    return pw.Container(
-                      margin: pw.EdgeInsets.all(4),
-                      padding: pw.EdgeInsets.all(8),
-                      decoration: pw.BoxDecoration(
-                        border: pw.Border.all(color: PdfColors.orange),
-                        borderRadius: pw.BorderRadius.circular(4),
-                      ),
-                      child: pw.Text(
-                        "${attendance.arrivalDate?.toDate()} - ${attendance.status}",
-                        style: pw.TextStyle(color: PdfColors.orange),
-                      ),
-                    );
-                  }).toList(),
-                )
-              else
-                pw.Text(
-                  'لا توجد سجلات حضور',
-                  style: pw.TextStyle(color: PdfColors.grey),
-                ),
-              pw.SizedBox(height: 20),
-              pw.Text(
-                'المحاضرات',
-                style: pw.TextStyle(
-                  fontSize: 18,
-                  fontWeight: pw.FontWeight.bold,
-                ),
-              ),
-              if (member.lectures.isNotEmpty)
-                pw.Wrap(
-                  children: member.lectures.map((lecture) {
-                    return pw.Container(
-                      margin: pw.EdgeInsets.all(4),
-                      padding: pw.EdgeInsets.all(8),
-                      decoration: pw.BoxDecoration(
-                        border: pw.Border.all(color: PdfColors.green),
-                        borderRadius: pw.BorderRadius.circular(4),
-                      ),
-                      child: pw.Text(
-                        "${lecture.subject.name} - ${lecture.hall} (${lecture.startTime.toDate()} إلى ${lecture.endTime.toDate()})",
-                        style: pw.TextStyle(color: PdfColors.green),
-                      ),
-                    );
-                  }).toList(),
-                )
-              else
-                pw.Text(
-                  'لا توجد محاضرات',
-                  style: pw.TextStyle(color: PdfColors.grey),
-                ),
             ],
           );
         },
@@ -206,21 +53,177 @@ class PdfGenerator {
     return pdf;
   }
 
-  static pw.TableRow _buildPdfTableRow(String label, String value) {
-    return pw.TableRow(
-      children: [
-        pw.Padding(
-          padding: const pw.EdgeInsets.all(8.0),
-          child: pw.Text(
-            label,
-            style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 16),
-          ),
+  Future<pw.Font> _loadFont(String fontPath) async {
+    final fontData = await rootBundle.load(fontPath);
+    return pw.Font.ttf(fontData.buffer.asByteData());
+  }
+
+  pw.Widget _buildTitle(pw.Font ttf, String title) {
+    return pw.Center(
+      child: pw.Text(
+        title,
+        style: pw.TextStyle(
+          font: ttf,
+          fontSize: 18,
+          fontWeight: pw.FontWeight.bold,
         ),
-        pw.Padding(
-          padding: const pw.EdgeInsets.all(8.0),
-          child: pw.Text(value, style: pw.TextStyle(fontSize: 14)),
+        textDirection: pw.TextDirection.rtl,
+        textAlign: pw.TextAlign.center,
+      ),
+    );
+  }
+
+  pw.Widget _buildDetailSection(pw.Font ttf, UserModel member) {
+    return pw.Column(
+      crossAxisAlignment: pw.CrossAxisAlignment.end,
+      children: [
+        _buildText("الاسم: ${member.name}", ttf),
+        _buildText("البريد الإلكتروني: ${member.email}", ttf),
+        _buildText("الدور: ${member.role.name.tr()}", ttf),
+        _buildText(
+          "حالة النشاط: ${member.activityStatus.name == "active" ? "نشط" : "غير نشط"}",
+          ttf,
+        ),
+        _buildText("التخصص: ${member.specialization ?? "غير متوفر"}", ttf),
+        _buildText(
+          "الرتبة الأكاديمية: ${member.academicRank ?? "غير متوفر"}",
+          ttf,
         ),
       ],
     );
+  }
+
+  pw.Widget _buildLectureTable(pw.Font ttf, List<Lecture> lectures) {
+    // Define the days of the week in Arabic
+    final daysOfWeek = [
+      'السبت',
+      'الأحد',
+      'الاثنين',
+      'الثلاثاء',
+      'الأربعاء',
+      'الخميس',
+      'الجمعة',
+    ];
+
+    // Define the headers for the table
+    final headers = [
+      'المادة',
+      'رمز', // Add subject code
+      'رقم', // Add subject number
+      'القاعة',
+      'بداية', // Add start time
+      'نهاية', // Add end time
+      ...daysOfWeek, // Add days of the week to the headers
+    ];
+
+    // Generate data for the table
+    final data =
+        lectures.map((lecture) {
+          // Get the day of the week based on the lecture's startTime
+          final dayOfWeek = _getDayOfWeek(lecture.startTime);
+
+          // Create a list of attendance statuses for each day of the week
+          final attendanceStatusByDay =
+              daysOfWeek.map((day) {
+                return day == dayOfWeek
+                    ? _buildRedCircle() // Use a red circle instead of the time range
+                    : pw.Text('-');
+              }).toList();
+
+          return [
+            lecture.subject.name,
+            lecture.subject.code, // Add subject code
+            lecture.subject.number, // Add subject number
+            lecture.hall,
+            DateFormat(
+              timeFormat,
+            ).format(lecture.startTime.toDate()), // Add start time
+            DateFormat(
+              timeFormat,
+            ).format(lecture.endTime.toDate()), // Add end time
+            ...attendanceStatusByDay, // Add attendance statuses for each day
+          ];
+        }).toList();
+
+    return pw.TableHelper.fromTextArray(
+      headers: headers.map((header) => _buildText(header, ttf)).toList(),
+      data: data,
+      cellAlignment: pw.Alignment.center,
+      headerAlignment: pw.Alignment.center,
+      headerStyle: pw.TextStyle(
+        font: ttf,
+        fontSize: 12,
+        fontWeight: pw.FontWeight.bold,
+      ),
+      cellStyle: pw.TextStyle(font: ttf, fontSize: 10),
+      border: pw.TableBorder.all(),
+      tableDirection: pw.TextDirection.rtl,
+    );
+  }
+
+  pw.Widget _buildRedCircle() {
+    return pw.Container(
+      width: 10,
+      height: 10,
+      decoration: pw.BoxDecoration(
+        shape: pw.BoxShape.circle,
+        color: PdfColors.red,
+      ),
+    );
+  }
+
+  pw.Widget _buildAttendanceTable(pw.Font ttf, List<Attendance> attendances) {
+    final headers = ['الحالة', 'تاريخ الحضور'];
+
+    final data =
+        attendances.map((attendance) {
+          return [
+            attendance.status,
+            DateFormat(dateFormat).format(attendance.arrivalDate!.toDate()),
+          ];
+        }).toList();
+
+    return pw.TableHelper.fromTextArray(
+      headers: headers.map((header) => _buildText(header, ttf)).toList(),
+      data: data,
+      cellAlignment: pw.Alignment.centerRight,
+      headerAlignment: pw.Alignment.centerRight,
+      headerStyle: pw.TextStyle(
+        font: ttf,
+        fontSize: 12,
+        fontWeight: pw.FontWeight.bold,
+      ),
+      cellStyle: pw.TextStyle(font: ttf, fontSize: 10),
+      border: pw.TableBorder.all(),
+    );
+  }
+
+  pw.Widget _buildFooter(pw.Font ttf, String footer) {
+    return pw.Row(
+      mainAxisAlignment: pw.MainAxisAlignment.end,
+      children: [_buildText(footer, ttf)],
+    );
+  }
+
+  pw.Text _buildText(String text, pw.Font ttf) {
+    return pw.Text(
+      text,
+      style: pw.TextStyle(font: ttf, fontSize: 12),
+      textDirection: pw.TextDirection.rtl,
+      textAlign: pw.TextAlign.start,
+    );
+  }
+
+  pw.Widget _buildDivider() {
+    return pw.Divider(thickness: 1, height: 20);
+  }
+
+  // Helper method to get the day of the week in Arabic
+  String _getDayOfWeek(Timestamp timestamp) {
+    final date = timestamp.toDate();
+    return DateFormat(
+      'EEEE',
+      'ar',
+    ).format(date); // 'EEEE' gives the full day name
   }
 }

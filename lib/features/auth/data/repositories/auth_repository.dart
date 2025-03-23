@@ -1,8 +1,3 @@
-import 'dart:developer';
-
-import 'package:firebase_auth/firebase_auth.dart';
-
-
 import '../../../../core/error/api_error_handler.dart';
 import '../../../../core/models/api_result.dart';
 import '../../../../core/services/firestore_service.dart';
@@ -11,13 +6,14 @@ import '../models/user_model.dart';
 class AuthRepository {
   final FirestoreService _firestoreService;
 
-  AuthRepository( this._firestoreService);
+  AuthRepository(this._firestoreService);
 
   Future<ApiResult<UserModel?>> signInWithEmailAndPassword(
-      String email, String password) async {
+    String email,
+    String password,
+  ) async {
     try {
-      final user =
-          await _firestoreService.signIn(
+      final user = await _firestoreService.signIn(
         email: email,
         password: password,
       );
@@ -35,8 +31,11 @@ class AuthRepository {
     String name,
   ) async {
     try {
-      final user =
-          await _firestoreService.signUp(email: email, password: password,name: name);
+      final user = await _firestoreService.signUp(
+        email: email,
+        password: password,
+        name: name,
+      );
       return ApiResult.success(user);
     } catch (e) {
       return ApiResult.failure(ApiErrorHandler.handle(e));
@@ -66,10 +65,8 @@ class AuthRepository {
 
   Future<ApiResult<UserModel?>> getCurrentUser() async {
     try {
-     UserModel? userModel =
-            await _firestoreService.getUserData();
-        return ApiResult.success(userModel);
-      
+      UserModel? userModel = await _firestoreService.getUserData();
+      return ApiResult.success(userModel);
     } catch (e) {
       return ApiResult.failure(ApiErrorHandler.handle(e));
     }

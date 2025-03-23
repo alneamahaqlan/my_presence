@@ -29,6 +29,8 @@ mixin _$Subject {
   String get code => throw _privateConstructorUsedError;
   @JsonKey(name: 'number')
   String get number => throw _privateConstructorUsedError;
+  @JsonKey(name: 'units')
+  int get units => throw _privateConstructorUsedError;
 
   /// Serializes this Subject to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -49,6 +51,7 @@ abstract class $SubjectCopyWith<$Res> {
     @JsonKey(name: 'name') String name,
     @JsonKey(name: 'code') String code,
     @JsonKey(name: 'number') String number,
+    @JsonKey(name: 'units') int units,
   });
 }
 
@@ -71,6 +74,7 @@ class _$SubjectCopyWithImpl<$Res, $Val extends Subject>
     Object? name = null,
     Object? code = null,
     Object? number = null,
+    Object? units = null,
   }) {
     return _then(
       _value.copyWith(
@@ -94,6 +98,11 @@ class _$SubjectCopyWithImpl<$Res, $Val extends Subject>
                     ? _value.number
                     : number // ignore: cast_nullable_to_non_nullable
                         as String,
+            units:
+                null == units
+                    ? _value.units
+                    : units // ignore: cast_nullable_to_non_nullable
+                        as int,
           )
           as $Val,
     );
@@ -113,6 +122,7 @@ abstract class _$$SubjectImplCopyWith<$Res> implements $SubjectCopyWith<$Res> {
     @JsonKey(name: 'name') String name,
     @JsonKey(name: 'code') String code,
     @JsonKey(name: 'number') String number,
+    @JsonKey(name: 'units') int units,
   });
 }
 
@@ -134,6 +144,7 @@ class __$$SubjectImplCopyWithImpl<$Res>
     Object? name = null,
     Object? code = null,
     Object? number = null,
+    Object? units = null,
   }) {
     return _then(
       _$SubjectImpl(
@@ -157,6 +168,11 @@ class __$$SubjectImplCopyWithImpl<$Res>
                 ? _value.number
                 : number // ignore: cast_nullable_to_non_nullable
                     as String,
+        units:
+            null == units
+                ? _value.units
+                : units // ignore: cast_nullable_to_non_nullable
+                    as int,
       ),
     );
   }
@@ -170,6 +186,7 @@ class _$SubjectImpl implements _Subject {
     @JsonKey(name: 'name') required this.name,
     @JsonKey(name: 'code') required this.code,
     @JsonKey(name: 'number') required this.number,
+    @JsonKey(name: 'units') required this.units,
   });
 
   factory _$SubjectImpl.fromJson(Map<String, dynamic> json) =>
@@ -187,10 +204,13 @@ class _$SubjectImpl implements _Subject {
   @override
   @JsonKey(name: 'number')
   final String number;
+  @override
+  @JsonKey(name: 'units')
+  final int units;
 
   @override
   String toString() {
-    return 'Subject(id: $id, name: $name, code: $code, number: $number)';
+    return 'Subject(id: $id, name: $name, code: $code, number: $number, units: $units)';
   }
 
   @override
@@ -201,7 +221,8 @@ class _$SubjectImpl implements _Subject {
             const DeepCollectionEquality().equals(other.id, id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.code, code) || other.code == code) &&
-            (identical(other.number, number) || other.number == number));
+            (identical(other.number, number) || other.number == number) &&
+            (identical(other.units, units) || other.units == units));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -212,6 +233,7 @@ class _$SubjectImpl implements _Subject {
     name,
     code,
     number,
+    units,
   );
 
   /// Create a copy of Subject
@@ -234,6 +256,7 @@ abstract class _Subject implements Subject {
     @JsonKey(name: 'name') required final String name,
     @JsonKey(name: 'code') required final String code,
     @JsonKey(name: 'number') required final String number,
+    @JsonKey(name: 'units') required final int units,
   }) = _$SubjectImpl;
 
   factory _Subject.fromJson(Map<String, dynamic> json) = _$SubjectImpl.fromJson;
@@ -250,6 +273,9 @@ abstract class _Subject implements Subject {
   @override
   @JsonKey(name: 'number')
   String get number;
+  @override
+  @JsonKey(name: 'units')
+  int get units;
 
   /// Create a copy of Subject
   /// with the given fields replaced by the non-null parameter values.

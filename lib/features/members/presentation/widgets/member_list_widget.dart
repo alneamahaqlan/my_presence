@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -11,6 +12,8 @@ import 'package:printing/printing.dart';
 import '../../../../core/models/status.dart';
 import '../../../../core/utils/ui.dart';
 import '../../../attendance/data/models/attendance_model.dart';
+import '../../../auth/data/models/user_model.dart';
+import '../../../lecture/data/models/lecture_model.dart';
 import '../bloc/member_bloc.dart';
 import 'member_card.dart';
 
@@ -19,7 +22,23 @@ class MemberListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MemberBloc, MemberState>(
+    return BlocConsumer<MemberBloc, MemberState>(
+      listener: (context, state) {
+        if (state.status == Status.success()) {
+          // context.read<MemberBloc>().add(const MemberEvent.loadMembers());
+          Ui.showSnackBar(
+            context: context,
+            type: SnackBarType.success,
+            message: 'تم تحديث الأعضاء بنجاح.',
+          );
+        } else if (state.status == Status.failed()) {
+          Ui.showSnackBar(
+            context: context,
+            type: SnackBarType.error,
+            message: 'فشل في تحديث الأعضاء: ${state.errorMessage}',
+          );
+        }
+      },
       builder: (context, state) {
         if (state.status == Status.loading()) {
           return const Center(child: CircularProgressIndicator());
@@ -37,86 +56,14 @@ class MemberListWidget extends StatelessWidget {
                   itemCount: state.members.length,
                   itemBuilder: (context, index) {
                     final member = state.members[index];
-                    return Dismissible(
-                      key: Key(member.id!),
-                      direction:
-                          member.isActive
-                              ? DismissDirection.endToStart
-                              : DismissDirection.startToEnd,
-                      background: Container(
-                        color: member.isActive ? Colors.red : Colors.green,
-                        alignment:
-                            member.isActive
-                                ? Alignment.centerRight
-                                : Alignment.centerLeft,
-                        padding: EdgeInsets.only(
-                          right: member.isActive ? 20 : 0,
-                          left: member.isActive ? 0 : 20,
-                        ),
-                        child: const Icon(Icons.delete, color: Colors.white),
-                      ),
-                      confirmDismiss: (direction) async {
-                        return await Ui.showCustomDialog(
-                          context: context,
-                          title:
-                              member.isActive
-                                  ? 'تعطيل العضو'.tr()
-                                  : 'تفعيل العضو'.tr(),
-                          message:
-                              member.isActive
-                                  ? 'هل أنت متأكد أنك تريد تعطيل هذا العضو؟'
-                                      .tr()
-                                  : 'هل أنت متأكد أنك تريد تفعيل هذا العضو؟'
-                                      .tr(),
-                          confirmText:
-                              member.isActive ? 'تعطيل'.tr() : 'تفعيل'.tr(),
-                          cancelText: 'إلغاء'.tr(),
-                          confirmButtonColor:
-                              member.isActive ? Colors.red : Colors.green,
-                        );
-                      },
-                      onDismissed: (direction) {
-                        context.read<MemberBloc>().add(
-                          MemberEvent.deleteMember(
-                            userId: member.id,
-                            isActive: !member.isActive,
-                          ),
-                        );
-                      },
-                      child: InkWell(
-                        onTap: () {
-                          print(member.attendances.length);
-                          context.pushNamed(
-                            AppRoutes.viewMember,
-                            extra: member,
-                          );
-                        },
-                        child: MemberCard(
-                          name: member.name,
-                          email: member.email,
-                          role: member.role.name,
-                          activityStatus: member.activityStatus.name,
-                          onEdit: () {
-                            context.pushNamed(
-                              AppRoutes.editMember,
-                              extra: member,
-                            );
-                          },
-                        ),
-                      ),
-                    );
+                    return _buildDismissibleMemberCard(context, member);
                   },
                 ),
               ),
               ElevatedButton(
                 onPressed: () async {
-                  // Assuming `state.members[index].attendances` contains the list of attendances
-                  final attendances =
-                      state.members
-                          .expand((member) => member.attendances)
-                          .toList();
                   final pdfGenerator = PdfGenerator(
-                    title: 'قائمة الحضور',
+                    title: 'قائمه الحظور للاسبوع الحالي',
                     footer:
                         'تم الإنشاء في ${DateFormat('yyyy-MM-dd').format(DateTime.now())}',
                     headers: [
@@ -126,7 +73,11 @@ class MemberListWidget extends StatelessWidget {
                       'تاريخ الحضور',
                       'الحالة',
                     ],
-                    attendances: attendances,
+                    attendances:
+                        state.members
+                            .expand((member) => member.attendances)
+                            .toList(),
+                    members: state.members,
                   );
                   await pdfGenerator.generateAndPrintPdf();
                 },
@@ -138,6 +89,64 @@ class MemberListWidget extends StatelessWidget {
       },
     );
   }
+
+  Widget _buildDismissibleMemberCard(BuildContext context, UserModel member) {
+    return Dismissible(
+      key: Key(member.id!),
+      direction:
+          member.isActive
+              ? DismissDirection.endToStart
+              : DismissDirection.startToEnd,
+      background: _buildDismissibleBackground(member),
+      confirmDismiss: (direction) async {
+        return await Ui.showCustomDialog(
+          context: context,
+          title: member.isActive ? 'تعطيل العضو'.tr() : 'تفعيل العضو'.tr(),
+          message:
+              member.isActive
+                  ? 'هل أنت متأكد أنك تريد تعطيل هذا العضو؟'.tr()
+                  : 'هل أنت متأكد أنك تريد تفعيل هذا العضو؟'.tr(),
+          confirmText: member.isActive ? 'تعطيل'.tr() : 'تفعيل'.tr(),
+          cancelText: 'إلغاء'.tr(),
+          confirmButtonColor: member.isActive ? Colors.red : Colors.green,
+        );
+      },
+      onDismissed: (direction) {
+        context.read<MemberBloc>().add(
+          MemberEvent.deleteMember(
+            userId: member.id,
+            isActive: !member.isActive,
+          ),
+        );
+      },
+      child: InkWell(
+        onTap: () {
+          context.pushNamed(AppRoutes.viewMember, extra: member);
+        },
+        child: MemberCard(
+          name: member.name,
+          email: member.email,
+          role: member.role.name,
+          activityStatus: member.activityStatus.name,
+          onEdit: () {
+            context.pushNamed(AppRoutes.editMember, extra: member);
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDismissibleBackground(UserModel member) {
+    return Container(
+      color: member.isActive ? Colors.red : Colors.green,
+      alignment: member.isActive ? Alignment.centerRight : Alignment.centerLeft,
+      padding: EdgeInsets.only(
+        right: member.isActive ? 20 : 0,
+        left: member.isActive ? 0 : 20,
+      ),
+      child: const Icon(Icons.delete, color: Colors.white),
+    );
+  }
 }
 
 class PdfGenerator {
@@ -145,6 +154,7 @@ class PdfGenerator {
   final String footer;
   final List<String> headers;
   final List<Attendance> attendances;
+  final List<UserModel> members;
   final String fontPath;
   final String dateFormat;
   final String timeFormat;
@@ -154,6 +164,7 @@ class PdfGenerator {
     required this.footer,
     required this.headers,
     required this.attendances,
+    required this.members,
     this.fontPath = "assets/fonts/Amiri-Regular.ttf",
     this.dateFormat = 'yyyy-MM-dd',
     this.timeFormat = 'hh:mm a',
@@ -173,7 +184,7 @@ class PdfGenerator {
             children: [
               _buildTitle(ttf, title),
               _buildDateSection(ttf, dateFormat),
-              _buildTable(ttf, headers, attendances),
+              _buildMemberLectureDaysTable(ttf, members),
               _buildFooter(ttf, footer),
             ],
           );
@@ -223,13 +234,96 @@ class PdfGenerator {
     );
   }
 
-  pw.Widget _buildTable(
-    pw.Font ttf,
-    List<String> headers,
-    List<Attendance> attendances,
-  ) {
+  pw.Widget _buildMemberLectureDaysTable(pw.Font ttf, List<UserModel> members) {
+    final daysOfWeek = [
+      'السبت',
+      'الأحد',
+      'الاثنين',
+      'الثلاثاء',
+      'الأربعاء',
+      'الخميس',
+      'الجمعة',
+    ];
+
+    final now = DateTime.now();
+    final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
+    final endOfWeek = startOfWeek.add(Duration(days: 6));
+
+    final headers = [
+      'بواسطه',
+      'وقت الخروج',
+      'وقت الحضور',
+      'المادة',
+      'القاعه',
+      ...daysOfWeek.reversed,
+      'اسم العضو',
+    ];
+
+    final data =
+        members.map((member) {
+          final lectureDays = _getLectureDaysForCurrentWeek(
+            member.lectures,
+            startOfWeek,
+            endOfWeek,
+          );
+
+          final lecturesInCurrentWeek = member.lectures.where(
+            (lecture) => lecture.meetings.any(
+              (meet) =>
+                  meet.startTime.toDate().isAfter(
+                    startOfWeek.subtract(Duration(days: 1)),
+                  ) &&
+                  meet.startTime.toDate().isBefore(
+                    endOfWeek.add(Duration(days: 1)),
+                  ),
+            ),
+          );
+
+          final firstLecture =
+              lecturesInCurrentWeek.isNotEmpty
+                  ? lecturesInCurrentWeek.first
+                  : null;
+
+          final hall = firstLecture?.hall ?? '';
+          final subject = firstLecture?.subject.name ?? '';
+          final arrivalTime =
+              (firstLecture?.meetings != null &&
+                      firstLecture!.meetings.isNotEmpty)
+                  ? DateFormat(
+                    timeFormat,
+                    'ar',
+                  ).format(firstLecture.meetings.first.startTime.toDate())
+                  : '';
+          final departureTime =
+              (firstLecture?.meetings != null &&
+                      firstLecture!.meetings.isNotEmpty)
+                  ? DateFormat(
+                    timeFormat,
+                    'ar',
+                  ).format(firstLecture.meetings.first.endTime.toDate())
+                  : '';
+          final byUser =
+              (firstLecture?.meetings != null &&
+                      firstLecture!.meetings.isNotEmpty)
+                  ? firstLecture.meetings.first.byUser?.name ?? ''
+                  : '';
+
+          return [
+            _buildText(byUser, ttf),
+            _buildText(departureTime, ttf),
+            _buildText(arrivalTime, ttf),
+            _buildText(subject, ttf),
+            _buildText(hall, ttf),
+            ...daysOfWeek.reversed.map((day) {
+              final status = lectureDays[day] ?? 'unknown';
+              return _buildText(status, ttf);
+            }),
+            _buildText(member.name, ttf),
+          ];
+        }).toList();
+
     return pw.TableHelper.fromTextArray(
-      data: attendances.map((attendance) => _mapRow(attendance, ttf)).toList(),
+      data: data,
       context: null,
       cellAlignment: pw.Alignment.centerRight,
       headerAlignment: pw.Alignment.centerRight,
@@ -244,22 +338,47 @@ class PdfGenerator {
     );
   }
 
-  List<pw.Widget> _mapRow(Attendance attendance, pw.Font ttf) {
-    return [
-      _buildText(attendance.byUser.name, ttf), // User (attendee) name
-      _buildText(attendance.lecture.subject.name, ttf), // Lecture subject
-      _buildText(attendance.lecture.hall, ttf), // Lecture hall
-      _buildText(
-        attendance.arrivalDate != null
-            ? DateFormat(
-              dateFormat,
-              'ar',
-            ).format(attendance.arrivalDate!.toDate())
-            : 'غير محدد',
-        ttf,
-      ), // Arrival date
-      _buildText(attendance.status, ttf), // Attendance status
+  Map<String, String> _getLectureDaysForCurrentWeek(
+    List<Lecture> lectures,
+    DateTime startOfWeek,
+    DateTime endOfWeek,
+  ) {
+    final daysOfWeek = [
+      'السبت',
+      'الأحد',
+      'الاثنين',
+      'الثلاثاء',
+      'الأربعاء',
+      'الخميس',
+      'الجمعة',
     ];
+    final Map<String, String> lectureDays = {};
+
+    for (var day in daysOfWeek) {
+      lectureDays[day] = '';
+    }
+
+    for (var lecture in lectures) {
+      for (var meet in lecture.meetings) {
+        final meetDate = meet.startTime.toDate();
+
+        if (meetDate.isAfter(startOfWeek.subtract(Duration(days: 1))) &&
+            meetDate.isBefore(endOfWeek.add(Duration(days: 1)))) {
+          final day = _getDayOfWeek(meet.startTime);
+
+          if (lectureDays.containsKey(day)) {
+            lectureDays[day] = meet.status ?? '';
+          }
+        }
+      }
+    }
+
+    return lectureDays;
+  }
+
+  String _getDayOfWeek(Timestamp timestamp) {
+    final date = timestamp.toDate();
+    return DateFormat('EEEE', 'ar').format(date);
   }
 
   pw.Widget _buildFooter(pw.Font ttf, String footer) {

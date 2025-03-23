@@ -32,12 +32,11 @@ class SubjectRepository {
   //create subject
   Future<ApiResult<String>> createSubject(Subject subject) async {
     try {
-    
       final docRef = await _firestoreService.addDocument(
         collectionName: 'subjects',
         data: {
           'name': subject.name,
-        
+          'units': subject.units,
           'code': subject.code,
           'number': subject.number,
         },

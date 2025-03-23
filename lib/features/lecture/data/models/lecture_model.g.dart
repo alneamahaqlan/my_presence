@@ -15,6 +15,11 @@ _$LectureImpl _$$LectureImplFromJson(Map<String, dynamic> json) =>
       startTime: const TimestampConverter().fromJson(json['startTime']),
       endTime: const TimestampConverter().fromJson(json['endTime']),
       hall: json['hall'] as String,
+      meetings:
+          (json['meetings'] as List<dynamic>?)
+              ?.map((e) => Meet.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
       createdAt: const TimestampConverter().fromJson(json['createdAt']),
       updatedAt: const TimestampConverter().fromJson(json['updatedAt']),
     );
@@ -28,6 +33,7 @@ Map<String, dynamic> _$$LectureImplToJson(_$LectureImpl instance) =>
       'startTime': const TimestampConverter().toJson(instance.startTime),
       'endTime': const TimestampConverter().toJson(instance.endTime),
       'hall': instance.hall,
+      'meetings': instance.meetings,
       'createdAt': _$JsonConverterToJson<dynamic, Timestamp>(
         instance.createdAt,
         const TimestampConverter().toJson,

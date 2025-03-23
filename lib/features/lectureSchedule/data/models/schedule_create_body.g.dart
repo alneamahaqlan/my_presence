@@ -6,20 +6,24 @@ part of 'schedule_create_body.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ScheduleCreateBodyImpl _$$ScheduleCreateBodyImplFromJson(
-  Map<String, dynamic> json,
-) => _$ScheduleCreateBodyImpl(
-  title: json['title'] as String,
-  departmentId: json['departmentId'] as String,
-  termStart: const TimestampConverter().fromJson(json['termStart']),
-  termEnd: const TimestampConverter().fromJson(json['termEnd']),
-);
+ScheduleCreateBody _$ScheduleCreateBodyFromJson(Map<String, dynamic> json) =>
+    ScheduleCreateBody(
+      title: json['title'] as String,
+      level: (json['level'] as num).toInt(),
+      division: json['division'] as String,
+      department: Department.fromJson(
+        json['department'] as Map<String, dynamic>,
+      ),
+      termStart: DateTime.parse(json['termStart'] as String),
+      termEnd: DateTime.parse(json['termEnd'] as String),
+    );
 
-Map<String, dynamic> _$$ScheduleCreateBodyImplToJson(
-  _$ScheduleCreateBodyImpl instance,
-) => <String, dynamic>{
-  'title': instance.title,
-  'departmentId': instance.departmentId,
-  'termStart': const TimestampConverter().toJson(instance.termStart),
-  'termEnd': const TimestampConverter().toJson(instance.termEnd),
-};
+Map<String, dynamic> _$ScheduleCreateBodyToJson(ScheduleCreateBody instance) =>
+    <String, dynamic>{
+      'title': instance.title,
+      'level': instance.level,
+      'division': instance.division,
+      'department': instance.department,
+      'termStart': instance.termStart.toIso8601String(),
+      'termEnd': instance.termEnd.toIso8601String(),
+    };

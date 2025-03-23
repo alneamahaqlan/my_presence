@@ -8,6 +8,7 @@ import '../../../../../core/models/status.dart';
 import '../../../auth/data/models/user_model.dart';
 import '../../../reports/data/models/evaluation_model.dart';
 import '../../../reports/data/models/research_model.dart';
+import '../../data/models/member_create_body.dart';
 import '../../data/models/member_edit_body.dart';
 import '../../data/repositories/member_repository.dart';
 
@@ -16,7 +17,7 @@ part 'member_event.dart';
 part 'member_state.dart';
 
 class MemberBloc extends Bloc<MemberEvent, MemberState> {
-   final MemberRepository _memberRepository;
+  final MemberRepository _memberRepository;
   StreamSubscription? _membersSubscription;
 
   MemberBloc(this._memberRepository) : super(MemberState.initial()) {
@@ -30,7 +31,6 @@ class MemberBloc extends Bloc<MemberEvent, MemberState> {
         addResearch: (event) async => _onAddResearch(event, emit),
       );
     });
-   
   }
 
   Future<void> _onLoadMembers(
@@ -59,10 +59,12 @@ class MemberBloc extends Bloc<MemberEvent, MemberState> {
       );
     } catch (e, stackTrace) {
       log('Error in _onLoadMembers: $e', stackTrace: stackTrace);
-      emit(state.copyWith(
-        status: const Status.failed(),
-        errorMessage: 'Failed to load members: $e',
-      ));
+      emit(
+        state.copyWith(
+          status: const Status.failed(),
+          errorMessage: 'Failed to load members: $e',
+        ),
+      );
     }
   }
 
@@ -71,31 +73,31 @@ class MemberBloc extends Bloc<MemberEvent, MemberState> {
     _membersSubscription?.cancel();
     return super.close();
   }
+
   Future<void> _onSaveMember(
     SaveMember event,
     Emitter<MemberState> emit,
   ) async {
-    // final mm = await _memberRepository.fetchUsersWithDetails();
-    // print(mm);
-    emit(state.copyWith(status: const Status.loading()));
+    emit(state.copyWith(createStatus: const Status.loading()));
 
-    final result = await _memberRepository.createMember(event.user);
+    final result = await _memberRepository.createMember(event.memberCreateBody);
 
     result.when(
       success: (userId) {
-        emit(state.copyWith(status: const Status.success()));
-      add(const MemberEvent.loadMembers());
+        emit(state.copyWith(createStatus: const Status.success()));
+        // add(const MemberEvent.loadMembers());
       },
       failure: (error) {
         emit(
           state.copyWith(
-            status: const Status.failed(),
+            createStatus: const Status.failed(),
             errorMessage: error.message,
           ),
         );
       },
     );
-  }  
+  }
+
   Future<void> _onDeleteMember(
     DeleteMember event,
     Emitter<MemberState> emit,
@@ -127,7 +129,7 @@ class MemberBloc extends Bloc<MemberEvent, MemberState> {
     EditMember event,
     Emitter<MemberState> emit,
   ) async {
-    emit(state.copyWith(status: const Status.loading()));
+    emit(state.copyWith(editStatus: const Status.loading()));
 
     final result = await _memberRepository.updateMember(
       documentId: event.userId,
@@ -136,13 +138,12 @@ class MemberBloc extends Bloc<MemberEvent, MemberState> {
 
     result.when(
       success: (_) {
-        emit(state.copyWith(status: const Status.success()));
-        add(const MemberEvent.loadMembers());
+        emit(state.copyWith(editStatus: const Status.success()));
       },
       failure: (error) {
         emit(
           state.copyWith(
-            status: const Status.failed(),
+            editStatus: const Status.failed(),
             errorMessage: error.message,
           ),
         );
@@ -162,9 +163,7 @@ class MemberBloc extends Bloc<MemberEvent, MemberState> {
     );
 
     result.when(
-      success: (_) {
-        add(const MemberEvent.loadMembers());
-      },
+      success: (_) {},
       failure: (error) {
         emit(
           state.copyWith(
@@ -190,7 +189,6 @@ class MemberBloc extends Bloc<MemberEvent, MemberState> {
     result.when(
       success: (_) {
         emit(state.copyWith(status: const Status.success()));
-          add(const MemberEvent.loadMembers());
       },
       failure: (error) {
         emit(

@@ -16,6 +16,7 @@ import '../../features/department/presentation/pages/add_department_page.dart';
 import '../../features/department/presentation/pages/department_page.dart';
 import '../../features/faculty/presentation/pages/add_faculty_page.dart';
 import '../../features/faculty/presentation/pages/faculties_page.dart';
+import '../../features/lecture/data/repositories/lecture_repository.dart';
 import '../../features/lecture/presentation/bloc/lecture_bloc.dart';
 import '../../features/lecture/presentation/pages/create_lecture_page.dart';
 import '../../features/lecture/presentation/pages/lectures_page.dart';
@@ -171,7 +172,14 @@ class AppPages {
                   path: AppRoutes.lectures,
                   name: AppRoutes.lectures,
                   builder: (context, state) {
-                    return LecturesPage();
+                 
+
+                    return BlocProvider.value(
+                      value: 
+                              getIt<LectureBloc>(),
+
+                      child: LecturesPage(),
+                    );
                   },
                   routes: [
                     //CreateLecturePage
@@ -181,7 +189,11 @@ class AppPages {
                       builder: (context, state) {
                         // final schedule = state.extra as Schedule;
 
-                        return CreateLecturePage();
+                        return BlocProvider.value(
+                          value: getIt<LectureBloc>(),
+
+                          child: CreateLecturePage(),
+                        );
                       },
                     ),
                   ],

@@ -515,6 +515,7 @@ abstract class UpdateSubject implements SubjectEvent {
 /// @nodoc
 mixin _$SubjectState {
   Status get status => throw _privateConstructorUsedError;
+  Status get createStatus => throw _privateConstructorUsedError;
   List<Subject> get subjects => throw _privateConstructorUsedError;
   String? get message => throw _privateConstructorUsedError;
 
@@ -532,9 +533,15 @@ abstract class $SubjectStateCopyWith<$Res> {
     $Res Function(SubjectState) then,
   ) = _$SubjectStateCopyWithImpl<$Res, SubjectState>;
   @useResult
-  $Res call({Status status, List<Subject> subjects, String? message});
+  $Res call({
+    Status status,
+    Status createStatus,
+    List<Subject> subjects,
+    String? message,
+  });
 
   $StatusCopyWith<$Res> get status;
+  $StatusCopyWith<$Res> get createStatus;
 }
 
 /// @nodoc
@@ -553,6 +560,7 @@ class _$SubjectStateCopyWithImpl<$Res, $Val extends SubjectState>
   @override
   $Res call({
     Object? status = null,
+    Object? createStatus = null,
     Object? subjects = null,
     Object? message = freezed,
   }) {
@@ -562,6 +570,11 @@ class _$SubjectStateCopyWithImpl<$Res, $Val extends SubjectState>
                 null == status
                     ? _value.status
                     : status // ignore: cast_nullable_to_non_nullable
+                        as Status,
+            createStatus:
+                null == createStatus
+                    ? _value.createStatus
+                    : createStatus // ignore: cast_nullable_to_non_nullable
                         as Status,
             subjects:
                 null == subjects
@@ -587,6 +600,16 @@ class _$SubjectStateCopyWithImpl<$Res, $Val extends SubjectState>
       return _then(_value.copyWith(status: value) as $Val);
     });
   }
+
+  /// Create a copy of SubjectState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $StatusCopyWith<$Res> get createStatus {
+    return $StatusCopyWith<$Res>(_value.createStatus, (value) {
+      return _then(_value.copyWith(createStatus: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -598,10 +621,17 @@ abstract class _$$SubjectStateImplCopyWith<$Res>
   ) = __$$SubjectStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Status status, List<Subject> subjects, String? message});
+  $Res call({
+    Status status,
+    Status createStatus,
+    List<Subject> subjects,
+    String? message,
+  });
 
   @override
   $StatusCopyWith<$Res> get status;
+  @override
+  $StatusCopyWith<$Res> get createStatus;
 }
 
 /// @nodoc
@@ -619,6 +649,7 @@ class __$$SubjectStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? status = null,
+    Object? createStatus = null,
     Object? subjects = null,
     Object? message = freezed,
   }) {
@@ -628,6 +659,11 @@ class __$$SubjectStateImplCopyWithImpl<$Res>
             null == status
                 ? _value.status
                 : status // ignore: cast_nullable_to_non_nullable
+                    as Status,
+        createStatus:
+            null == createStatus
+                ? _value.createStatus
+                : createStatus // ignore: cast_nullable_to_non_nullable
                     as Status,
         subjects:
             null == subjects
@@ -649,6 +685,7 @@ class __$$SubjectStateImplCopyWithImpl<$Res>
 class _$SubjectStateImpl implements _SubjectState {
   const _$SubjectStateImpl({
     this.status = const Status.initial(),
+    this.createStatus = const Status.initial(),
     final List<Subject> subjects = const [],
     this.message,
   }) : _subjects = subjects;
@@ -656,6 +693,9 @@ class _$SubjectStateImpl implements _SubjectState {
   @override
   @JsonKey()
   final Status status;
+  @override
+  @JsonKey()
+  final Status createStatus;
   final List<Subject> _subjects;
   @override
   @JsonKey()
@@ -670,7 +710,7 @@ class _$SubjectStateImpl implements _SubjectState {
 
   @override
   String toString() {
-    return 'SubjectState(status: $status, subjects: $subjects, message: $message)';
+    return 'SubjectState(status: $status, createStatus: $createStatus, subjects: $subjects, message: $message)';
   }
 
   @override
@@ -679,6 +719,8 @@ class _$SubjectStateImpl implements _SubjectState {
         (other.runtimeType == runtimeType &&
             other is _$SubjectStateImpl &&
             (identical(other.status, status) || other.status == status) &&
+            (identical(other.createStatus, createStatus) ||
+                other.createStatus == createStatus) &&
             const DeepCollectionEquality().equals(other._subjects, _subjects) &&
             (identical(other.message, message) || other.message == message));
   }
@@ -687,6 +729,7 @@ class _$SubjectStateImpl implements _SubjectState {
   int get hashCode => Object.hash(
     runtimeType,
     status,
+    createStatus,
     const DeepCollectionEquality().hash(_subjects),
     message,
   );
@@ -703,12 +746,15 @@ class _$SubjectStateImpl implements _SubjectState {
 abstract class _SubjectState implements SubjectState {
   const factory _SubjectState({
     final Status status,
+    final Status createStatus,
     final List<Subject> subjects,
     final String? message,
   }) = _$SubjectStateImpl;
 
   @override
   Status get status;
+  @override
+  Status get createStatus;
   @override
   List<Subject> get subjects;
   @override
