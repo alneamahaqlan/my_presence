@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../extensions/string_extensions.dart';
 
@@ -14,7 +15,8 @@ class TextFieldWidget extends StatelessWidget {
   final String? initialValue;
   final bool readOnly;
   final VoidCallback? onTap;
-  final Widget? suffixIcon; // New parameter for suffix icon
+  final Widget? suffixIcon;
+  final List<TextInputFormatter>? inputFormatters; // Add input formatters
 
   const TextFieldWidget({
     super.key,
@@ -29,7 +31,8 @@ class TextFieldWidget extends StatelessWidget {
     this.initialValue,
     this.readOnly = false,
     this.onTap,
-    this.suffixIcon, // Add suffixIcon to the constructor
+    this.suffixIcon,
+    this.inputFormatters, // Add to constructor
   });
 
   @override
@@ -38,7 +41,6 @@ class TextFieldWidget extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return TextFormField(
-      
       onTap: onTap,
       readOnly: readOnly,
       validator: validator,
@@ -46,32 +48,32 @@ class TextFieldWidget extends StatelessWidget {
       controller: controller,
       obscureText: isPassword,
       maxLines: maxLines,
-      style: textTheme.bodyLarge, // Use theme text style
+      style: textTheme.bodyLarge,
       onChanged: onChanged,
       initialValue: initialValue,
+      inputFormatters: inputFormatters, // Use input formatters
       decoration: InputDecoration(
-        prefixIcon:
-            icon != null
-                ? Icon(
-                  icon,
-                  color: colorScheme.onSurface, // Use theme color
-                )
-                : null,
-        suffixIcon: suffixIcon, // Add suffixIcon to the InputDecoration
+        prefixIcon: icon != null
+            ? Icon(
+                icon,
+                color: colorScheme.onSurface,
+              )
+            : null,
+        suffixIcon: suffixIcon,
         hintText: hint?.trans(context),
         hintStyle: textTheme.bodyMedium?.copyWith(
-          color: Theme.of(context).hintColor, // Use theme hint color
+          color: Theme.of(context).hintColor,
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
-            color: Theme.of(context).dividerColor, // Use theme divider color
+            color: Theme.of(context).dividerColor,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
-            color: colorScheme.primary, // Use theme primary color
+            color: colorScheme.primary,
           ),
         ),
       ),

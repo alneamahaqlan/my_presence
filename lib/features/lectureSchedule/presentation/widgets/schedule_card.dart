@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // For date formatting
-import '../../data/models/schedule_model.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+
+import '../../data/models/schedule_model.dart';
 
 class ScheduleCard extends StatelessWidget {
   final Schedule schedule;
@@ -10,114 +10,126 @@ class ScheduleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Card(
-      elevation: 6, // Increased shadow for depth
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16), // More rounded corners
-      ),
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.blue.shade100, Colors.blue.shade300],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: () {
+          // Add onTap functionality if needed
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            gradient: LinearGradient(
+              colors: [
+                colorScheme.primary.withOpacity(0.8),
+                colorScheme.primary.withOpacity(0.6),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
           ),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Title
-              Text(
-                schedule.title,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blue.shade900,
-                ),
-              ),
-              const SizedBox(height: 8),
-
-              // Term Dates
+              // Header with title and level
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Icon(Icons.calendar_today, size: 20, color: Colors.white),
-                  const SizedBox(width: 8),
-                  Text(
-                    '${_formatDate(schedule.termStart.toDate())} - ${_formatDate(schedule.termEnd.toDate())}',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                  Expanded(
+                    child: Text(
+                      schedule.title,
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        color: colorScheme.onPrimary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: colorScheme.secondary,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      'المستوى ${schedule.level}',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: colorScheme.onSecondary,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 12),
 
-              // Lectures List
-              if (schedule.lectures.isNotEmpty)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'lectures'.tr(),
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white70,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    ...schedule.lectures.map((lecture) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.book, size: 16, color: Colors.white70),
-                            const SizedBox(width: 8),
-                            Text(
-                              lecture.id,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  ],
-                ),
+              // Term dates
+              _buildInfoRow(
+                context,
+                icon: Icons.calendar_month_outlined,
+                text:
+                    '${_formatDate(schedule.termStart.toDate())} - ${_formatDate(schedule.termEnd.toDate())}',
+              ),
+              const SizedBox(height: 8),
+
+              // Division
+              _buildInfoRow(
+                context,
+                icon: Icons.group_outlined,
+                text: schedule.division,
+              ),
               const SizedBox(height: 12),
 
-              // Created At and Updated At (if available)
-              if (schedule.createdAt != null || schedule.updatedAt != null)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Divider(color: Colors.white70),
-                    if (schedule.createdAt != null)
-                      Text(
-                        '${'created_at'.tr()}: ${_formatDate(schedule.createdAt!.toDate())}',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.white,
-                        ),
-                      ),
-                    if (schedule.updatedAt != null)
-                      Text(
-                        '${'updated_at'.tr()}: ${_formatDate(schedule.updatedAt!.toDate())}',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.white,
-                        ),
-                      ),
-                  ],
+              // Department
+              _buildInfoRow(
+                context,
+                icon: Icons.school_outlined,
+                text: schedule.department.name,
+              ),
+              const SizedBox(height: 16),
+
+              // Lectures section
+              if (schedule.lectures.isNotEmpty) ...[
+                Text(
+                  'lectures'.tr(),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: colorScheme.onPrimary.withOpacity(0.9),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children:
+                      schedule.lectures.map((lecture) {
+                        return Chip(
+                          label: Text(
+                            lecture.subject.name,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: colorScheme.onPrimary,
+                            ),
+                          ),
+                          backgroundColor: colorScheme.primary.withOpacity(0.4),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          visualDensity: VisualDensity.compact,
+                        );
+                      }).toList(),
+                ),
+                const SizedBox(height: 12),
+              ],
             ],
           ),
         ),
@@ -125,8 +137,59 @@ class ScheduleCard extends StatelessWidget {
     );
   }
 
-  // Helper method to format dates
+  Widget _buildInfoRow(
+    BuildContext context, {
+    required IconData icon,
+    required String text,
+  }) {
+    final theme = Theme.of(context);
+    return Row(
+      children: [
+        Icon(
+          icon,
+          size: 20,
+          color: theme.colorScheme.onPrimary.withOpacity(0.8),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            text,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onPrimary,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDateInfo(
+    BuildContext context, {
+    required IconData icon,
+    required DateTime date,
+    required String label,
+  }) {
+    final theme = Theme.of(context);
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(
+          icon,
+          size: 16,
+          color: theme.colorScheme.onPrimary.withOpacity(0.6),
+        ),
+        const SizedBox(width: 4),
+        Text(
+          '$label: ${_formatDate(date)}',
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.onPrimary.withOpacity(0.7),
+          ),
+        ),
+      ],
+    );
+  }
+
   String _formatDate(DateTime date) {
-    return DateFormat('dd MMM yyyy', 'ar').format(date); // Arabic formatting
+    return DateFormat('dd MMM yyyy', 'ar').format(date);
   }
 }

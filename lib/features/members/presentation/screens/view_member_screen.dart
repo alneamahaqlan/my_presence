@@ -5,24 +5,63 @@ import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 
 import '../../../../core/extensions/context_extensions.dart';
+import '../../../../core/utils/enums/academic_level.dart';
+import '../../../../core/widgets/drop_down_widget.dart';
 import '../../../../core/widgets/text_widget.dart';
 import '../../../../dependency_injection.dart';
 import '../../../attendance/presentation/bloc/attendance_bloc.dart';
 import '../../../attendance/presentation/pages/add_attendance_page.dart';
 import '../../../auth/data/models/user_model.dart';
+import '../../../department/data/models/department_model.dart';
 import '../../../lecture/data/models/lecture_model.dart';
 import '../../../lecture/presentation/widgets/lecture_meetings_widget.dart';
 import '../widgets/AddEvaluationDialog.dart';
 import '../widgets/AddResearchDialog.dart';
 import '../widgets/pdf_generator.dart';
 
-class ViewMemberScreen extends StatelessWidget {
+class ViewMemberScreen extends StatefulWidget {
   final UserModel member;
 
   const ViewMemberScreen({super.key, required this.member});
 
   @override
+  State<ViewMemberScreen> createState() => _ViewMemberScreenState();
+}
+
+class _ViewMemberScreenState extends State<ViewMemberScreen> {
+  String? selectedDepartmentId;
+  int? selectedLevel;
+
+  String _getAcademicLevelText(int? level) {
+    if (level == null) return "غير متوفر";
+    return AcademicLevel.fromValue(level).toString();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final departments =
+        widget.member.lectures
+            .map((lecture) => lecture.schedule.department)
+            .toSet()
+            .toList();
+
+    final levels =
+        widget.member.lectures
+            .map((lecture) => lecture.schedule.level)
+            .toSet()
+            .toList()
+          ..sort();
+
+    final filteredLectures =
+        widget.member.lectures.where((lecture) {
+          final departmentMatch =
+              selectedDepartmentId == null ||
+              lecture.schedule.department.id == selectedDepartmentId;
+          final levelMatch =
+              selectedLevel == null || lecture.schedule.level == selectedLevel;
+          return departmentMatch && levelMatch;
+        }).toList();
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -56,35 +95,93 @@ class ViewMemberScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildDetailRow(Icons.person, "الاسم", member.name),
+              // Filter Row
+              Row(
+                children: [
+                  if (departments.isNotEmpty)
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          bottom: 16.0,
+                          right: 8.0,
+                        ),
+                        child: DropDownWidget<Department>(
+                          hint: 'اختر القسم',
+                          items: departments,
+                          selectedValue:
+                              selectedDepartmentId == null
+                                  ? null
+                                  : departments.firstWhere(
+                                    (d) => d.id == selectedDepartmentId,
+                                  ),
+                          onChanged: (Department? department) {
+                            setState(() {
+                              selectedDepartmentId = department?.id;
+                            });
+                          },
+                          displayText:
+                              (Department department) => department.name,
+                        ),
+                      ),
+                    ),
+
+                  if (levels.isNotEmpty) SizedBox(width: 8.0),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0, left: 8.0),
+                      child: DropDownWidget<int>(
+                        hint: 'اختر المستوى',
+                        items: levels,
+                        selectedValue: selectedLevel,
+                        onChanged: (int? level) {
+                          setState(() {
+                            selectedLevel = level;
+                          });
+                        },
+                        displayText:
+                            (int level) => _getAcademicLevelText(level),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              _buildDetailRow(Icons.person, "الاسم", widget.member.name),
               _buildDivider(),
-              _buildDetailRow(Icons.email, "البريد الإلكتروني", member.email),
+              _buildDetailRow(
+                Icons.email,
+                "البريد الإلكتروني",
+                widget.member.email,
+              ),
               _buildDivider(),
               _buildDetailRow(
                 Icons.admin_panel_settings,
                 "الدور",
-                member.role.name == "teacher" ? "مدرس" : "طالب",
+                widget.member.role.name == "teacher" ? "مدرس" : "طالب",
               ),
               _buildDivider(),
               _buildDetailRow(
                 Icons.circle,
                 "حالة النشاط",
-                member.activityStatus.name == "active" ? "نشط" : "غير نشط",
+                widget.member.activityStatus.name == "active"
+                    ? "نشط"
+                    : "غير نشط",
               ),
               _buildDivider(),
               _buildDetailRow(
                 Icons.school,
                 "التخصص",
-                member.specialization ?? "غير متوفر",
+                widget.member.specialization ?? "غير متوفر",
               ),
               _buildDivider(),
               _buildDetailRow(
                 Icons.star,
                 "الرتبة الأكاديمية",
-                member.academicRank ?? "غير متوفر",
+                widget.member.academicRank ?? "غير متوفر",
               ),
               _buildDivider(),
-              // Collapsible section for subjects
+
+              // Subjects Section
               ExpansionTile(
                 title: ListTile(
                   contentPadding: EdgeInsets.zero,
@@ -96,14 +193,14 @@ class ViewMemberScreen extends StatelessWidget {
                   ),
                 ),
                 children: [
-                  if (member.subjects.isNotEmpty)
+                  if (widget.member.subjects.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Wrap(
                         spacing: 8.0,
                         runSpacing: 8.0,
                         children:
-                            member.subjects.map((subject) {
+                            widget.member.subjects.map((subject) {
                               return Chip(
                                 label: Text(subject.name),
                                 backgroundColor: Colors.teal.withOpacity(0.2),
@@ -122,8 +219,9 @@ class ViewMemberScreen extends StatelessWidget {
                     ),
                 ],
               ),
-              _buildDivider(), // Divider moved HERE (outside ExpansionTile)
-              // Collapsible section for evaluations
+              _buildDivider(),
+
+              // Evaluations Section
               ExpansionTile(
                 title: ListTile(
                   contentPadding: EdgeInsets.zero,
@@ -135,14 +233,14 @@ class ViewMemberScreen extends StatelessWidget {
                   ),
                 ),
                 children: [
-                  if (member.evaluations.isNotEmpty)
+                  if (widget.member.evaluations.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Wrap(
                         spacing: 8.0,
                         runSpacing: 8.0,
                         children:
-                            member.evaluations.map((evaluation) {
+                            widget.member.evaluations.map((evaluation) {
                               return Chip(
                                 label: Text(
                                   "${evaluation.score} - ${evaluation.comment ?? "بدون تعليق"}",
@@ -163,8 +261,9 @@ class ViewMemberScreen extends StatelessWidget {
                     ),
                 ],
               ),
-              _buildDivider(), // Divider moved HERE (outside ExpansionTile)
-              // Collapsible section for researches
+              _buildDivider(),
+
+              // Researches Section
               ExpansionTile(
                 title: ListTile(
                   contentPadding: EdgeInsets.zero,
@@ -176,14 +275,14 @@ class ViewMemberScreen extends StatelessWidget {
                   ),
                 ),
                 children: [
-                  if (member.researches.isNotEmpty)
+                  if (widget.member.researches.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Wrap(
                         spacing: 8.0,
                         runSpacing: 8.0,
                         children:
-                            member.researches.map((research) {
+                            widget.member.researches.map((research) {
                               return Chip(
                                 label: Text(research.name),
                                 backgroundColor: Colors.purple.withOpacity(0.2),
@@ -204,8 +303,9 @@ class ViewMemberScreen extends StatelessWidget {
                     ),
                 ],
               ),
-              _buildDivider(), // Divider moved HERE (outside ExpansionTile)
-              // Collapsible section for attendance
+              _buildDivider(),
+
+              // Attendance Section
               ExpansionTile(
                 title: ListTile(
                   contentPadding: EdgeInsets.zero,
@@ -220,14 +320,14 @@ class ViewMemberScreen extends StatelessWidget {
                   ),
                 ),
                 children: [
-                  if (member.attendances.isNotEmpty)
+                  if (widget.member.attendances.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Wrap(
                         spacing: 8.0,
                         runSpacing: 8.0,
                         children:
-                            member.attendances.map((attendance) {
+                            widget.member.attendances.map((attendance) {
                               return Chip(
                                 label: Text(
                                   "${attendance.arrivalDate!.toDate()} - ${attendance.status}",
@@ -250,8 +350,9 @@ class ViewMemberScreen extends StatelessWidget {
                     ),
                 ],
               ),
-              _buildDivider(), // Divider moved HERE (outside ExpansionTile)
-              // Collapsible section for lectures
+              _buildDivider(),
+
+              // Lectures Section with Filters
               ExpansionTile(
                 title: ListTile(
                   contentPadding: EdgeInsets.zero,
@@ -263,14 +364,14 @@ class ViewMemberScreen extends StatelessWidget {
                   ),
                 ),
                 children: [
-                  if (member.lectures.isNotEmpty)
+                  if (filteredLectures.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Wrap(
                         spacing: 8.0,
                         runSpacing: 8.0,
                         children:
-                            member.lectures.map((lecture) {
+                            filteredLectures.map((lecture) {
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -283,14 +384,20 @@ class ViewMemberScreen extends StatelessWidget {
                                       ),
                                     ),
                                     subtitle: Text(
-                                      "${lecture.schedule.department.faculty?.name} - ${lecture.schedule.department.name}",
+                                      "${lecture.schedule.department.faculty?.name ?? "غير متوفر"} - ${lecture.schedule.department.name}",
                                       style: const TextStyle(fontSize: 10),
+                                    ),
+                                    trailing: Text(
+                                      "المستوى - ${_getAcademicLevelText(lecture.schedule.level)}",
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                   LectureMeetingsWidget(
                                     lecture: lecture,
                                     onTap: (startTime) {
-                                     
                                       _showAddAttendanceDialog(
                                         context,
                                         lecture,
@@ -313,7 +420,7 @@ class ViewMemberScreen extends StatelessWidget {
                     ),
                 ],
               ),
-              _buildDivider(), // Divider moved HERE (outside ExpansionTile)
+              _buildDivider(),
             ],
           ),
         ),
@@ -322,7 +429,11 @@ class ViewMemberScreen extends StatelessWidget {
   }
 
   Future<void> _printMemberDetails(BuildContext context) async {
-    final pdfGenerator = PdfGenerator(member: member);
+    final pdfGenerator = PdfGenerator(
+      member: widget.member,
+      departmentId: selectedDepartmentId,
+      level: selectedLevel,
+    );
     final pdf = await pdfGenerator.generatePdf();
     await Printing.layoutPdf(
       onLayout: (PdfPageFormat format) async => pdf.save(),
@@ -333,7 +444,7 @@ class ViewMemberScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) {
-        return AddEvaluationDialog(member: member);
+        return AddEvaluationDialog(member: widget.member);
       },
     );
   }
@@ -342,7 +453,7 @@ class ViewMemberScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) {
-        return AddResearchDialog(member: member);
+        return AddResearchDialog(member: widget.member);
       },
     );
   }
@@ -358,9 +469,9 @@ class ViewMemberScreen extends StatelessWidget {
         return BlocProvider(
           create: (context) => getIt<AttendanceBloc>(),
           child: AddAttendancePage(
-            member: member,
+            member: widget.member,
             lecture: lecture,
-            initialStartTime: startTime.toDate(), // Pass the startTime
+            initialStartTime: startTime.toDate(),
           ),
         );
       },

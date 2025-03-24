@@ -127,9 +127,9 @@ Future<void> setup() async {
   );
 
   // Register HomeBloc
-  getIt.registerFactory<LectureScheduleBloc>(
-    () => LectureScheduleBloc(getIt<LectureScheduleRepository>()),
-  );
+  // getIt.registerFactory<LectureScheduleBloc>(
+  //   () => LectureScheduleBloc(getIt<LectureScheduleRepository>()),
+  // );
 
   // Register IncomeBloc
   getIt.registerFactory<IncomeBloc>(

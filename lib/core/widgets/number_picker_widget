@@ -1,0 +1,134 @@
+// lib/core/widgets/number_picker_widget.dart
+import 'package:flutter/material.dart';
+
+class NumberPickerWidget extends StatefulWidget {
+  final int minValue;
+  final int maxValue;
+  final ValueChanged<int> onChanged;
+  final int initialValue;
+  final Color? activeColor;
+  final Color? backgroundColor;
+
+  const NumberPickerWidget({
+    super.key,
+    required this.minValue,
+    required this.maxValue,
+    required this.onChanged,
+    required this.initialValue,
+    this.activeColor,
+    this.backgroundColor,
+  });
+
+  @override
+  State<NumberPickerWidget> createState() => _NumberPickerWidgetState();
+}
+
+class _NumberPickerWidgetState extends State<NumberPickerWidget> {
+  late int _currentValue;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentValue = widget.initialValue;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final activeColor = widget.activeColor ?? theme.colorScheme.primary;
+    final backgroundColor = widget.backgroundColor ?? theme.colorScheme.surface;
+    final disabledColor = theme.colorScheme.onSurface.withOpacity(0.12);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: theme.dividerColor,
+          width: 1,
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Decrement button
+          _PickerButton(
+            icon: Icons.remove,
+            onPressed: _currentValue > widget.minValue
+                ? () {
+                    setState(() {
+                      _currentValue--;
+                      widget.onChanged(_currentValue);
+                    });
+                  }
+                : null,
+            activeColor: activeColor,
+            disabledColor: disabledColor,
+          ),
+          
+          // Value display
+          Container(
+            width: 48,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Center(
+              child: Text(
+                '$_currentValue',
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: theme.colorScheme.onSurface,
+                ),
+              ),
+            ),
+          ),
+          
+          // Increment button
+          _PickerButton(
+            icon: Icons.add,
+            onPressed: _currentValue < widget.maxValue
+                ? () {
+                    setState(() {
+                      _currentValue++;
+                      widget.onChanged(_currentValue);
+                    });
+                  }
+                : null,
+            activeColor: activeColor,
+            disabledColor: disabledColor,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PickerButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback? onPressed;
+  final Color activeColor;
+  final Color disabledColor;
+
+  const _PickerButton({
+    required this.icon,
+    required this.onPressed,
+    required this.activeColor,
+    required this.disabledColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(icon),
+      iconSize: 20,
+      color: onPressed != null ? activeColor : disabledColor,
+      onPressed: onPressed,
+      style: IconButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        visualDensity: VisualDensity.compact,
+        padding: const EdgeInsets.all(8),
+      ),
+    );
+  }
+}

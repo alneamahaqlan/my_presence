@@ -39,11 +39,10 @@ class LectureScheduleRepository {
   //
 
   Future<ApiResult<String>> createSchedule({
-    required Department department,
     required ScheduleCreateBody scheduleCreateBody,
   }) async {
     try {
-      log(scheduleCreateBody.toJson().toString());
+
 
       final docRef = await _firestoreService.firestore
           .collection('faculties')

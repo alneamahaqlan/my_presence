@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 // import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/models/status.dart';
 import '../../../../core/routes/app_pages.dart';
+import '../../../../dependency_injection.dart';
+import '../../../department/data/models/department_model.dart';
 import '../bloc/lecture_schedule_bloc.dart';
 import '../widgets/schedule_card.dart';
 
@@ -13,11 +15,17 @@ class SchedulePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final router = getIt<GoRouter>();
+    final department = router.state.extra as Department;
+    context.read<LectureScheduleBloc>().add(
+      SetDepartment(department: department),
+    );
+
+    context.read<LectureScheduleBloc>().add(
+      FetchLectureSchedules(department: department),
+    );
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('المستويات الدراسية'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('الجدول الدراسي'), centerTitle: true),
       body: BlocBuilder<LectureScheduleBloc, LectureScheduleState>(
         builder: (context, state) {
           if (state.status == Status.loading()) {
@@ -36,10 +44,7 @@ class SchedulePage extends StatelessWidget {
                 final schedule = schedules[index];
                 return InkWell(
                   onTap: () {
-                    context.pushNamed(
-                      AppRoutes.lectures,
-                      extra:schedule,
-                    );
+                    context.pushNamed(AppRoutes.lectures, extra: schedule);
                   },
                   child: ScheduleCard(schedule: schedule),
                 ); // Use ScheduleCard
@@ -53,10 +58,7 @@ class SchedulePage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           final state = context.read<LectureScheduleBloc>().state;
-          context.pushNamed(
-            AppRoutes.addLectureSchedule,
-            extra: state.department!,
-          );
+          context.pushNamed(AppRoutes.addSchedule, extra: state.department!);
         },
         child: const Icon(Icons.add),
       ),

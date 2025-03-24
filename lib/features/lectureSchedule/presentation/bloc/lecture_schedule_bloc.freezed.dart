@@ -20,10 +20,7 @@ mixin _$LectureScheduleEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Department department) fetchSchedules,
-    required TResult Function(
-      Department department,
-      ScheduleCreateBody scheduleCreateBody,
-    )
+    required TResult Function(ScheduleCreateBody scheduleCreateBody)
     addSchedule,
     required TResult Function(String id, Schedule schedule) updateSchedule,
     required TResult Function(String id) deleteSchedule,
@@ -38,11 +35,7 @@ mixin _$LectureScheduleEvent {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Department department)? fetchSchedules,
-    TResult? Function(
-      Department department,
-      ScheduleCreateBody scheduleCreateBody,
-    )?
-    addSchedule,
+    TResult? Function(ScheduleCreateBody scheduleCreateBody)? addSchedule,
     TResult? Function(String id, Schedule schedule)? updateSchedule,
     TResult? Function(String id)? deleteSchedule,
     TResult? Function(
@@ -56,11 +49,7 @@ mixin _$LectureScheduleEvent {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Department department)? fetchSchedules,
-    TResult Function(
-      Department department,
-      ScheduleCreateBody scheduleCreateBody,
-    )?
-    addSchedule,
+    TResult Function(ScheduleCreateBody scheduleCreateBody)? addSchedule,
     TResult Function(String id, Schedule schedule)? updateSchedule,
     TResult Function(String id)? deleteSchedule,
     TResult Function(
@@ -217,10 +206,7 @@ class _$FetchLectureSchedulesImpl implements FetchLectureSchedules {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Department department) fetchSchedules,
-    required TResult Function(
-      Department department,
-      ScheduleCreateBody scheduleCreateBody,
-    )
+    required TResult Function(ScheduleCreateBody scheduleCreateBody)
     addSchedule,
     required TResult Function(String id, Schedule schedule) updateSchedule,
     required TResult Function(String id) deleteSchedule,
@@ -239,11 +225,7 @@ class _$FetchLectureSchedulesImpl implements FetchLectureSchedules {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Department department)? fetchSchedules,
-    TResult? Function(
-      Department department,
-      ScheduleCreateBody scheduleCreateBody,
-    )?
-    addSchedule,
+    TResult? Function(ScheduleCreateBody scheduleCreateBody)? addSchedule,
     TResult? Function(String id, Schedule schedule)? updateSchedule,
     TResult? Function(String id)? deleteSchedule,
     TResult? Function(
@@ -261,11 +243,7 @@ class _$FetchLectureSchedulesImpl implements FetchLectureSchedules {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Department department)? fetchSchedules,
-    TResult Function(
-      Department department,
-      ScheduleCreateBody scheduleCreateBody,
-    )?
-    addSchedule,
+    TResult Function(ScheduleCreateBody scheduleCreateBody)? addSchedule,
     TResult Function(String id, Schedule schedule)? updateSchedule,
     TResult Function(String id)? deleteSchedule,
     TResult Function(
@@ -347,9 +325,7 @@ abstract class _$$AddLectureScheduleImplCopyWith<$Res> {
     $Res Function(_$AddLectureScheduleImpl) then,
   ) = __$$AddLectureScheduleImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({Department department, ScheduleCreateBody scheduleCreateBody});
-
-  $DepartmentCopyWith<$Res> get department;
+  $Res call({ScheduleCreateBody scheduleCreateBody});
 }
 
 /// @nodoc
@@ -365,14 +341,9 @@ class __$$AddLectureScheduleImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? department = null, Object? scheduleCreateBody = null}) {
+  $Res call({Object? scheduleCreateBody = null}) {
     return _then(
       _$AddLectureScheduleImpl(
-        department:
-            null == department
-                ? _value.department
-                : department // ignore: cast_nullable_to_non_nullable
-                    as Department,
         scheduleCreateBody:
             null == scheduleCreateBody
                 ? _value.scheduleCreateBody
@@ -381,34 +352,19 @@ class __$$AddLectureScheduleImplCopyWithImpl<$Res>
       ),
     );
   }
-
-  /// Create a copy of LectureScheduleEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $DepartmentCopyWith<$Res> get department {
-    return $DepartmentCopyWith<$Res>(_value.department, (value) {
-      return _then(_value.copyWith(department: value));
-    });
-  }
 }
 
 /// @nodoc
 
 class _$AddLectureScheduleImpl implements AddLectureSchedule {
-  const _$AddLectureScheduleImpl({
-    required this.department,
-    required this.scheduleCreateBody,
-  });
+  const _$AddLectureScheduleImpl({required this.scheduleCreateBody});
 
-  @override
-  final Department department;
   @override
   final ScheduleCreateBody scheduleCreateBody;
 
   @override
   String toString() {
-    return 'LectureScheduleEvent.addSchedule(department: $department, scheduleCreateBody: $scheduleCreateBody)';
+    return 'LectureScheduleEvent.addSchedule(scheduleCreateBody: $scheduleCreateBody)';
   }
 
   @override
@@ -416,14 +372,12 @@ class _$AddLectureScheduleImpl implements AddLectureSchedule {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AddLectureScheduleImpl &&
-            (identical(other.department, department) ||
-                other.department == department) &&
             (identical(other.scheduleCreateBody, scheduleCreateBody) ||
                 other.scheduleCreateBody == scheduleCreateBody));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, department, scheduleCreateBody);
+  int get hashCode => Object.hash(runtimeType, scheduleCreateBody);
 
   /// Create a copy of LectureScheduleEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -440,10 +394,7 @@ class _$AddLectureScheduleImpl implements AddLectureSchedule {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Department department) fetchSchedules,
-    required TResult Function(
-      Department department,
-      ScheduleCreateBody scheduleCreateBody,
-    )
+    required TResult Function(ScheduleCreateBody scheduleCreateBody)
     addSchedule,
     required TResult Function(String id, Schedule schedule) updateSchedule,
     required TResult Function(String id) deleteSchedule,
@@ -455,18 +406,14 @@ class _$AddLectureScheduleImpl implements AddLectureSchedule {
     updateAttendance,
     required TResult Function(Department department) setDepartment,
   }) {
-    return addSchedule(department, scheduleCreateBody);
+    return addSchedule(scheduleCreateBody);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Department department)? fetchSchedules,
-    TResult? Function(
-      Department department,
-      ScheduleCreateBody scheduleCreateBody,
-    )?
-    addSchedule,
+    TResult? Function(ScheduleCreateBody scheduleCreateBody)? addSchedule,
     TResult? Function(String id, Schedule schedule)? updateSchedule,
     TResult? Function(String id)? deleteSchedule,
     TResult? Function(
@@ -477,18 +424,14 @@ class _$AddLectureScheduleImpl implements AddLectureSchedule {
     updateAttendance,
     TResult? Function(Department department)? setDepartment,
   }) {
-    return addSchedule?.call(department, scheduleCreateBody);
+    return addSchedule?.call(scheduleCreateBody);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Department department)? fetchSchedules,
-    TResult Function(
-      Department department,
-      ScheduleCreateBody scheduleCreateBody,
-    )?
-    addSchedule,
+    TResult Function(ScheduleCreateBody scheduleCreateBody)? addSchedule,
     TResult Function(String id, Schedule schedule)? updateSchedule,
     TResult Function(String id)? deleteSchedule,
     TResult Function(
@@ -501,7 +444,7 @@ class _$AddLectureScheduleImpl implements AddLectureSchedule {
     required TResult orElse(),
   }) {
     if (addSchedule != null) {
-      return addSchedule(department, scheduleCreateBody);
+      return addSchedule(scheduleCreateBody);
     }
     return orElse();
   }
@@ -552,11 +495,9 @@ class _$AddLectureScheduleImpl implements AddLectureSchedule {
 
 abstract class AddLectureSchedule implements LectureScheduleEvent {
   const factory AddLectureSchedule({
-    required final Department department,
     required final ScheduleCreateBody scheduleCreateBody,
   }) = _$AddLectureScheduleImpl;
 
-  Department get department;
   ScheduleCreateBody get scheduleCreateBody;
 
   /// Create a copy of LectureScheduleEvent
@@ -662,10 +603,7 @@ class _$UpdateLectureScheduleImpl implements UpdateLectureSchedule {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Department department) fetchSchedules,
-    required TResult Function(
-      Department department,
-      ScheduleCreateBody scheduleCreateBody,
-    )
+    required TResult Function(ScheduleCreateBody scheduleCreateBody)
     addSchedule,
     required TResult Function(String id, Schedule schedule) updateSchedule,
     required TResult Function(String id) deleteSchedule,
@@ -684,11 +622,7 @@ class _$UpdateLectureScheduleImpl implements UpdateLectureSchedule {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Department department)? fetchSchedules,
-    TResult? Function(
-      Department department,
-      ScheduleCreateBody scheduleCreateBody,
-    )?
-    addSchedule,
+    TResult? Function(ScheduleCreateBody scheduleCreateBody)? addSchedule,
     TResult? Function(String id, Schedule schedule)? updateSchedule,
     TResult? Function(String id)? deleteSchedule,
     TResult? Function(
@@ -706,11 +640,7 @@ class _$UpdateLectureScheduleImpl implements UpdateLectureSchedule {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Department department)? fetchSchedules,
-    TResult Function(
-      Department department,
-      ScheduleCreateBody scheduleCreateBody,
-    )?
-    addSchedule,
+    TResult Function(ScheduleCreateBody scheduleCreateBody)? addSchedule,
     TResult Function(String id, Schedule schedule)? updateSchedule,
     TResult Function(String id)? deleteSchedule,
     TResult Function(
@@ -864,10 +794,7 @@ class _$DeleteLectureScheduleImpl implements DeleteLectureSchedule {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Department department) fetchSchedules,
-    required TResult Function(
-      Department department,
-      ScheduleCreateBody scheduleCreateBody,
-    )
+    required TResult Function(ScheduleCreateBody scheduleCreateBody)
     addSchedule,
     required TResult Function(String id, Schedule schedule) updateSchedule,
     required TResult Function(String id) deleteSchedule,
@@ -886,11 +813,7 @@ class _$DeleteLectureScheduleImpl implements DeleteLectureSchedule {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Department department)? fetchSchedules,
-    TResult? Function(
-      Department department,
-      ScheduleCreateBody scheduleCreateBody,
-    )?
-    addSchedule,
+    TResult? Function(ScheduleCreateBody scheduleCreateBody)? addSchedule,
     TResult? Function(String id, Schedule schedule)? updateSchedule,
     TResult? Function(String id)? deleteSchedule,
     TResult? Function(
@@ -908,11 +831,7 @@ class _$DeleteLectureScheduleImpl implements DeleteLectureSchedule {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Department department)? fetchSchedules,
-    TResult Function(
-      Department department,
-      ScheduleCreateBody scheduleCreateBody,
-    )?
-    addSchedule,
+    TResult Function(ScheduleCreateBody scheduleCreateBody)? addSchedule,
     TResult Function(String id, Schedule schedule)? updateSchedule,
     TResult Function(String id)? deleteSchedule,
     TResult Function(
@@ -1102,10 +1021,7 @@ class _$UpdateAttendanceImpl implements UpdateAttendance {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Department department) fetchSchedules,
-    required TResult Function(
-      Department department,
-      ScheduleCreateBody scheduleCreateBody,
-    )
+    required TResult Function(ScheduleCreateBody scheduleCreateBody)
     addSchedule,
     required TResult Function(String id, Schedule schedule) updateSchedule,
     required TResult Function(String id) deleteSchedule,
@@ -1124,11 +1040,7 @@ class _$UpdateAttendanceImpl implements UpdateAttendance {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Department department)? fetchSchedules,
-    TResult? Function(
-      Department department,
-      ScheduleCreateBody scheduleCreateBody,
-    )?
-    addSchedule,
+    TResult? Function(ScheduleCreateBody scheduleCreateBody)? addSchedule,
     TResult? Function(String id, Schedule schedule)? updateSchedule,
     TResult? Function(String id)? deleteSchedule,
     TResult? Function(
@@ -1146,11 +1058,7 @@ class _$UpdateAttendanceImpl implements UpdateAttendance {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Department department)? fetchSchedules,
-    TResult Function(
-      Department department,
-      ScheduleCreateBody scheduleCreateBody,
-    )?
-    addSchedule,
+    TResult Function(ScheduleCreateBody scheduleCreateBody)? addSchedule,
     TResult Function(String id, Schedule schedule)? updateSchedule,
     TResult Function(String id)? deleteSchedule,
     TResult Function(
@@ -1315,10 +1223,7 @@ class _$SetDepartmentImpl implements SetDepartment {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Department department) fetchSchedules,
-    required TResult Function(
-      Department department,
-      ScheduleCreateBody scheduleCreateBody,
-    )
+    required TResult Function(ScheduleCreateBody scheduleCreateBody)
     addSchedule,
     required TResult Function(String id, Schedule schedule) updateSchedule,
     required TResult Function(String id) deleteSchedule,
@@ -1337,11 +1242,7 @@ class _$SetDepartmentImpl implements SetDepartment {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Department department)? fetchSchedules,
-    TResult? Function(
-      Department department,
-      ScheduleCreateBody scheduleCreateBody,
-    )?
-    addSchedule,
+    TResult? Function(ScheduleCreateBody scheduleCreateBody)? addSchedule,
     TResult? Function(String id, Schedule schedule)? updateSchedule,
     TResult? Function(String id)? deleteSchedule,
     TResult? Function(
@@ -1359,11 +1260,7 @@ class _$SetDepartmentImpl implements SetDepartment {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Department department)? fetchSchedules,
-    TResult Function(
-      Department department,
-      ScheduleCreateBody scheduleCreateBody,
-    )?
-    addSchedule,
+    TResult Function(ScheduleCreateBody scheduleCreateBody)? addSchedule,
     TResult Function(String id, Schedule schedule)? updateSchedule,
     TResult Function(String id)? deleteSchedule,
     TResult Function(

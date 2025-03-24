@@ -103,7 +103,7 @@ class LectureScheduleBloc
     emit(state.copyWith(status: const Status.loading())); // Set loading state
 
     final result = await _repository.createSchedule(
-      department: event.department,
+    
       scheduleCreateBody: event.scheduleCreateBody,
     );
 

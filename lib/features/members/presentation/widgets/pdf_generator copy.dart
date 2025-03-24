@@ -1,21 +1,24 @@
+// // lib/features/reports/presentation/widgets/pdf_generator.dart
 // import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:easy_localization/easy_localization.dart';
 // import 'package:flutter/services.dart' show rootBundle;
-// import 'package:intl/intl.dart';
 // import 'package:pdf/pdf.dart';
 // import 'package:pdf/widgets.dart' as pw;
 
-// import '../../../attendance/data/models/attendance_model.dart';
+// import '../../../../core/utils/enums/days_of_week.dart';
 // import '../../../auth/data/models/user_model.dart';
 // import '../../../lecture/data/models/lecture_model.dart';
 
 // class PdfGenerator {
 //   final UserModel member;
+//   final String? departmentId;
 //   final String fontPath;
 //   final String dateFormat;
 //   final String timeFormat;
 
 //   PdfGenerator({
 //     required this.member,
+//     this.departmentId,
 //     this.fontPath = "assets/fonts/Amiri-Regular.ttf",
 //     this.dateFormat = 'yyyy-MM-dd',
 //     this.timeFormat = 'hh:mm a',
@@ -25,25 +28,37 @@
 //     final pdf = pw.Document();
 //     final ttf = await _loadFont(fontPath);
 
+//     // Filter lectures by department if specified
+//     final lectures =
+//         departmentId == null
+//             ? member.lectures
+//             : member.lectures
+//                 .where(
+//                   (element) => element.schedule.department.id == departmentId,
+//                 )
+//                 .toList();
+
+//     final totalUnits = lectures
+//         .map((e) => e.subject.units)
+//         .fold(0, (previousValue, element) => element + previousValue);
+//     final filteredMember = member.copyWith(lectures: lectures);
+
 //     pdf.addPage(
 //       pw.Page(
+//         textDirection: pw.TextDirection.rtl,
 //         pageFormat: PdfPageFormat.a4,
 //         margin: pw.EdgeInsets.all(16),
 //         build: (pw.Context context) {
 //           return pw.Column(
-//             crossAxisAlignment: pw.CrossAxisAlignment.start,
+//             crossAxisAlignment: pw.CrossAxisAlignment.end,
 //             children: [
-//               _buildTitle(ttf, "تفاصيل العضو"),
-//               _buildDetailSection(ttf, member),
+//               _buildTitle(ttf, "جدول المحاظرات لعضو هيئة التدريس"),
+//               _buildDetailSection(ttf, filteredMember),
+//               pw.SizedBox(height: 50),
+//               // _buildDivider(height: 50),
+//               _buildLectureTable(ttf, lectures),
 //               _buildDivider(),
-//               _buildLectureTable(ttf, member.lectures),
-//               _buildDivider(),
-//               _buildAttendanceTable(ttf, member.attendances),
-//               _buildDivider(),
-//               _buildFooter(
-//                 ttf,
-//                 "تم الإنشاء في ${DateFormat(dateFormat).format(DateTime.now())}",
-//               ),
+//               _buildFooter(ttf, "المجموع: $totalUnits وحدة"),
 //             ],
 //           );
 //         },
@@ -59,86 +74,120 @@
 //   }
 
 //   pw.Widget _buildTitle(pw.Font ttf, String title) {
-//     return pw.Text(
-//       title,
-//       style: pw.TextStyle(
-//         font: ttf,
-//         fontSize: 18,
-//         fontWeight: pw.FontWeight.bold,
+//     return pw.Center(
+//       child: pw.Text(
+//         title,
+//         style: pw.TextStyle(
+//           font: ttf,
+//           fontSize: 18,
+//           fontWeight: pw.FontWeight.bold,
+//         ),
+//         textDirection: pw.TextDirection.rtl,
+//         textAlign: pw.TextAlign.center,
 //       ),
-//       textDirection: pw.TextDirection.rtl,
-//       textAlign: pw.TextAlign.center,
 //     );
 //   }
 
 //   pw.Widget _buildDetailSection(pw.Font ttf, UserModel member) {
-//     return pw.Column(
-//       crossAxisAlignment: pw.CrossAxisAlignment.start,
+//     return pw.Row(
+//       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
 //       children: [
-//         _buildText("الاسم: ${member.name}", ttf),
-//         _buildText("البريد الإلكتروني: ${member.email}", ttf),
-//         _buildText(
-//           "الدور: ${member.role.name == "teacher" ? "مدرس" : "طالب"}",
-//           ttf,
+//         pw.Column(
+//           crossAxisAlignment: pw.CrossAxisAlignment.start,
+//           children: [
+//             _buildText("الاسم: ${member.name}", ttf),
+//             _buildText("البريد الإلكتروني: ${member.email}", ttf),
+//             _buildText("الدور: ${member.role.name.tr()}", ttf),
+//             _buildText(
+//               "حالة النشاط: ${member.activityStatus.name == "active" ? "نشط" : "غير نشط"}",
+//               ttf,
+//             ),
+//             _buildText("التخصص: ${member.specialization ?? "غير متوفر"}", ttf),
+//             _buildText(
+//               "الرتبة الأكاديمية: ${member.academicRank ?? "غير متوفر"}",
+//               ttf,
+//             ),
+//           ],
 //         ),
-//         _buildText(
-//           "حالة النشاط: ${member.activityStatus.name == "active" ? "نشط" : "غير نشط"}",
-//           ttf,
-//         ),
-//         _buildText("التخصص: ${member.specialization ?? "غير متوفر"}", ttf),
-//         _buildText(
-//           "الرتبة الأكاديمية: ${member.academicRank ?? "غير متوفر"}",
-//           ttf,
+//         pw.Column(
+//           crossAxisAlignment: pw.CrossAxisAlignment.start,
+//           children: [
+//             _buildText(
+//               "تم الإنشاء في ${DateFormat(dateFormat).format(DateTime.now())}",
+//               ttf,
+//             ),
+//             if (member.lectures.isNotEmpty) ...[
+//               _buildText(
+//                 "القسم: ${member.lectures.first.schedule.department.name}",
+//                 ttf,
+//               ),
+//               _buildText(
+//                 "الشعبة: ${member.lectures.first.schedule.division}",
+//                 ttf,
+//               ),
+//               _buildText(
+//                 "المستوى: ${member.lectures.first.schedule.level}",
+//                 ttf,
+//               ),
+//             ],
+//           ],
 //         ),
 //       ],
 //     );
 //   }
 
 //   pw.Widget _buildLectureTable(pw.Font ttf, List<Lecture> lectures) {
-//     // Define the days of the week in Arabic
-//     final daysOfWeek = [
-//       'السبت',
-//       'الأحد',
-//       'الاثنين',
-//       'الثلاثاء',
-//       'الأربعاء',
-//       'الخميس',
-//       'الجمعة',
-//     ];
+//     final daysOfWeek = DaysOfWeek.values.map((e) => e.toString()).toList();
 
-//     // Define the headers for the table
 //     final headers = [
 //       'المادة',
+//       'الرمز',
+//       'الرقم',
+//       'الوحدات',
+//       'الشعبة',
 //       'القاعة',
-//       ...daysOfWeek, // Add days of the week to the headers
+//       'بدايه',
+//       'نهايه',
+//       ...daysOfWeek.reversed,
 //     ];
 
-//     // Generate data for the table
 //     final data =
 //         lectures.map((lecture) {
-//           // Get the day of the week based on the lecture's startTime
 //           final dayOfWeek = _getDayOfWeek(lecture.startTime);
 
-//           // Create a list of attendance statuses for each day of the week
 //           final attendanceStatusByDay =
-//               daysOfWeek.map((day) {
-//                 return day == dayOfWeek
-//                     ? '${DateFormat(timeFormat).format(lecture.startTime.toDate())} - ${DateFormat(timeFormat).format(lecture.endTime.toDate())}'
-//                     : '-';
-//               }).toList();
+//               daysOfWeek
+//                   .map((day) {
+//                     return day == dayOfWeek ? _buildRedCircle() : pw.Text('-');
+//                   })
+//                   .toList()
+//                   .reversed;
 
 //           return [
 //             lecture.subject.name,
+//             lecture.subject.code,
+//             lecture.subject.number,
+//             lecture.subject.units.toString(),
+//             lecture.schedule.division,
 //             lecture.hall,
-//             ...attendanceStatusByDay, // Add attendance statuses for each day
+//             DateFormat(timeFormat).format(lecture.startTime.toDate()),
+//             DateFormat(timeFormat).format(lecture.endTime.toDate()),
+//             ...attendanceStatusByDay,
 //           ];
 //         }).toList();
 
+//     final transposedData =
+//         [headers, ...data].map((row) => row.reversed.toList()).toList();
+
 //     return pw.TableHelper.fromTextArray(
-//       headers: headers.map((header) => _buildText(header, ttf)).toList(),
-//       data: data,
+//       headers:
+//           transposedData.first
+//               .map((header) => _buildText(header as String, ttf))
+//               .toList(),
+//       data: transposedData.skip(1).toList(),
 //       cellAlignment: pw.Alignment.center,
 //       headerAlignment: pw.Alignment.center,
+//       tableWidth: pw.TableWidth.max,
 //       headerStyle: pw.TextStyle(
 //         font: ttf,
 //         fontSize: 12,
@@ -150,35 +199,20 @@
 //     );
 //   }
 
-//   pw.Widget _buildAttendanceTable(pw.Font ttf, List<Attendance> attendances) {
-//     final headers = ['الحالة', 'تاريخ الحضور'];
-
-//     final data =
-//         attendances.map((attendance) {
-//           return [
-//             attendance.status,
-//             DateFormat(dateFormat).format(attendance.arrivalDate!.toDate()),
-//           ];
-//         }).toList();
-
-//     return pw.TableHelper.fromTextArray(
-//       headers: headers.map((header) => _buildText(header, ttf)).toList(),
-//       data: data,
-//       cellAlignment: pw.Alignment.centerRight,
-//       headerAlignment: pw.Alignment.centerRight,
-//       headerStyle: pw.TextStyle(
-//         font: ttf,
-//         fontSize: 12,
-//         fontWeight: pw.FontWeight.bold,
+//   pw.Widget _buildRedCircle() {
+//     return pw.Container(
+//       width: 10,
+//       height: 10,
+//       decoration: pw.BoxDecoration(
+//         shape: pw.BoxShape.circle,
+//         color: PdfColors.red,
 //       ),
-//       cellStyle: pw.TextStyle(font: ttf, fontSize: 10),
-//       border: pw.TableBorder.all(),
 //     );
 //   }
 
 //   pw.Widget _buildFooter(pw.Font ttf, String footer) {
 //     return pw.Row(
-//       mainAxisAlignment: pw.MainAxisAlignment.end,
+//       mainAxisAlignment: pw.MainAxisAlignment.start,
 //       children: [_buildText(footer, ttf)],
 //     );
 //   }
@@ -192,16 +226,13 @@
 //     );
 //   }
 
-//   pw.Widget _buildDivider() {
-//     return pw.Divider(thickness: 1, height: 20);
+//   pw.Widget _buildDivider({double? height}) {
+//     return pw.Divider(thickness: 1, height: height ?? 20);
 //   }
 
-//   // Helper method to get the day of the week in Arabic
 //   String _getDayOfWeek(Timestamp timestamp) {
 //     final date = timestamp.toDate();
-//     return DateFormat(
-//       'EEEE',
-//       'ar',
-//     ).format(date); // 'EEEE' gives the full day name
+//     final dayOfWeek = DaysOfWeek.fromDateTime(date);
+//     return dayOfWeek.toString();
 //   }
 // }

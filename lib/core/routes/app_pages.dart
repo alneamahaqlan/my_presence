@@ -21,11 +21,12 @@ import '../../features/lecture/presentation/bloc/lecture_bloc.dart';
 import '../../features/lecture/presentation/pages/create_lecture_page.dart';
 import '../../features/lecture/presentation/pages/lectures_page.dart';
 import '../../features/lectureSchedule/data/models/schedule_model.dart';
+import '../../features/lectureSchedule/data/repositories/lecture_schedule_repository.dart';
 import '../../features/lectureSchedule/presentation/bloc/lecture_schedule_bloc.dart';
-import '../../features/lectureSchedule/presentation/pages/create_lecture_schedule_page.dart';
+import '../../features/lectureSchedule/presentation/pages/create_lschedule_page.dart';
 import '../../features/lectureSchedule/presentation/pages/edit_lecture_schedule_page.dart';
 import '../../features/lectureSchedule/presentation/pages/lecture_schedule_detail_page.dart';
-import '../../features/lectureSchedule/presentation/pages/lecture_schedule_list_page.dart';
+import '../../features/lectureSchedule/presentation/pages/schedules_page.dart';
 import '../../features/members/presentation/screens/add_member_screen.dart';
 import '../../features/members/presentation/screens/edit_member_screen.dart';
 import '../../features/members/presentation/screens/members_screen.dart';
@@ -133,35 +134,37 @@ class AppPages {
           },
           routes: [
             GoRoute(
-              path: AppRoutes.lectureScheduleList,
-              name: AppRoutes.lectureScheduleList,
+              path: AppRoutes.schedules,
+              name: AppRoutes.schedules,
               builder: (context, state) {
-                final router = getIt<GoRouter>();
-                final department = router.state.extra as Department;
-                context.read<LectureScheduleBloc>().add(
-                  SetDepartment(department: department),
+                return BlocProvider(
+                  create:
+                      (context) => LectureScheduleBloc(
+                        getIt<LectureScheduleRepository>(),
+                      ),
+                  child: SchedulePage(),
                 );
-
-                context.read<LectureScheduleBloc>().add(
-                  FetchLectureSchedules(department: department),
-                );
-                return SchedulePage();
               },
               routes: [
                 //CreateLectureSchedulePage
                 GoRoute(
-                  path: AppRoutes.addLectureSchedule,
-                  name: AppRoutes.addLectureSchedule,
+                  path: AppRoutes.addSchedule,
+                  name: AppRoutes.addSchedule,
                   builder: (context, state) {
-                    final department = state.extra as Department;
-                    return CreateLectureSchedulePage(department: department);
+                    return BlocProvider(
+                     create:
+                      (context) => LectureScheduleBloc(
+                        getIt<LectureScheduleRepository>(),
+                      ),
+                      child: CreateSchedulePage(),
+                    );
                   },
                 ),
 
                 //EditLectureSchedulePage
                 GoRoute(
-                  path: AppRoutes.editLectureSchedule,
-                  name: AppRoutes.editLectureSchedule,
+                  path: AppRoutes.editSchedule,
+                  name: AppRoutes.editSchedule,
                   builder: (context, state) {
                     final schedule = state.extra as Schedule;
                     return EditLectureSchedulePage(schedule: schedule);
@@ -170,8 +173,8 @@ class AppPages {
 
                 //LectureScheduleDetailPage
                 GoRoute(
-                  path: AppRoutes.viewLectureSchedule,
-                  name: AppRoutes.viewLectureSchedule,
+                  path: AppRoutes.viewSchedule,
+                  name: AppRoutes.viewSchedule,
                   builder: (context, state) {
                     final schedule = state.extra as Schedule;
                     return LectureScheduleDetailPage(schedule: schedule);

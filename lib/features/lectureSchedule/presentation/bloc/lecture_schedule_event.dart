@@ -6,7 +6,7 @@ class LectureScheduleEvent with _$LectureScheduleEvent {
     required Department department,
   }) = FetchLectureSchedules;
   const factory LectureScheduleEvent.addSchedule({
-   required Department department,
+
     required ScheduleCreateBody scheduleCreateBody,
   }) = AddLectureSchedule;
   const factory LectureScheduleEvent.updateSchedule(

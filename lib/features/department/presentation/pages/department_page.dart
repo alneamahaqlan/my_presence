@@ -60,7 +60,7 @@ class DepartmentPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.0),
         onTap: () {
           print(department.id);
-          context.pushNamed(AppRoutes.lectureScheduleList, extra: department);
+          context.pushNamed(AppRoutes.schedules, extra: department);
         },
         child: Padding(
           padding: const EdgeInsets.all(16.0),

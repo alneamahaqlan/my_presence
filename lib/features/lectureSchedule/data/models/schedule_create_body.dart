@@ -48,7 +48,7 @@ class ScheduleCreateBody {
       'id': department.id,
       'name': department.name,
       'faculty': department.faculty?.toJson(),
-      'schedules': department.schedules,
+      // 'schedules': department.schedules,
       'createdAt': department.createdAt,
       'updatedAt': department.updatedAt,
     },

@@ -12,8 +12,8 @@ abstract class AppRoutes {
   static const String addIncomeInner = 'add-income';
   static const String members = '/members';
   static const String addMember = '/add-member';
-  static const String editMember = '/edit-member'; 
-   static const String viewMember = '/view-member';
+  static const String editMember = '/edit-member';
+  static const String viewMember = '/view-member';
 
   static const String addMemberInner = 'add-member';
   static const String departments = '/departments';
@@ -26,16 +26,16 @@ abstract class AppRoutes {
   static const String settings = '/settings';
   static const String home = '/home';
   static const String notifications = '/notifications';
-  
+
   static const String faculties = '/faculties';
   static const String addFaculty = '/add-faculty';
   static const String editFaculty = '/edit-faculty';
   static const String viewFaculty = '/view-faculty';
 
-  static const String lectureScheduleList = '/lecture-schedule-list';
-  static const String addLectureSchedule = '/add-lecture-schedule';
-  static const String editLectureSchedule = '/edit-lecture-schedule';
-  static const String viewLectureSchedule = '/view-lecture-schedule';
+  static const String schedules = '/schedules';
+  static const String addSchedule = '/add-schedule';
+  static const String editSchedule = '/edit-schedule';
+  static const String viewSchedule = '/view-schedule';
 
   static const String addDepartment = '/add-department';
   static const String editDepartment = '/edit-department';

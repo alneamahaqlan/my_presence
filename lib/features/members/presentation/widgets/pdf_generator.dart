@@ -1,20 +1,27 @@
+// lib/features/reports/presentation/widgets/pdf_generator.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
+import '../../../../core/utils/enums/academic_level.dart';
+import '../../../../core/utils/enums/days_of_week.dart';
 import '../../../auth/data/models/user_model.dart';
 import '../../../lecture/data/models/lecture_model.dart';
 
 class PdfGenerator {
   final UserModel member;
+  final String? departmentId;
+  final int? level;
   final String fontPath;
   final String dateFormat;
   final String timeFormat;
 
   PdfGenerator({
     required this.member,
+    this.departmentId,
+    this.level,
     this.fontPath = "assets/fonts/Amiri-Regular.ttf",
     this.dateFormat = 'yyyy-MM-dd',
     this.timeFormat = 'hh:mm a',
@@ -23,32 +30,37 @@ class PdfGenerator {
   Future<pw.Document> generatePdf() async {
     final pdf = pw.Document();
     final ttf = await _loadFont(fontPath);
-    final lectures =
-        member.lectures
-            .where(
-              (element) =>
-                  element.schedule.department.id == '0BhHtY06QDK1h8fMQFVE',
-            )
-            .toList();
+
+    final lectures = member.lectures.where((lecture) {
+      final departmentMatch = departmentId == null || 
+          lecture.schedule.department.id == departmentId;
+      final levelMatch = level == null || 
+          lecture.schedule.level == level;
+      return departmentMatch && levelMatch;
+    }).toList();
+
     final totalUnits = lectures
         .map((e) => e.subject.units)
-        .fold(0, (previousValue, element) => element = element + previousValue);
+        .fold(0, (previousValue, element) => element + previousValue);
+    final filteredMember = member.copyWith(lectures: lectures);
+
 
     pdf.addPage(
       pw.Page(
+        textDirection: pw.TextDirection.rtl,
         pageFormat: PdfPageFormat.a4,
         margin: pw.EdgeInsets.all(16),
         build: (pw.Context context) {
           return pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.end,
             children: [
-              _buildTitle(ttf, "جدول المحاظرات لعضو التدريس"),
-              _buildDetailSection(ttf, member),
-              _buildDivider(height: 50),
-
+              _buildTitle(ttf, "جدول المحاظرات لعضو هيئة التدريس"),
+              _buildDetailSection(ttf, filteredMember),
+              pw.SizedBox(height: 50),
+              // _buildDivider(height: 50),
               _buildLectureTable(ttf, lectures),
               _buildDivider(),
-              _buildFooter(ttf, " المجموع : $totalUnits"),
+              _buildFooter(ttf, "المجموع: $totalUnits وحدة"),
             ],
           );
         },
@@ -58,45 +70,16 @@ class PdfGenerator {
     return pdf;
   }
 
-  Future<pw.Font> _loadFont(String fontPath) async {
-    final fontData = await rootBundle.load(fontPath);
-    return pw.Font.ttf(fontData.buffer.asByteData());
-  }
 
-  pw.Widget _buildTitle(pw.Font ttf, String title) {
-    return pw.Center(
-      child: pw.Text(
-        title,
-        style: pw.TextStyle(
-          font: ttf,
-          fontSize: 18,
-          fontWeight: pw.FontWeight.bold,
-        ),
-        textDirection: pw.TextDirection.rtl,
-        textAlign: pw.TextAlign.center,
-      ),
-    );
-  }
+
+ 
 
   pw.Widget _buildDetailSection(pw.Font ttf, UserModel member) {
     return pw.Row(
       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
       children: [
         pw.Column(
-          crossAxisAlignment: pw.CrossAxisAlignment.end,
-          children: [
-            _buildText(
-              "تم الإنشاء في ${DateFormat(dateFormat).format(DateTime.now())}",
-              ttf,
-            ),
-
-            _buildText("القسم: ${member.specialization ?? "غير متوفر"}", ttf),
-            _buildText("الشعبه: ${member.specialization ?? "غير متوفر"}", ttf),
-            _buildText("المستوى: ${member.specialization ?? "غير متوفر"}", ttf),
-          ],
-        ),
-        pw.Column(
-          crossAxisAlignment: pw.CrossAxisAlignment.end,
+          crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
             _buildText("الاسم: ${member.name}", ttf),
             _buildText("البريد الإلكتروني: ${member.email}", ttf),
@@ -112,72 +95,85 @@ class PdfGenerator {
             ),
           ],
         ),
+        pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.start,
+          children: [
+            _buildText(
+              "تم الإنشاء في ${DateFormat(dateFormat).format(DateTime.now())}",
+              ttf,
+            ),
+            if (member.lectures.isNotEmpty) ...[
+              _buildText(
+                "القسم: ${member.lectures.first.schedule.department.name}",
+                ttf,
+              ),
+              _buildText(
+                "الشعبة: ${member.lectures.first.schedule.division}",
+                ttf,
+              ),
+              _buildText(
+                "المستوى: ${AcademicLevel.fromValue(member.lectures.first.schedule.level).toString()}",
+                ttf,
+              ),
+            ],
+          ],
+        ),
       ],
     );
   }
 
   pw.Widget _buildLectureTable(pw.Font ttf, List<Lecture> lectures) {
-    // Define the days of the week in Arabic
-    final daysOfWeek = [
-      'السبت',
-      'الأحد',
-      'الاثنين',
-      'الثلاثاء',
-      'الأربعاء',
-      'الخميس',
-      'الجمعة',
-    ];
+    final daysOfWeek = DaysOfWeek.values.map((e) => e.toString()).toList();
 
-    // Define the headers for the table
     final headers = [
       'المادة',
-      'رمز', // Add subject code
-      'رقم', // Add subject number
+      'الرمز',
+      'الرقم',
       'الوحدات',
-      'الشعبه',
+      'الشعبة',
       'القاعة',
-      'بداية', // Add start time
-      'نهاية', // Add end time
-
-      ...daysOfWeek, // Add days of the week to the headers
+      'بدايه',
+      'نهايه',
+      ...daysOfWeek.reversed,
     ];
 
-    // Generate data for the table
     final data =
         lectures.map((lecture) {
-          // Get the day of the week based on the lecture's startTime
           final dayOfWeek = _getDayOfWeek(lecture.startTime);
 
-          // Create a list of attendance statuses for each day of the week
           final attendanceStatusByDay =
-              daysOfWeek.map((day) {
-                return day == dayOfWeek
-                    ? _buildRedCircle() // Use a red circle instead of the time range
-                    : pw.Text('-');
-              }).toList();
+              daysOfWeek
+                  .map((day) {
+                    return day == dayOfWeek ? _buildRedCircle() : pw.Text('-');
+                  })
+                  .toList()
+                  .reversed;
 
           return [
             lecture.subject.name,
-            lecture.subject.code, // Add subject code
-            lecture.subject.number, // Add subject number
-            lecture.subject.units,
+            lecture.subject.code,
+            lecture.subject.number,
+            lecture.subject.units.toString(),
             lecture.schedule.division,
             lecture.hall,
-            DateFormat(
-              timeFormat,
-            ).format(lecture.startTime.toDate()), // Add start time
-            DateFormat(
-              timeFormat,
-            ).format(lecture.endTime.toDate()), // Add end time
-            ...attendanceStatusByDay, // Add attendance statuses for each day
+            DateFormat(timeFormat).format(lecture.startTime.toDate()),
+            DateFormat(timeFormat).format(lecture.endTime.toDate()),
+            ...attendanceStatusByDay,
           ];
         }).toList();
 
+    final transposedData =
+        [headers, ...data].map((row) => row.reversed.toList()).toList();
+
     return pw.TableHelper.fromTextArray(
-      headers: headers.map((header) => _buildText(header, ttf)).toList(),
-      data: data,
+      headers:
+          transposedData.first
+              .map((header) => _buildText(header as String, ttf))
+              .toList(),
+      data: transposedData.skip(1).toList(),
       cellAlignment: pw.Alignment.center,
       headerAlignment: pw.Alignment.center,
+      tableWidth: pw.TableWidth.max,
       headerStyle: pw.TextStyle(
         font: ttf,
         fontSize: 12,
@@ -202,7 +198,7 @@ class PdfGenerator {
 
   pw.Widget _buildFooter(pw.Font ttf, String footer) {
     return pw.Row(
-      mainAxisAlignment: pw.MainAxisAlignment.end,
+      mainAxisAlignment: pw.MainAxisAlignment.start,
       children: [_buildText(footer, ttf)],
     );
   }
@@ -215,17 +211,32 @@ class PdfGenerator {
       textAlign: pw.TextAlign.start,
     );
   }
+   pw.Widget _buildTitle(pw.Font ttf, String title) {
+    return pw.Center(
+      child: pw.Text(
+        title,
+        style: pw.TextStyle(
+          font: ttf,
+          fontSize: 18,
+          fontWeight: pw.FontWeight.bold,
+        ),
+        textDirection: pw.TextDirection.rtl,
+        textAlign: pw.TextAlign.center,
+      ),
+    );
+  }
 
   pw.Widget _buildDivider({double? height}) {
     return pw.Divider(thickness: 1, height: height ?? 20);
   }
 
-  // Helper method to get the day of the week in Arabic
   String _getDayOfWeek(Timestamp timestamp) {
     final date = timestamp.toDate();
-    return DateFormat(
-      'EEEE',
-      'ar',
-    ).format(date); // 'EEEE' gives the full day name
+    final dayOfWeek = DaysOfWeek.fromDateTime(date);
+    return dayOfWeek.toString();
+  }
+    Future<pw.Font> _loadFont(String fontPath) async {
+    final fontData = await rootBundle.load(fontPath);
+    return pw.Font.ttf(fontData.buffer.asByteData());
   }
 }

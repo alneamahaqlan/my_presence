@@ -1,35 +1,37 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/models/status.dart';
+import '../../../../core/utils/enums/academic_level.dart';
 import '../../../../core/utils/ui.dart';
 import '../../../../core/widgets/button_widget.dart';
+import '../../../../core/widgets/number_picker_widget';
 import '../../../../core/widgets/text_field_widget.dart';
+import '../../../../dependency_injection.dart';
 import '../../../department/data/models/department_model.dart';
 import '../../data/models/schedule_create_body.dart';
 import '../bloc/lecture_schedule_bloc.dart';
 
-class CreateLectureSchedulePage extends StatefulWidget {
-  final Department department;
-
-  const CreateLectureSchedulePage({super.key, required this.department});
+class CreateSchedulePage extends StatefulWidget {
+  const CreateSchedulePage({super.key});
 
   @override
-  _CreateLectureSchedulePageState createState() =>
-      _CreateLectureSchedulePageState();
+  _CreateSchedulePageState createState() => _CreateSchedulePageState();
 }
 
-class _CreateLectureSchedulePageState extends State<CreateLectureSchedulePage> {
+class _CreateSchedulePageState extends State<CreateSchedulePage> {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final _startDateController = TextEditingController();
   final _endDateController = TextEditingController();
   final _divisionController = TextEditingController();
-  final _levelController = TextEditingController();
+  AcademicLevel _selectedLevel = AcademicLevel.first; 
 
   Future<void> _selectStartDate(BuildContext context) async {
     final DateTime? date = await Ui.selectDate(context);
-
     if (date != null) {
       setState(() {
         _startDateController.text = _formatDate(date);
@@ -39,7 +41,6 @@ class _CreateLectureSchedulePageState extends State<CreateLectureSchedulePage> {
 
   Future<void> _selectEndDate(BuildContext context) async {
     final DateTime? date = await Ui.selectDate(context);
-
     if (date != null) {
       setState(() {
         _endDateController.text = _formatDate(date);
@@ -53,6 +54,11 @@ class _CreateLectureSchedulePageState extends State<CreateLectureSchedulePage> {
 
   @override
   Widget build(BuildContext context) {
+    final router = getIt<GoRouter>();
+    final department = router.state.extra as Department;
+    context.read<LectureScheduleBloc>().add(
+      SetDepartment(department: department),
+    );
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -70,7 +76,7 @@ class _CreateLectureSchedulePageState extends State<CreateLectureSchedulePage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                // حقل العنوان
+                // Title field
                 TextFieldWidget(
                   hint: 'العنوان',
                   controller: _titleController,
@@ -82,39 +88,45 @@ class _CreateLectureSchedulePageState extends State<CreateLectureSchedulePage> {
                   },
                 ),
                 const SizedBox(height: 16),
-
-                // حقل المستوى (Level)
-                TextFieldWidget(
-                  hint: 'المستوى (رقم)',
-                  controller: _levelController,
-                  keyboardType: TextInputType.number,
-
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'يرجى إدخال مستوى';
+  const Text('المستوى', style: TextStyle(fontSize: 16)),
+                const SizedBox(height: 8),
+                DropdownButtonFormField<AcademicLevel>(
+                  value: _selectedLevel,
+                  items: AcademicLevel.values.map((level) {
+                    return DropdownMenuItem(
+                      value: level,
+                      child: Text('المستوى ${level.toString()}'),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() {
+                        _selectedLevel = value;
+                      });
                     }
-                    if (int.tryParse(value) == null) {
-                      return 'يرجى إدخال رقم صحيح';
-                    }
-                    return null;
                   },
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                    hintText: 'اختر المستوى',
+                  ),
                 ),
                 const SizedBox(height: 16),
 
-                // حقل القسم (Division)
+                // Division field
                 TextFieldWidget(
-                  hint: 'القسم',
+                  hint: 'الشعبه',
                   controller: _divisionController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'يرجى إدخال القسم';
+                      return 'يرجى إدخال الشعبة';
                     }
                     return null;
                   },
                 ),
                 const SizedBox(height: 16),
 
-                // حقل تاريخ البدء
+                // Start date field
                 TextFieldWidget(
                   hint: 'تاريخ البدء',
                   controller: _startDateController,
@@ -133,7 +145,7 @@ class _CreateLectureSchedulePageState extends State<CreateLectureSchedulePage> {
                 ),
                 const SizedBox(height: 16),
 
-                // حقل تاريخ الانتهاء
+                // End date field
                 TextFieldWidget(
                   hint: 'تاريخ الانتهاء',
                   controller: _endDateController,
@@ -152,8 +164,25 @@ class _CreateLectureSchedulePageState extends State<CreateLectureSchedulePage> {
                 ),
                 const SizedBox(height: 20),
 
-                // زر الإنشاء
-                BlocBuilder<LectureScheduleBloc, LectureScheduleState>(
+                // Create button
+                BlocConsumer<LectureScheduleBloc, LectureScheduleState>(
+                  listener: (context, state) {
+                    state.status.maybeWhen(
+                      success: () {
+                        context.pop();
+                      },
+                      failed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('فشل إنشاء الجدول.'),
+                            backgroundColor: colorScheme.error,
+                          ),
+                        );
+                      },
+
+                      orElse: () {},
+                    );
+                  },
                   builder: (context, state) {
                     return ButtonWidget(
                       text: 'إنشاء',
@@ -166,7 +195,6 @@ class _CreateLectureSchedulePageState extends State<CreateLectureSchedulePage> {
                             _endDateController.text,
                           );
 
-                          // منع إضافة الجداول يوم الجمعة
                           if (newStart.weekday == DateTime.friday) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
@@ -179,27 +207,19 @@ class _CreateLectureSchedulePageState extends State<CreateLectureSchedulePage> {
                             return;
                           }
 
-                          // إنشاء الجدول بالمعلومات المطلوبة
                           final schedule = ScheduleCreateBody(
                             title: _titleController.text,
-                            department: widget.department,
-                            level: int.parse(
-                              _levelController.text,
-                            ), // Parse level as int
+                            department: department,
+                              level: _selectedLevel.value,
                             division: _divisionController.text,
                             termStart: newStart,
                             termEnd: newEnd,
                           );
+                          log('Create schedule: ${schedule.toJson()}');
 
-                          // إرسال الحدث لإضافة الجدول
                           context.read<LectureScheduleBloc>().add(
-                            AddLectureSchedule(
-                              department: widget.department,
-                              scheduleCreateBody: schedule,
-                            ),
+                            AddLectureSchedule(scheduleCreateBody: schedule),
                           );
-
-                          Navigator.pop(context);
                         }
                       },
                       isSubmitting: state.status == Status.loading(),
