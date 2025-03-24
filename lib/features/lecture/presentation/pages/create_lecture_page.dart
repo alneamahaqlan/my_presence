@@ -206,7 +206,17 @@ class _CreateLecturePageState extends State<CreateLecturePage> {
   }
 
   Future<void> _selectStartDateTime(BuildContext context) async {
-    final DateTime? pickedDateTime = await Ui.selectDateTime(context);
+    final schedule = widget.schedule;
+    final termStart = schedule.termStart.toDate();
+    final termEnd = schedule.termEnd.toDate();
+
+    final DateTime? pickedDateTime = await Ui.selectDateTime(
+      context,
+      initialDate: termStart, // Initialize with term start date
+      firstDate: termStart, // Can't pick before term starts
+      lastDate: termEnd, // Can't pick after term ends
+    );
+
     if (pickedDateTime == null) return;
 
     setState(() {
@@ -224,20 +234,35 @@ class _CreateLecturePageState extends State<CreateLecturePage> {
       return;
     }
 
+    // Get the same date as start time but with max time (23:59)
+    final sameDayEnd = DateTime(
+      _startDateTime!.year,
+      _startDateTime!.month,
+      _startDateTime!.day,
+      23,
+      59,
+    );
+
     final DateTime? pickedDateTime = await Ui.selectDateTime(
       context,
-      initialDate: _startDateTime,
-      firstDate: _startDateTime,
-      lastDate: DateTime(
-        _startDateTime!.year,
-        _startDateTime!.month,
-        _startDateTime!.day,
-        23,
-        59,
-      ),
+      initialDate: _startDateTime!.add(
+        const Duration(hours: 1),
+      ), // Default to 1 hour after start
+      firstDate: _startDateTime!, // Can't be before start time
+      lastDate: sameDayEnd, // Can't be on different day
     );
 
     if (pickedDateTime == null) return;
+
+    // Ensure end time is after start time
+    if (pickedDateTime.isBefore(_startDateTime!)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('وقت النهاية يجب أن يكون بعد وقت البداية'),
+        ),
+      );
+      return;
+    }
 
     setState(() {
       _endDateController.text = _formatDateTime(pickedDateTime);

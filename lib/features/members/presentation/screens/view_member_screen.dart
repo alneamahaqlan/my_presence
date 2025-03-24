@@ -116,83 +116,70 @@ class _ViewMemberScreenState extends State<ViewMemberScreen> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Filter Row
-              if (faculties.isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 16.0),
-                  child: DropDownWidget<Faculty>(
-                    hint: 'اختر الكلية',
-                    items: faculties.cast<Faculty>(),
-                    selectedValue:
-                        selectedFacultyId == null
-                            ? null
-                            : faculties.cast<Faculty?>().firstWhere(
-                              (f) => f?.id == selectedFacultyId,
-                              orElse: () => null,
-                            ),
-                    onChanged: (Faculty? faculty) {
-                      setState(() {
-                        selectedFacultyId = faculty?.id;
-                        selectedDepartmentId =
-                            null; // Reset department when faculty changes
-                      });
-                    },
-                    displayText: (Faculty faculty) => faculty.name,
-                  ),
-                ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Wrap(
+                  spacing: 8.0,
+                  runSpacing: 8.0,
 
-              Row(
-                children: [
-                  if (departments.isNotEmpty)
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: 16.0,
-                          right: 8.0,
-                        ),
-                        child: DropDownWidget<Department>(
-                          hint: 'اختر القسم',
-                          items: departments,
-                          selectedValue:
-                              selectedDepartmentId == null
-                                  ? null
-                                  : departments.firstWhere(
-                                    (d) => d.id == selectedDepartmentId,
-                                  ),
-                          onChanged: (Department? department) {
-                            setState(() {
-                              selectedDepartmentId = department?.id;
-                            });
-                          },
-                          displayText:
-                              (Department department) => department.name,
-                        ),
-                      ),
-                    ),
-
-                  if (levels.isNotEmpty) SizedBox(width: 8.0),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0, left: 8.0),
-                      child: DropDownWidget<int>(
-                        hint: 'اختر المستوى',
-                        items: levels,
-                        selectedValue: selectedLevel,
-                        onChanged: (int? level) {
+                  children: [
+                    if (faculties.isNotEmpty)
+                      DropDownWidget<Faculty>(
+                        hint: 'اختر الكلية',
+                        items: faculties.cast<Faculty>(),
+                        selectedValue:
+                            selectedFacultyId == null
+                                ? null
+                                : faculties.cast<Faculty?>().firstWhere(
+                                  (f) => f?.id == selectedFacultyId,
+                                  orElse: () => null,
+                                ),
+                        onChanged: (Faculty? faculty) {
                           setState(() {
-                            selectedLevel = level;
+                            selectedFacultyId = faculty?.id;
+                            selectedDepartmentId =
+                                null; // Reset department when faculty changes
                           });
                         },
-                        displayText:
-                            (int level) => _getAcademicLevelText(level),
+                        displayText: (Faculty faculty) => faculty.name,
                       ),
+                    if (departments.isNotEmpty)
+                      DropDownWidget<Department>(
+                        hint: 'اختر القسم',
+                        items: departments,
+                        selectedValue:
+                            selectedDepartmentId == null
+                                ? null
+                                : departments.firstWhere(
+                                  (d) => d.id == selectedDepartmentId,
+                                ),
+                        onChanged: (Department? department) {
+                          setState(() {
+                            selectedDepartmentId = department?.id;
+                          });
+                        },
+                        displayText: (Department department) => department.name,
+                      ),
+
+                    if (levels.isNotEmpty) SizedBox(width: 8.0),
+                    DropDownWidget<int>(
+                      hint: 'اختر المستوى',
+                      items: levels,
+                      selectedValue: selectedLevel,
+                      onChanged: (int? level) {
+                        setState(() {
+                          selectedLevel = level;
+                        });
+                      },
+                      displayText: (int level) => _getAcademicLevelText(level),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
 
               _buildDetailRow(Icons.person, "الاسم", widget.member.name),

@@ -58,53 +58,57 @@ class LectureCreateBody {
   factory LectureCreateBody.fromJson(Map<String, dynamic> json) =>
       _$LectureCreateBodyFromJson(json);
 
-Map<String, dynamic> toJson() {
-  // Generate meeting dates based on the schedule's termStart and termEnd
-  final meetingDates = calculateMeetingDates(
-    schedule.termStart.toDate(),
-    schedule.termEnd.toDate(),
-  );
+  Map<String, dynamic> toJson() {
+    // Generate meeting dates based on the schedule's termStart and termEnd
+    final meetingDates = calculateMeetingDates(
+      startTime.toDate(),
+      schedule.termStart.toDate(),
+      schedule.termEnd.toDate(),
+    );
 
-  // Generate meetings using the generateMeetings method
-  final generatedMeetings = generateMeetings(meetingDates, schedule);
+    // Generate meetings using the generateMeetings method
+    final generatedMeetings = generateMeetings(meetingDates, schedule);
 
-  return {
-    'subject': subject.toJson(),
-    'user': {
-      'id': user.id,
-      'name': user.name,
-      'email': user.email,
-      'role': user.role.name,
-      'activityStatus': user.activityStatus.name,
-      'specialization': user.specialization,
-      'academicRank': user.academicRank,
-    },
-    'schedule': {
-      'id': schedule.id,
-      'termStart': schedule.termStart,
-      'termEnd': schedule.termEnd,
-      'title': schedule.title,
-      'level': schedule.level,
-      'division': schedule.division,
-      'department': {
-        'id': schedule.department.id,
-        'name': schedule.department.name,
-        'faculty': schedule.department.faculty?.toJson(),
-        'schedules': schedule.department.schedules,
-        'createdAt': schedule.department.createdAt,
-        'updatedAt': schedule.department.updatedAt,
+    return {
+      'subject': subject.toJson(),
+      'user': {
+        'id': user.id,
+        'name': user.name,
+        'email': user.email,
+        'role': user.role.name,
+        'activityStatus': user.activityStatus.name,
+        'specialization': user.specialization,
+        'academicRank': user.academicRank,
       },
-      'createdAt': schedule.createdAt,
-      'updatedAt': schedule.updatedAt,
-    },
-    'startTime': startTime,
-    'endTime': endTime,
-    'hall': hall,
-    'meetings': generatedMeetings.map((e) => e.toJson()).toList(), // Serialize meetings
-    'createdAt': createdAt ?? Timestamp.now(),
-    'updatedAt': updatedAt ?? Timestamp.now(),
-  };
-}
+      'schedule': {
+        'id': schedule.id,
+        'termStart': schedule.termStart,
+        'termEnd': schedule.termEnd,
+        'title': schedule.title,
+        'level': schedule.level,
+        'division': schedule.division,
+        'department': {
+          'id': schedule.department.id,
+          'name': schedule.department.name,
+          'faculty': schedule.department.faculty?.toJson(),
+          'schedules': schedule.department.schedules,
+          'createdAt': schedule.department.createdAt,
+          'updatedAt': schedule.department.updatedAt,
+        },
+        'createdAt': schedule.createdAt,
+        'updatedAt': schedule.updatedAt,
+      },
+      'startTime': startTime,
+      'endTime': endTime,
+      'hall': hall,
+      'meetings':
+          generatedMeetings
+              .map((e) => e.toJson())
+              .toList(), // Serialize meetings
+      'createdAt': createdAt ?? Timestamp.now(),
+      'updatedAt': updatedAt ?? Timestamp.now(),
+    };
+  }
 
   // Generate meetings with the same hour and minute as schedule.startTime and schedule.endTime
   static List<Meet> generateMeetings(
@@ -150,16 +154,19 @@ Map<String, dynamic> toJson() {
 
   // Calculate meeting dates
   static List<DateTime> calculateMeetingDates(
+    DateTime startTime,
     DateTime termStart,
     DateTime termEnd,
   ) {
     List<DateTime> meetingDates = [];
-    DateTime currentDate = termStart;
+    DateTime currentDate = startTime;
 
     while (currentDate.isBefore(termEnd) ||
         currentDate.isAtSameMomentAs(termEnd)) {
       meetingDates.add(currentDate);
-      currentDate = currentDate.add(const Duration(days: 7)); // Weekly meetings
+      currentDate = currentDate.add(
+        Duration(days: 7, hours: startTime.hour, minutes: startTime.minute),
+      ); // Weekly meetings
     }
 
     return meetingDates;

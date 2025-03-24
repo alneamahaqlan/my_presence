@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:my_presence/core/extensions/context_extensions.dart';
 
+import '../../../../core/routes/app_pages.dart';
 import '../../data/models/schedule_model.dart';
 
 class ScheduleCard extends StatelessWidget {
@@ -20,7 +22,7 @@ class ScheduleCard extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
         onTap: () {
-          // Add onTap functionality if needed
+          context.pushNamed(AppRoutes.lectures, extra: schedule);
         },
         child: Container(
           decoration: BoxDecoration(

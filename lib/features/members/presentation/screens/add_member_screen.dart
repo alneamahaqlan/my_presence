@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_presence/core/extensions/context_extensions.dart';
 
-import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/models/status.dart';
 import '../../../../core/utils/enums/activity_status.dart';
 import '../../../../core/utils/enums/role.dart';
@@ -150,41 +150,34 @@ class AddMemberScreen extends StatelessWidget {
       validator: (value) => value == null ? 'يرجى اختيار $hint' : null,
     );
   }
-Widget _buildSaveButton(
-  BuildContext context,
-  GlobalKey<FormState> formKey,
-  TextEditingController nameController,
-  TextEditingController emailController,
-  TextEditingController roleController,
-  TextEditingController activityStatusController,
-  TextEditingController specializationController,
-  TextEditingController academicRankController,
-) {
-  return BlocListener<MemberBloc, MemberState>(
-    listener: (context, state) {
-      state.createStatus.when(
-        initial: () {},
-        loading: () => _showLoadingDialog(context),
-        success: () {
-          Navigator.of(context).pop(); // Close the loading dialog
-          Ui.showSnackBar(
-            context: context,
-            message: 'تمت إضافة العضو بنجاح!',
-            type: SnackBarType.success,
-          );
-          Navigator.of(context).pop(); // Close the current screen
-        },
-        failed: () {
-          Navigator.of(context).pop(); // Close the loading dialog
-          Ui.showSnackBar(
-            context: context,
-            message: state.errorMessage!,
-            type: SnackBarType.error,
-          );
-        },
-      );
-    },
-    child: BlocBuilder<MemberBloc, MemberState>(
+
+  Widget _buildSaveButton(
+    BuildContext context,
+    GlobalKey<FormState> formKey,
+    TextEditingController nameController,
+    TextEditingController emailController,
+    TextEditingController roleController,
+    TextEditingController activityStatusController,
+    TextEditingController specializationController,
+    TextEditingController academicRankController,
+  ) {
+    return BlocConsumer<MemberBloc, MemberState>(
+      listener: (context, state) {
+        state.createStatus.maybeWhen(
+          orElse: () {},
+          success: () {
+            context.pop(); // Close the current screen
+          },
+          failed: () {
+            context.pop();
+            Ui.showSnackBar(
+              context: context,
+              message: state.errorMessage!,
+              type: SnackBarType.error,
+            );
+          },
+        );
+      },
       builder: (context, state) {
         return ButtonWidget(
           text: 'حفظ',
@@ -204,9 +197,8 @@ Widget _buildSaveButton(
           isSubmitting: state.createStatus == Status.loading(),
         );
       },
-    ),
-  );
-}
+    );
+  }
 
   void _showLoadingDialog(BuildContext context) {
     showDialog(

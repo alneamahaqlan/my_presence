@@ -192,48 +192,46 @@ Widget _buildSaveButton(
   TextEditingController academicRankController,
   String memberId,
 ) {
-  return BlocListener<MemberBloc, MemberState>(
+  return BlocConsumer<MemberBloc, MemberState>(
     listener: (context, state) {
-      state.editStatus.maybeWhen(
-        initial: () {},
-        loading: () => _showLoadingDialog(context),
-        success: () {
-          Navigator.of(context).pop(); // Close the loading dialog
-          Ui.showSnackBar(
-            context: context,
-            message: 'تم تعديل العضو بنجاح!',
-            type: SnackBarType.success,
-          );
-          Navigator.of(context).pop(); // Close the current screen
-        },
-        orElse: () {},
-      );
-    },
-    child: BlocBuilder<MemberBloc, MemberState>(
-      builder: (context, state) {
-        return ButtonWidget(
-          text: 'تحديث',
-          onPressed: () {
-            if (formKey.currentState!.validate()) {
-              context.read<MemberBloc>().add(
-                MemberEvent.editMember(
-                  userId: memberId,
-                  memberEditBody: MemberEditBody(
-                    name: nameController.text,
-                    email: emailController.text,
-                    role: roleController.text,
-                    activityStatus: activityStatusController.text,
-                    specialization: specializationController.text,
-                    academicRank: academicRankController.text,
-                  ),
-                ),
-              );
-            }
+        state.editStatus.maybeWhen(
+          orElse: () {},
+          success: () {
+            context.pop(); // Close the current screen
           },
-          isSubmitting: state.editStatus == Status.loading(),
+          failed: () {
+            context.pop();
+            Ui.showSnackBar(
+              context: context,
+              message: state.errorMessage!,
+              type: SnackBarType.error,
+            );
+          },
         );
       },
-    ),
+    builder: (context, state) {
+      return ButtonWidget(
+        text: 'تحديث',
+        onPressed: () {
+          if (formKey.currentState!.validate()) {
+            context.read<MemberBloc>().add(
+              MemberEvent.editMember(
+                userId: memberId,
+                memberEditBody: MemberEditBody(
+                  name: nameController.text,
+                  email: emailController.text,
+                  role: roleController.text,
+                  activityStatus: activityStatusController.text,
+                  specialization: specializationController.text,
+                  academicRank: academicRankController.text,
+                ),
+              ),
+            );
+          }
+        },
+        isSubmitting: state.editStatus == Status.loading(),
+      );
+    },
   );
 }
 
