@@ -1,7 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:go_router/go_router.dart';
-import 'package:my_presence/dependency_injection.dart';
 
 import '../../../../core/models/status.dart';
 import '../../../attendance/data/models/attendance_model.dart';
@@ -28,10 +26,7 @@ class LectureScheduleBloc
     on<UpdateAttendance>(_onUpdateAttendance);
     on<SetDepartment>(_onSetDepartment);
 
-    final router = getIt<GoRouter>();
-    final department = router.state.extra as Department;
-    add(SetDepartment(department: department));
-    add(FetchLectureSchedules(department: department));
+    
   }
   Future<void> _onSetDepartment(
     SetDepartment event,
@@ -115,9 +110,6 @@ class LectureScheduleBloc
     result.when(
       success: (_) {
         emit(state.copyWith(status: const Status.success()));
-        add(
-          FetchLectureSchedules(department: state.department!),
-        ); // Refresh data
       },
       failure: (error) {
         emit(

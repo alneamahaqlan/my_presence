@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../data/models/lecture_model.dart';
@@ -6,7 +7,7 @@ class LectureMeetingsWidget extends StatelessWidget {
   const LectureMeetingsWidget({super.key, required this.lecture, this.onTap});
 
   final Lecture lecture;
-  final void Function(DateTime startTime)? onTap; // Modify onTap to accept DateTime
+  final void Function(Timestamp  startTime)? onTap; // Modify onTap to accept DateTime
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class LectureMeetingsWidget extends StatelessWidget {
           InkWell(
             onTap: meet.status != null ? null : () {
               if (onTap != null) {
-                onTap!(meet.startTime.toDate()); // Pass the startTime to onTap
+                onTap!(meet.startTime); // Pass the startTime to onTap
               }
             },
             child: Chip(

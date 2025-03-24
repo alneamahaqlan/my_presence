@@ -1,14 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'lecture_model.dart';
+part of 'lecture_create_body.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$LectureImpl _$$LectureImplFromJson(Map<String, dynamic> json) =>
-    _$LectureImpl(
-      id: json['id'],
+LectureCreateBody _$LectureCreateBodyFromJson(Map<String, dynamic> json) =>
+    LectureCreateBody(
       subject: Subject.fromJson(json['subject'] as Map<String, dynamic>),
       user: UserModel.fromJson(json['user'] as Map<String, dynamic>),
       schedule: Schedule.fromJson(json['schedule'] as Map<String, dynamic>),
@@ -24,9 +23,8 @@ _$LectureImpl _$$LectureImplFromJson(Map<String, dynamic> json) =>
       updatedAt: const TimestampConverter().fromJson(json['updatedAt']),
     );
 
-Map<String, dynamic> _$$LectureImplToJson(_$LectureImpl instance) =>
+Map<String, dynamic> _$LectureCreateBodyToJson(LectureCreateBody instance) =>
     <String, dynamic>{
-      'id': instance.id,
       'subject': instance.subject,
       'user': instance.user,
       'schedule': instance.schedule,

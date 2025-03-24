@@ -112,7 +112,7 @@ class MemberBloc extends Bloc<MemberEvent, MemberState> {
     result.when(
       success: (_) {
         emit(state.copyWith(status: const Status.success()));
-        add(const MemberEvent.loadMembers());
+      
       },
       failure: (error) {
         emit(

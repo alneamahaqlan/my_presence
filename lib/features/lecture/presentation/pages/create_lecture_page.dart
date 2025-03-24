@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:my_presence/dependency_injection.dart';
+import 'package:my_presence/core/extensions/context_extensions.dart';
 
+import '../../../../core/models/status.dart';
 import '../../../../core/utils/enums/role.dart';
 import '../../../../core/utils/ui.dart';
 import '../../../../core/widgets/button_widget.dart'; // Import ButtonWidget
@@ -14,11 +14,12 @@ import '../../../lectureSchedule/data/models/schedule_model.dart';
 import '../../../members/presentation/bloc/member_bloc.dart';
 import '../../../subject/data/models/subject_model.dart';
 import '../../../subject/presentation/bloc/subject_bloc.dart';
-import '../../data/models/lecture_model.dart';
+import '../../data/models/lecture_create_body.dart';
 import '../bloc/lecture_bloc.dart';
 
 class CreateLecturePage extends StatefulWidget {
-  const CreateLecturePage({super.key});
+  final Schedule schedule;
+  const CreateLecturePage({super.key, required this.schedule});
 
   @override
   _CreateLecturePageState createState() => _CreateLecturePageState();
@@ -158,18 +159,11 @@ class _CreateLecturePageState extends State<CreateLecturePage> {
                 // Create Button
                 BlocConsumer<LectureBloc, LectureState>(
                   listener: (context, state) {
-                    state.createStatus.maybeWhen(
-                      orElse: () {},
+                    if (state.createStatus == const Status.success()) {
+                      context.pop();
 
-                      success: () {
-                        context.pop();
-                      },
-                      failed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('فشل إنشاء المحاضرة')),
-                        );
-                      },
-                    );
+                      context.read<MemberBloc>().add(LoadMembers());
+                    }
                   },
                   builder: (context, state) {
                     return ButtonWidget(
@@ -183,24 +177,16 @@ class _CreateLecturePageState extends State<CreateLecturePage> {
                             _endDateController.text,
                           );
 
-                          final router = getIt.call<GoRouter>();
-                          final schedule =
-                              (router.state.extra
-                                      as Map<String, dynamic>?)?['schedule']
-                                  as Schedule;
-
-                          final lecture = Lecture(
+                          final lecture = LectureCreateBody(
                             subject: _selectedSubject!,
                             user: _selectedUser!,
-                            scheduleId: schedule.id,
+                            schedule: widget.schedule,
                             startTime: Timestamp.fromDate(newStart),
                             endTime: Timestamp.fromDate(newEnd),
                             hall: _hallController.text,
                           );
 
                           context.read<LectureBloc>().add(AddLecture(lecture));
-
-                   
                         }
                       },
 

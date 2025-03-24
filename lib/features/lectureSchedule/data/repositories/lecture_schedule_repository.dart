@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:developer';
 
 import '../../../../core/error/api_error_handler.dart';
 import '../../../../core/models/api_result.dart';
@@ -19,18 +19,17 @@ class LectureScheduleRepository {
       final snapshot =
           await _firestoreService.firestore
               .collection('faculties')
-              .doc(department.faculty.id)
+              .doc(department.faculty?.id)
               .collection('departments')
               .doc(department.id)
               .collection('schedules')
+              .orderBy('createdAt', descending: true)
               .get();
       final schedules =
           snapshot.docs.map((doc) {
             final schedule = Schedule.fromJson(doc.data());
             return schedule.copyWith(id: doc.id);
           }).toList();
-
-  
 
       return ApiResult.success(schedules);
     } catch (error) {
@@ -40,16 +39,17 @@ class LectureScheduleRepository {
   //
 
   Future<ApiResult<String>> createSchedule({
-      required Department department,
+    required Department department,
     required ScheduleCreateBody scheduleCreateBody,
   }) async {
     try {
-      
+      log(scheduleCreateBody.toJson().toString());
+
       final docRef = await _firestoreService.firestore
-      .collection('faculties')
-          .doc(department.faculty.id)
+          .collection('faculties')
+          .doc(scheduleCreateBody.department.faculty?.id)
           .collection('departments')
-          .doc(department.id)
+          .doc(scheduleCreateBody.department.id)
           .collection('schedules')
           .add(scheduleCreateBody.toJson());
       return ApiResult.success(docRef.id);
@@ -70,26 +70,6 @@ class LectureScheduleRepository {
           'id': schedule.id,
           'termStart': schedule.termStart,
           'termEnd': schedule.termEnd,
-          // 'subject': {
-          //   'id': schedule.subject.id,
-          //   'name': schedule.subject.name,
-
-          //   'code': schedule.subject.code,
-          //   'number': schedule.subject.number,
-          // },
-          // 'hall': schedule.hall,
-
-          // 'date': schedule.date,
-          // 'endDate': schedule.endDate,
-          // 'user': {
-          //   'id': member.id,
-          //   'name': member.name,
-          //   'email': member.email,
-          //   'role': member.role.name,
-          //   'activityStatus': member.activityStatus.name,
-          //   'specialization': member.specialization,
-          //   'academicRank': member.academicRank,
-          // },
         },
         subCollection: 'lectures',
         subDataList:

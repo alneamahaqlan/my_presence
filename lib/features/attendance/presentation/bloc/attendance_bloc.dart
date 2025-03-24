@@ -1,9 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../../dependency_injection.dart';
+
 import '../../../auth/data/models/user_model.dart';
-import '../../../auth/presentation/bloc/auth_bloc.dart';
+
+import '../../data/models/attendance_create_body.dart';
 import '../../data/models/attendance_model.dart';
 import '../../data/repositories/attendance_repository.dart';
 
@@ -26,13 +27,12 @@ Future<void> _addAttendance(
   ) async {
     emit(const AttendanceState.loading());
     try {
-      final auth = getIt<AuthBloc>();
-      final byUser = auth.state.user;
+  
 
       final result = await repository.createAttendance(
-        attendance: event.attendance,
+        attendanceCreateBody: event.attendanceCreateBody,
         member: event.member,
-        byUser: byUser!,
+  
       );
       result.when(
         success: (id) {

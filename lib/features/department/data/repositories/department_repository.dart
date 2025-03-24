@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:my_presence/features/faculty/data/models/faculty_model.dart';
 
 import '../../../../core/error/api_error_handler.dart';
@@ -12,32 +14,15 @@ class DepartmentRepository {
 
   DepartmentRepository(this._firestoreService);
 
-  Stream<ApiResult<List<Department>>> getDepartments() {
-    try {
-      return _firestoreService.getDocuments(collectionName: 'departments').map((
-        snapshot,
-      ) {
-        final departments =
-            snapshot.docs.map((doc) {
-              final member = Department.fromJson(
-                doc.data() as Map<String, dynamic>,
-              );
-              return member.copyWith(id: doc.id);
-            }).toList();
-        return ApiResult.success(departments);
-      });
-    } catch (e) {
-      return Stream.value(ApiResult.failure(ApiErrorHandler.handle(e)));
-    }
-  }
-
   //create department
   Future<ApiResult<String>> createDepartment({
     required String facultyId,
     required DepartmentCreateBody departmentCreateBody,
   }) async {
     try {
-    
+      log('Creating department...');
+      log('Faculty ID: $facultyId');
+      log('Department create body: ${departmentCreateBody.toJson()}');
       final docRef = await _firestoreService.firestore
           .collection('faculties')
           .doc(facultyId)

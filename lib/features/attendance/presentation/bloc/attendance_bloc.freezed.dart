@@ -17,19 +17,32 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$AttendanceEvent {
-  Attendance get attendance => throw _privateConstructorUsedError;
+  AttendanceCreateBody get attendanceCreateBody =>
+      throw _privateConstructorUsedError;
   UserModel get member => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Attendance attendance, UserModel member) add,
+    required TResult Function(
+      AttendanceCreateBody attendanceCreateBody,
+      UserModel member,
+    )
+    add,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Attendance attendance, UserModel member)? add,
+    TResult? Function(
+      AttendanceCreateBody attendanceCreateBody,
+      UserModel member,
+    )?
+    add,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Attendance attendance, UserModel member)? add,
+    TResult Function(
+      AttendanceCreateBody attendanceCreateBody,
+      UserModel member,
+    )?
+    add,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -60,9 +73,8 @@ abstract class $AttendanceEventCopyWith<$Res> {
     $Res Function(AttendanceEvent) then,
   ) = _$AttendanceEventCopyWithImpl<$Res, AttendanceEvent>;
   @useResult
-  $Res call({Attendance attendance, UserModel member});
+  $Res call({AttendanceCreateBody attendanceCreateBody, UserModel member});
 
-  $AttendanceCopyWith<$Res> get attendance;
   $UserModelCopyWith<$Res> get member;
 }
 
@@ -80,14 +92,14 @@ class _$AttendanceEventCopyWithImpl<$Res, $Val extends AttendanceEvent>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? attendance = null, Object? member = null}) {
+  $Res call({Object? attendanceCreateBody = null, Object? member = null}) {
     return _then(
       _value.copyWith(
-            attendance:
-                null == attendance
-                    ? _value.attendance
-                    : attendance // ignore: cast_nullable_to_non_nullable
-                        as Attendance,
+            attendanceCreateBody:
+                null == attendanceCreateBody
+                    ? _value.attendanceCreateBody
+                    : attendanceCreateBody // ignore: cast_nullable_to_non_nullable
+                        as AttendanceCreateBody,
             member:
                 null == member
                     ? _value.member
@@ -96,16 +108,6 @@ class _$AttendanceEventCopyWithImpl<$Res, $Val extends AttendanceEvent>
           )
           as $Val,
     );
-  }
-
-  /// Create a copy of AttendanceEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $AttendanceCopyWith<$Res> get attendance {
-    return $AttendanceCopyWith<$Res>(_value.attendance, (value) {
-      return _then(_value.copyWith(attendance: value) as $Val);
-    });
   }
 
   /// Create a copy of AttendanceEvent
@@ -128,10 +130,8 @@ abstract class _$$AddAttendanceImplCopyWith<$Res>
   ) = __$$AddAttendanceImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Attendance attendance, UserModel member});
+  $Res call({AttendanceCreateBody attendanceCreateBody, UserModel member});
 
-  @override
-  $AttendanceCopyWith<$Res> get attendance;
   @override
   $UserModelCopyWith<$Res> get member;
 }
@@ -149,14 +149,14 @@ class __$$AddAttendanceImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? attendance = null, Object? member = null}) {
+  $Res call({Object? attendanceCreateBody = null, Object? member = null}) {
     return _then(
       _$AddAttendanceImpl(
-        attendance:
-            null == attendance
-                ? _value.attendance
-                : attendance // ignore: cast_nullable_to_non_nullable
-                    as Attendance,
+        attendanceCreateBody:
+            null == attendanceCreateBody
+                ? _value.attendanceCreateBody
+                : attendanceCreateBody // ignore: cast_nullable_to_non_nullable
+                    as AttendanceCreateBody,
         member:
             null == member
                 ? _value.member
@@ -170,16 +170,19 @@ class __$$AddAttendanceImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$AddAttendanceImpl implements AddAttendance {
-  const _$AddAttendanceImpl({required this.attendance, required this.member});
+  const _$AddAttendanceImpl({
+    required this.attendanceCreateBody,
+    required this.member,
+  });
 
   @override
-  final Attendance attendance;
+  final AttendanceCreateBody attendanceCreateBody;
   @override
   final UserModel member;
 
   @override
   String toString() {
-    return 'AttendanceEvent.add(attendance: $attendance, member: $member)';
+    return 'AttendanceEvent.add(attendanceCreateBody: $attendanceCreateBody, member: $member)';
   }
 
   @override
@@ -187,13 +190,13 @@ class _$AddAttendanceImpl implements AddAttendance {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AddAttendanceImpl &&
-            (identical(other.attendance, attendance) ||
-                other.attendance == attendance) &&
+            (identical(other.attendanceCreateBody, attendanceCreateBody) ||
+                other.attendanceCreateBody == attendanceCreateBody) &&
             (identical(other.member, member) || other.member == member));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, attendance, member);
+  int get hashCode => Object.hash(runtimeType, attendanceCreateBody, member);
 
   /// Create a copy of AttendanceEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -206,27 +209,39 @@ class _$AddAttendanceImpl implements AddAttendance {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Attendance attendance, UserModel member) add,
+    required TResult Function(
+      AttendanceCreateBody attendanceCreateBody,
+      UserModel member,
+    )
+    add,
   }) {
-    return add(attendance, member);
+    return add(attendanceCreateBody, member);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Attendance attendance, UserModel member)? add,
+    TResult? Function(
+      AttendanceCreateBody attendanceCreateBody,
+      UserModel member,
+    )?
+    add,
   }) {
-    return add?.call(attendance, member);
+    return add?.call(attendanceCreateBody, member);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Attendance attendance, UserModel member)? add,
+    TResult Function(
+      AttendanceCreateBody attendanceCreateBody,
+      UserModel member,
+    )?
+    add,
     required TResult orElse(),
   }) {
     if (add != null) {
-      return add(attendance, member);
+      return add(attendanceCreateBody, member);
     }
     return orElse();
   }
@@ -262,12 +277,12 @@ class _$AddAttendanceImpl implements AddAttendance {
 
 abstract class AddAttendance implements AttendanceEvent {
   const factory AddAttendance({
-    required final Attendance attendance,
+    required final AttendanceCreateBody attendanceCreateBody,
     required final UserModel member,
   }) = _$AddAttendanceImpl;
 
   @override
-  Attendance get attendance;
+  AttendanceCreateBody get attendanceCreateBody;
   @override
   UserModel get member;
 

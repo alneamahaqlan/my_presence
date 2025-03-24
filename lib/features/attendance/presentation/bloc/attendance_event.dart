@@ -6,7 +6,7 @@ class AttendanceEvent with _$AttendanceEvent {
   // const factory AttendanceEvent.fetchAll() = FetchAllAttendance;
 
   // Add a new attendance record
-  const factory AttendanceEvent.add({required Attendance attendance,required UserModel member}) = AddAttendance;
+  const factory AttendanceEvent.add({required AttendanceCreateBody attendanceCreateBody,required UserModel member}) = AddAttendance;
 
   // // Update an existing attendance record
   // const factory AttendanceEvent.update(Attendance attendance) =

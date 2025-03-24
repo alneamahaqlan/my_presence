@@ -4,7 +4,6 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
-import '../../../attendance/data/models/attendance_model.dart';
 import '../../../auth/data/models/user_model.dart';
 import '../../../lecture/data/models/lecture_model.dart';
 
@@ -24,6 +23,16 @@ class PdfGenerator {
   Future<pw.Document> generatePdf() async {
     final pdf = pw.Document();
     final ttf = await _loadFont(fontPath);
+    final lectures =
+        member.lectures
+            .where(
+              (element) =>
+                  element.schedule.department.id == '0BhHtY06QDK1h8fMQFVE',
+            )
+            .toList();
+    final totalUnits = lectures
+        .map((e) => e.subject.units)
+        .fold(0, (previousValue, element) => element = element + previousValue);
 
     pdf.addPage(
       pw.Page(
@@ -33,17 +42,13 @@ class PdfGenerator {
           return pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.end,
             children: [
-              _buildTitle(ttf, "تفاصيل العضو"),
+              _buildTitle(ttf, "جدول المحاظرات لعضو التدريس"),
               _buildDetailSection(ttf, member),
+              _buildDivider(height: 50),
+
+              _buildLectureTable(ttf, lectures),
               _buildDivider(),
-              _buildLectureTable(ttf, member.lectures),
-              _buildDivider(),
-              _buildAttendanceTable(ttf, member.attendances),
-              _buildDivider(),
-              _buildFooter(
-                ttf,
-                "تم الإنشاء في ${DateFormat(dateFormat).format(DateTime.now())}",
-              ),
+              _buildFooter(ttf, " المجموع : $totalUnits"),
             ],
           );
         },
@@ -74,20 +79,38 @@ class PdfGenerator {
   }
 
   pw.Widget _buildDetailSection(pw.Font ttf, UserModel member) {
-    return pw.Column(
-      crossAxisAlignment: pw.CrossAxisAlignment.end,
+    return pw.Row(
+      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
       children: [
-        _buildText("الاسم: ${member.name}", ttf),
-        _buildText("البريد الإلكتروني: ${member.email}", ttf),
-        _buildText("الدور: ${member.role.name.tr()}", ttf),
-        _buildText(
-          "حالة النشاط: ${member.activityStatus.name == "active" ? "نشط" : "غير نشط"}",
-          ttf,
+        pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.end,
+          children: [
+            _buildText(
+              "تم الإنشاء في ${DateFormat(dateFormat).format(DateTime.now())}",
+              ttf,
+            ),
+
+            _buildText("القسم: ${member.specialization ?? "غير متوفر"}", ttf),
+            _buildText("الشعبه: ${member.specialization ?? "غير متوفر"}", ttf),
+            _buildText("المستوى: ${member.specialization ?? "غير متوفر"}", ttf),
+          ],
         ),
-        _buildText("التخصص: ${member.specialization ?? "غير متوفر"}", ttf),
-        _buildText(
-          "الرتبة الأكاديمية: ${member.academicRank ?? "غير متوفر"}",
-          ttf,
+        pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.end,
+          children: [
+            _buildText("الاسم: ${member.name}", ttf),
+            _buildText("البريد الإلكتروني: ${member.email}", ttf),
+            _buildText("الدور: ${member.role.name.tr()}", ttf),
+            _buildText(
+              "حالة النشاط: ${member.activityStatus.name == "active" ? "نشط" : "غير نشط"}",
+              ttf,
+            ),
+            _buildText("التخصص: ${member.specialization ?? "غير متوفر"}", ttf),
+            _buildText(
+              "الرتبة الأكاديمية: ${member.academicRank ?? "غير متوفر"}",
+              ttf,
+            ),
+          ],
         ),
       ],
     );
@@ -110,9 +133,12 @@ class PdfGenerator {
       'المادة',
       'رمز', // Add subject code
       'رقم', // Add subject number
+      'الوحدات',
+      'الشعبه',
       'القاعة',
       'بداية', // Add start time
       'نهاية', // Add end time
+
       ...daysOfWeek, // Add days of the week to the headers
     ];
 
@@ -134,6 +160,8 @@ class PdfGenerator {
             lecture.subject.name,
             lecture.subject.code, // Add subject code
             lecture.subject.number, // Add subject number
+            lecture.subject.units,
+            lecture.schedule.division,
             lecture.hall,
             DateFormat(
               timeFormat,
@@ -172,32 +200,6 @@ class PdfGenerator {
     );
   }
 
-  pw.Widget _buildAttendanceTable(pw.Font ttf, List<Attendance> attendances) {
-    final headers = ['الحالة', 'تاريخ الحضور'];
-
-    final data =
-        attendances.map((attendance) {
-          return [
-            attendance.status,
-            DateFormat(dateFormat).format(attendance.arrivalDate!.toDate()),
-          ];
-        }).toList();
-
-    return pw.TableHelper.fromTextArray(
-      headers: headers.map((header) => _buildText(header, ttf)).toList(),
-      data: data,
-      cellAlignment: pw.Alignment.centerRight,
-      headerAlignment: pw.Alignment.centerRight,
-      headerStyle: pw.TextStyle(
-        font: ttf,
-        fontSize: 12,
-        fontWeight: pw.FontWeight.bold,
-      ),
-      cellStyle: pw.TextStyle(font: ttf, fontSize: 10),
-      border: pw.TableBorder.all(),
-    );
-  }
-
   pw.Widget _buildFooter(pw.Font ttf, String footer) {
     return pw.Row(
       mainAxisAlignment: pw.MainAxisAlignment.end,
@@ -214,8 +216,8 @@ class PdfGenerator {
     );
   }
 
-  pw.Widget _buildDivider() {
-    return pw.Divider(thickness: 1, height: 20);
+  pw.Widget _buildDivider({double? height}) {
+    return pw.Divider(thickness: 1, height: height ?? 20);
   }
 
   // Helper method to get the day of the week in Arabic

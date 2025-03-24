@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 
 import '../../../../core/models/status.dart';
 import '../../../../core/routes/app_pages.dart';
-import '../../../../dependency_injection.dart';
 import '../../../department/data/models/department_model.dart';
 import '../../../lectureSchedule/data/models/schedule_model.dart';
 import '../../data/models/lecture_model.dart';
@@ -14,21 +13,12 @@ import '../widgets/lecture_card.dart';
 import '../widgets/pdf_generator.dart';
 
 class LecturesPage extends StatelessWidget {
-  const LecturesPage({super.key});
+  final Schedule schedule;
+  const LecturesPage({super.key, required this.schedule});
 
   @override
   Widget build(BuildContext context) {
-    final router = getIt<GoRouter>();
-    final schedule =
-        (router.state.extra as Map<String, dynamic>?)?['schedule'] as Schedule;
-    final department =
-        (router.state.extra as Map<String, dynamic>?)?['department']
-            as Department;
-
-    context.read<LectureBloc>().add(
-      SetSchedule(schedule: schedule, department: department),
-    );
-    context.read<LectureBloc>().add(const FetchLectures());
+    context.read<LectureBloc>().add(FetchLectures(schedule));
 
     return Scaffold(
       appBar: AppBar(
@@ -38,15 +28,7 @@ class LecturesPage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              // Navigate to the CreateLecturePage
-              final state = context.read<LectureBloc>().state;
-              context.pushNamed(
-                AppRoutes.createLecture,
-                extra: {
-                  'schedule': state.schedule,
-                  'department': state.department,
-                },
-              );
+              context.pushNamed(AppRoutes.createLecture, extra: schedule);
             },
           ),
           IconButton(
@@ -55,30 +37,13 @@ class LecturesPage extends StatelessWidget {
               final state = context.read<LectureBloc>().state;
               if (state.status == Status.success()) {
                 final lectures = state.lectures;
-                _generatePdf(lectures, state.department!);
+                _generatePdf(lectures, schedule.department);
               }
             },
           ),
         ],
       ),
-      body: BlocConsumer<LectureBloc, LectureState>(
-        listener: (context, state) {
-          state.createStatus.maybeWhen(
-            orElse: () {},
-            success: () {
-              // context.read<MemberBloc>().add(LoadMembers());
-              context.read<LectureBloc>().add(const FetchLectures());
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('تم إنشاء المحاضرة بنجاح')),
-              );
-            },
-            failed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('فشل إنشاء المحاضرة')),
-              );
-            },
-          );
-        },
+      body: BlocBuilder<LectureBloc, LectureState>(
         builder: (context, state) {
           if (state.status == Status.loading()) {
             return const Center(child: CircularProgressIndicator());

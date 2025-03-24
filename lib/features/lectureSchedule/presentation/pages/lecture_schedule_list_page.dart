@@ -38,10 +38,7 @@ class SchedulePage extends StatelessWidget {
                   onTap: () {
                     context.pushNamed(
                       AppRoutes.lectures,
-                      extra: {
-                        'schedule': schedule,
-                        'department': state.department,
-                      },
+                      extra:schedule,
                     );
                   },
                   child: ScheduleCard(schedule: schedule),

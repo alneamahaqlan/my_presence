@@ -88,6 +88,7 @@ class _CreateLectureSchedulePageState extends State<CreateLectureSchedulePage> {
                   hint: 'المستوى (رقم)',
                   controller: _levelController,
                   keyboardType: TextInputType.number,
+
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'يرجى إدخال مستوى';

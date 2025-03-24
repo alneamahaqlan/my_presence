@@ -181,35 +181,35 @@ class EditMemberScreen extends StatelessWidget {
       validator: (value) => value == null ? 'يرجى اختيار $hint' : null,
     );
   }
-
-  Widget _buildSaveButton(
-    BuildContext context,
-    GlobalKey<FormState> formKey,
-    TextEditingController nameController,
-    TextEditingController emailController,
-    TextEditingController roleController,
-    TextEditingController activityStatusController,
-    TextEditingController specializationController,
-    TextEditingController academicRankController,
-    String memberId,
-  ) {
-    return BlocConsumer<MemberBloc, MemberState>(
-      listener: (context, state) {
-        state.editStatus.maybeWhen(
-          initial: () {},
-          loading: () => _showLoadingDialog(context),
-          success: () {
-            Ui.showSnackBar(
-              context: context,
-              message: 'تم تعديل العضو بنجاح!',
-              type: SnackBarType.success,
-            );
-            context.pop();
-            context.pop();
-          },
-          orElse: () {},
-        );
-      },
+Widget _buildSaveButton(
+  BuildContext context,
+  GlobalKey<FormState> formKey,
+  TextEditingController nameController,
+  TextEditingController emailController,
+  TextEditingController roleController,
+  TextEditingController activityStatusController,
+  TextEditingController specializationController,
+  TextEditingController academicRankController,
+  String memberId,
+) {
+  return BlocListener<MemberBloc, MemberState>(
+    listener: (context, state) {
+      state.editStatus.maybeWhen(
+        initial: () {},
+        loading: () => _showLoadingDialog(context),
+        success: () {
+          Navigator.of(context).pop(); // Close the loading dialog
+          Ui.showSnackBar(
+            context: context,
+            message: 'تم تعديل العضو بنجاح!',
+            type: SnackBarType.success,
+          );
+          Navigator.of(context).pop(); // Close the current screen
+        },
+        orElse: () {},
+      );
+    },
+    child: BlocBuilder<MemberBloc, MemberState>(
       builder: (context, state) {
         return ButtonWidget(
           text: 'تحديث',
@@ -233,8 +233,9 @@ class EditMemberScreen extends StatelessWidget {
           isSubmitting: state.editStatus == Status.loading(),
         );
       },
-    );
-  }
+    ),
+  );
+}
 
   void _showLoadingDialog(BuildContext context) {
     showDialog(

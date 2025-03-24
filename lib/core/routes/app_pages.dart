@@ -21,6 +21,7 @@ import '../../features/lecture/presentation/bloc/lecture_bloc.dart';
 import '../../features/lecture/presentation/pages/create_lecture_page.dart';
 import '../../features/lecture/presentation/pages/lectures_page.dart';
 import '../../features/lectureSchedule/data/models/schedule_model.dart';
+import '../../features/lectureSchedule/presentation/bloc/lecture_schedule_bloc.dart';
 import '../../features/lectureSchedule/presentation/pages/create_lecture_schedule_page.dart';
 import '../../features/lectureSchedule/presentation/pages/edit_lecture_schedule_page.dart';
 import '../../features/lectureSchedule/presentation/pages/lecture_schedule_detail_page.dart';
@@ -135,6 +136,15 @@ class AppPages {
               path: AppRoutes.lectureScheduleList,
               name: AppRoutes.lectureScheduleList,
               builder: (context, state) {
+                final router = getIt<GoRouter>();
+                final department = router.state.extra as Department;
+                context.read<LectureScheduleBloc>().add(
+                  SetDepartment(department: department),
+                );
+
+                context.read<LectureScheduleBloc>().add(
+                  FetchLectureSchedules(department: department),
+                );
                 return SchedulePage();
               },
               routes: [
@@ -172,27 +182,25 @@ class AppPages {
                   path: AppRoutes.lectures,
                   name: AppRoutes.lectures,
                   builder: (context, state) {
-                 
+                    final schedule = state.extra as Schedule;
 
-                    return BlocProvider.value(
-                      value: 
-                              getIt<LectureBloc>(),
-
-                      child: LecturesPage(),
+                    return BlocProvider(
+                      create:
+                          (context) => LectureBloc(getIt<LectureRepository>()),
+                      child: LecturesPage(schedule: schedule),
                     );
                   },
                   routes: [
-                    //CreateLecturePage
                     GoRoute(
                       path: AppRoutes.createLecture,
                       name: AppRoutes.createLecture,
                       builder: (context, state) {
-                        // final schedule = state.extra as Schedule;
-
-                        return BlocProvider.value(
-                          value: getIt<LectureBloc>(),
-
-                          child: CreateLecturePage(),
+                        final schedule = state.extra as Schedule;
+                        return BlocProvider(
+                          create:
+                              (context) =>
+                                  LectureBloc(getIt<LectureRepository>()),
+                          child: CreateLecturePage(schedule: schedule),
                         );
                       },
                     ),

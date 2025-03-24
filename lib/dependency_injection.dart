@@ -51,10 +51,8 @@ Future<void> setup() async {
   // Initialize Firebase
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-   // Register GoRouter
-  getIt.registerSingleton<GoRouter>( AppPages.router);
-
-
+  // Register GoRouter
+  getIt.registerSingleton<GoRouter>(AppPages.router);
 
   // Register FirebaseAuth instance
   getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
@@ -65,8 +63,6 @@ Future<void> setup() async {
   getIt.registerLazySingleton<FirebaseFirestore>(
     () => FirebaseFirestore.instance,
   );
-
-  
 
   // Register FirestoreService
   getIt.registerLazySingleton<FirestoreService>(
@@ -159,17 +155,13 @@ Future<void> setup() async {
   );
 
   getIt.registerSingleton<SubjectBloc>(SubjectBloc(getIt<SubjectRepository>()));
-     getIt.registerSingleton<LectureBloc>(
-                      LectureBloc(getIt<LectureRepository>()),
-                    );
+  // getIt.registerFactory<LectureBloc>(() => LectureBloc(getIt<LectureRepository>()));
   getIt.registerFactory<AttendanceRepository>(
     () => AttendanceRepository(getIt<FirestoreService>()),
   );
   getIt.registerFactory<AttendanceBloc>(
     () => AttendanceBloc(getIt<AttendanceRepository>()),
   );
-
-   
 
   // Start the app
   await startApp();

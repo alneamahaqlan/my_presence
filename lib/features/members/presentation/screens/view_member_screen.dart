@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pdf/pdf.dart';
@@ -7,12 +8,12 @@ import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/widgets/text_widget.dart';
 import '../../../../dependency_injection.dart';
 import '../../../attendance/presentation/bloc/attendance_bloc.dart';
+import '../../../attendance/presentation/pages/add_attendance_page.dart';
 import '../../../auth/data/models/user_model.dart';
 import '../../../lecture/data/models/lecture_model.dart';
 import '../../../lecture/presentation/widgets/lecture_meetings_widget.dart';
 import '../widgets/AddEvaluationDialog.dart';
 import '../widgets/AddResearchDialog.dart';
-import '../widgets/add_attendance_dialog.dart';
 import '../widgets/pdf_generator.dart';
 
 class ViewMemberScreen extends StatelessWidget {
@@ -270,14 +271,34 @@ class ViewMemberScreen extends StatelessWidget {
                         runSpacing: 8.0,
                         children:
                             member.lectures.map((lecture) {
-                              return LectureMeetingsWidget(
-                                lecture: lecture,
-                                onTap:
-                                    (startTime) => _showAddAttendanceDialog(
-                                      context,
-                                      lecture,
-                                      startTime, // Pass the startTime
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ListTile(
+                                    title: Text(
+                                      lecture.subject.name,
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
+                                    subtitle: Text(
+                                      "${lecture.schedule.department.faculty?.name} - ${lecture.schedule.department.name}",
+                                      style: const TextStyle(fontSize: 10),
+                                    ),
+                                  ),
+                                  LectureMeetingsWidget(
+                                    lecture: lecture,
+                                    onTap: (startTime) {
+                                     
+                                      _showAddAttendanceDialog(
+                                        context,
+                                        lecture,
+                                        startTime,
+                                      );
+                                    },
+                                  ),
+                                ],
                               );
                             }).toList(),
                       ),
@@ -329,17 +350,17 @@ class ViewMemberScreen extends StatelessWidget {
   void _showAddAttendanceDialog(
     BuildContext context,
     Lecture lecture,
-    DateTime startTime,
+    Timestamp startTime,
   ) {
     showDialog(
       context: context,
       builder: (context) {
         return BlocProvider(
           create: (context) => getIt<AttendanceBloc>(),
-          child: AddAttendanceDialog(
+          child: AddAttendancePage(
             member: member,
             lecture: lecture,
-            initialStartTime: startTime, // Pass the startTime
+            initialStartTime: startTime.toDate(), // Pass the startTime
           ),
         );
       },

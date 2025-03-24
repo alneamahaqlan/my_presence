@@ -15,7 +15,6 @@ class FacultyCreateBody {
 
   Map<String, dynamic> toJson() => {
     'name': name,
-    'departments': [],
     'createdAt': Timestamp.now(),
     'updatedAt': Timestamp.now(),
   };

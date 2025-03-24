@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => getIt<DepartmentBloc>()),
         BlocProvider(create: (context) => getIt<SubjectBloc>()),
         BlocProvider(create: (context) => getIt<LectureScheduleBloc>()),
-        BlocProvider(create: (context) => getIt<LectureBloc>()),
+        // BlocProvider(create: (context) => getIt<LectureBloc>()),
         BlocProvider(create: (context) => ThemeBloc()),
       ],
       child: BlocBuilder<ThemeBloc, AppTheme>(

@@ -35,55 +35,114 @@ class MemberRepository {
     }
   }
 
-  Stream<List<UserModel>> getMembersStream() {
-    final firestore = _firestoreService.firestore;
+  // Stream<List<UserModel>> getMembersStream() {
+  //   final firestore = _firestoreService.firestore;
 
-    return firestore
-        .collection('users')
-        .snapshots()
-        .asyncMap((snapshot) async {
-          Map<String, UserModel> userMap = {};
+  //   return firestore
+  //       .collection('users')
+  //       .snapshots()
+  //       .asyncMap((snapshot) async {
+  //         Map<String, UserModel> userMap = {};
 
-          for (var userDoc in snapshot.docs) {
-            try {
-              final userData = userDoc.data();
-              final userId = userDoc.id;
+  //         for (var userDoc in snapshot.docs) {
+  //           try {
+  //             final userData = userDoc.data();
+  //             final userId = userDoc.id;
 
-              // Validate user data
-              if (userData['name'] == null || userData['email'] == null) {
-                log('Invalid user data for user ID: $userId');
-                continue; // Skip invalid user documents
-              }
+  //             // Validate user data
+  //             if (userData['name'] == null || userData['email'] == null) {
+  //               log('Invalid user data for user ID: $userId');
+  //               continue; // Skip invalid user documents
+  //             }
 
-              final user = UserModel.fromJson({...userData, 'id': userId});
+  //             final user = UserModel.fromJson({...userData, 'id': userId});
 
-              // Fetch additional data for each user
-              final lectures = await _fetchLecturesForUser(userId);
-              final researches = await _fetchResearchesForUser(userId);
-              final evaluations = await _fetchEvaluationsForUser(userId);
-              final attendances = await _fetchAttendancesForUser(userId);
-              final subjects = await _fetchSubjectsForUser(userId);
+  //             // Fetch additional data for each user
+  //             final lectures = await _fetchLecturesForUser(userId);
+  //             final researches = await _fetchResearchesForUser(userId);
+  //             final evaluations = await _fetchEvaluationsForUser(userId);
+  //             final attendances = await _fetchAttendancesForUser(userId);
+  //             final subjects = await _fetchSubjectsForUser(userId);
 
-              userMap[userId] = user.copyWith(
-                lectures: lectures,
-                researches: researches,
-                evaluations: evaluations,
-                attendances: attendances,
-                subjects: subjects,
-              );
-            } catch (e, stackTrace) {
-              log('Error processing user document: $e', stackTrace: stackTrace);
+  //             userMap[userId] = user.copyWith(
+  //               lectures: lectures,
+  //               researches: researches,
+  //               evaluations: evaluations,
+  //               attendances: attendances,
+  //               subjects: subjects,
+  //             );
+  //           } catch (e, stackTrace) {
+  //             log('Error processing user document: $e', stackTrace: stackTrace);
+  //           }
+  //         }
+
+  //         return userMap.values.toList();
+  //       })
+  //       .handleError((error, stackTrace) {
+  //         log('Error in members stream: $error', stackTrace: stackTrace);
+  //         throw error; // Re-throw the error to propagate it to the Bloc
+  //       });
+  // }
+
+Stream<List<UserModel>> getMembersStream() {
+  final firestore = _firestoreService.firestore;
+
+  return firestore
+      .collection('users')
+      .snapshots()
+      .asyncMap((snapshot) async {
+        final userFutures = snapshot.docs.map((userDoc) async {
+          try {
+            final userData = userDoc.data();
+            final userId = userDoc.id;
+
+            // Validate user data
+            if (userData['name'] == null || userData['email'] == null) {
+              log('Invalid user data for user ID: $userId');
+              return null; // Skip invalid user documents
             }
+
+            final user = UserModel.fromJson({...userData, 'id': userId});
+
+            // Fetch additional data for each user in parallel
+            final futures = await Future.wait([
+              _fetchLecturesForUser(userId),
+              _fetchResearchesForUser(userId),
+              _fetchEvaluationsForUser(userId),
+              _fetchAttendancesForUser(userId),
+              _fetchSubjectsForUser(userId),
+            ]);
+
+            final lectures = futures[0] as List<Lecture>;
+            final researches = futures[1] as List<Research>;
+            final evaluations = futures[2] as List<Evaluation>;
+            final attendances = futures[3] as List<Attendance>;
+            final subjects = futures[4] as List<Subject>;
+
+            return user.copyWith(
+              lectures: lectures,
+              researches: researches,
+              evaluations: evaluations,
+              attendances: attendances,
+              subjects: subjects,
+            );
+          } catch (e, stackTrace) {
+            log('Error processing user document: $e', stackTrace: stackTrace);
+            return null;
           }
+        }).toList();
 
-          return userMap.values.toList();
-        })
-        .handleError((error, stackTrace) {
-          log('Error in members stream: $error', stackTrace: stackTrace);
-          throw error; // Re-throw the error to propagate it to the Bloc
-        });
-  }
+        // Wait for all user futures to complete
+        final users = await Future.wait(userFutures);
 
+        // Filter out null values (invalid users)
+        return users.whereType<UserModel>().toList();
+      })
+      .handleError((error, stackTrace) {
+        log('Error in members stream: $error', stackTrace: stackTrace);
+        throw error; // Re-throw the error to propagate it to the Bloc
+      });
+}
   Future<List<Lecture>> _fetchLecturesForUser(String userId) async {
     final firestore = _firestoreService.firestore;
     final lectures = <Lecture>[];

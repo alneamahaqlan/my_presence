@@ -150,41 +150,41 @@ class AddMemberScreen extends StatelessWidget {
       validator: (value) => value == null ? 'يرجى اختيار $hint' : null,
     );
   }
-
-  Widget _buildSaveButton(
-    BuildContext context,
-    GlobalKey<FormState> formKey,
-    TextEditingController nameController,
-    TextEditingController emailController,
-    TextEditingController roleController,
-    TextEditingController activityStatusController,
-    TextEditingController specializationController,
-    TextEditingController academicRankController,
-  ) {
-    return BlocConsumer<MemberBloc, MemberState>(
-      listener: (context, state) {
-        state.createStatus.when(
-          initial: () {},
-          loading: () => _showLoadingDialog(context),
-          success: () {
-            Ui.showSnackBar(
-              context: context,
-              message: 'تمت إضافة العضو بنجاح!',
-              type: SnackBarType.success,
-            );
-            context.pop();
-            context.pop();
-          },
-          failed: () {
-            context.pop();
-            Ui.showSnackBar(
-              context: context,
-              message: state.errorMessage!,
-              type: SnackBarType.error,
-            );
-          },
-        );
-      },
+Widget _buildSaveButton(
+  BuildContext context,
+  GlobalKey<FormState> formKey,
+  TextEditingController nameController,
+  TextEditingController emailController,
+  TextEditingController roleController,
+  TextEditingController activityStatusController,
+  TextEditingController specializationController,
+  TextEditingController academicRankController,
+) {
+  return BlocListener<MemberBloc, MemberState>(
+    listener: (context, state) {
+      state.createStatus.when(
+        initial: () {},
+        loading: () => _showLoadingDialog(context),
+        success: () {
+          Navigator.of(context).pop(); // Close the loading dialog
+          Ui.showSnackBar(
+            context: context,
+            message: 'تمت إضافة العضو بنجاح!',
+            type: SnackBarType.success,
+          );
+          Navigator.of(context).pop(); // Close the current screen
+        },
+        failed: () {
+          Navigator.of(context).pop(); // Close the loading dialog
+          Ui.showSnackBar(
+            context: context,
+            message: state.errorMessage!,
+            type: SnackBarType.error,
+          );
+        },
+      );
+    },
+    child: BlocBuilder<MemberBloc, MemberState>(
       builder: (context, state) {
         return ButtonWidget(
           text: 'حفظ',
@@ -195,7 +195,6 @@ class AddMemberScreen extends StatelessWidget {
                 name: nameController.text,
                 role: roleController.text,
                 activityStatus: activityStatusController.text,
-
                 specialization: specializationController.text,
                 academicRank: academicRankController.text,
               );
@@ -205,8 +204,9 @@ class AddMemberScreen extends StatelessWidget {
           isSubmitting: state.createStatus == Status.loading(),
         );
       },
-    );
-  }
+    ),
+  );
+}
 
   void _showLoadingDialog(BuildContext context) {
     showDialog(

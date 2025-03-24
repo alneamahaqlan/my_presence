@@ -27,8 +27,8 @@ mixin _$Lecture {
   Subject get subject => throw _privateConstructorUsedError;
   @JsonKey(name: 'user')
   UserModel get user => throw _privateConstructorUsedError;
-  @JsonKey(name: 'scheduleId')
-  String get scheduleId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'schedule')
+  Schedule get schedule => throw _privateConstructorUsedError;
   @TimestampConverter()
   @JsonKey(name: 'startTime')
   Timestamp get startTime => throw _privateConstructorUsedError;
@@ -64,7 +64,7 @@ abstract class $LectureCopyWith<$Res> {
     @JsonKey(name: 'id') dynamic id,
     @JsonKey(name: 'subject') Subject subject,
     @JsonKey(name: 'user') UserModel user,
-    @JsonKey(name: 'scheduleId') String scheduleId,
+    @JsonKey(name: 'schedule') Schedule schedule,
     @TimestampConverter() @JsonKey(name: 'startTime') Timestamp startTime,
     @TimestampConverter() @JsonKey(name: 'endTime') Timestamp endTime,
     @JsonKey(name: 'hall') String hall,
@@ -75,6 +75,7 @@ abstract class $LectureCopyWith<$Res> {
 
   $SubjectCopyWith<$Res> get subject;
   $UserModelCopyWith<$Res> get user;
+  $ScheduleCopyWith<$Res> get schedule;
 }
 
 /// @nodoc
@@ -95,7 +96,7 @@ class _$LectureCopyWithImpl<$Res, $Val extends Lecture>
     Object? id = freezed,
     Object? subject = null,
     Object? user = null,
-    Object? scheduleId = null,
+    Object? schedule = null,
     Object? startTime = null,
     Object? endTime = null,
     Object? hall = null,
@@ -120,11 +121,11 @@ class _$LectureCopyWithImpl<$Res, $Val extends Lecture>
                     ? _value.user
                     : user // ignore: cast_nullable_to_non_nullable
                         as UserModel,
-            scheduleId:
-                null == scheduleId
-                    ? _value.scheduleId
-                    : scheduleId // ignore: cast_nullable_to_non_nullable
-                        as String,
+            schedule:
+                null == schedule
+                    ? _value.schedule
+                    : schedule // ignore: cast_nullable_to_non_nullable
+                        as Schedule,
             startTime:
                 null == startTime
                     ? _value.startTime
@@ -179,6 +180,16 @@ class _$LectureCopyWithImpl<$Res, $Val extends Lecture>
       return _then(_value.copyWith(user: value) as $Val);
     });
   }
+
+  /// Create a copy of Lecture
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ScheduleCopyWith<$Res> get schedule {
+    return $ScheduleCopyWith<$Res>(_value.schedule, (value) {
+      return _then(_value.copyWith(schedule: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -193,7 +204,7 @@ abstract class _$$LectureImplCopyWith<$Res> implements $LectureCopyWith<$Res> {
     @JsonKey(name: 'id') dynamic id,
     @JsonKey(name: 'subject') Subject subject,
     @JsonKey(name: 'user') UserModel user,
-    @JsonKey(name: 'scheduleId') String scheduleId,
+    @JsonKey(name: 'schedule') Schedule schedule,
     @TimestampConverter() @JsonKey(name: 'startTime') Timestamp startTime,
     @TimestampConverter() @JsonKey(name: 'endTime') Timestamp endTime,
     @JsonKey(name: 'hall') String hall,
@@ -206,6 +217,8 @@ abstract class _$$LectureImplCopyWith<$Res> implements $LectureCopyWith<$Res> {
   $SubjectCopyWith<$Res> get subject;
   @override
   $UserModelCopyWith<$Res> get user;
+  @override
+  $ScheduleCopyWith<$Res> get schedule;
 }
 
 /// @nodoc
@@ -225,7 +238,7 @@ class __$$LectureImplCopyWithImpl<$Res>
     Object? id = freezed,
     Object? subject = null,
     Object? user = null,
-    Object? scheduleId = null,
+    Object? schedule = null,
     Object? startTime = null,
     Object? endTime = null,
     Object? hall = null,
@@ -250,11 +263,11 @@ class __$$LectureImplCopyWithImpl<$Res>
                 ? _value.user
                 : user // ignore: cast_nullable_to_non_nullable
                     as UserModel,
-        scheduleId:
-            null == scheduleId
-                ? _value.scheduleId
-                : scheduleId // ignore: cast_nullable_to_non_nullable
-                    as String,
+        schedule:
+            null == schedule
+                ? _value.schedule
+                : schedule // ignore: cast_nullable_to_non_nullable
+                    as Schedule,
         startTime:
             null == startTime
                 ? _value.startTime
@@ -297,7 +310,7 @@ class _$LectureImpl implements _Lecture {
     @JsonKey(name: 'id') this.id,
     @JsonKey(name: 'subject') required this.subject,
     @JsonKey(name: 'user') required this.user,
-    @JsonKey(name: 'scheduleId') required this.scheduleId,
+    @JsonKey(name: 'schedule') required this.schedule,
     @TimestampConverter() @JsonKey(name: 'startTime') required this.startTime,
     @TimestampConverter() @JsonKey(name: 'endTime') required this.endTime,
     @JsonKey(name: 'hall') required this.hall,
@@ -319,8 +332,8 @@ class _$LectureImpl implements _Lecture {
   @JsonKey(name: 'user')
   final UserModel user;
   @override
-  @JsonKey(name: 'scheduleId')
-  final String scheduleId;
+  @JsonKey(name: 'schedule')
+  final Schedule schedule;
   @override
   @TimestampConverter()
   @JsonKey(name: 'startTime')
@@ -352,7 +365,7 @@ class _$LectureImpl implements _Lecture {
 
   @override
   String toString() {
-    return 'Lecture(id: $id, subject: $subject, user: $user, scheduleId: $scheduleId, startTime: $startTime, endTime: $endTime, hall: $hall, meetings: $meetings, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'Lecture(id: $id, subject: $subject, user: $user, schedule: $schedule, startTime: $startTime, endTime: $endTime, hall: $hall, meetings: $meetings, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -363,8 +376,8 @@ class _$LectureImpl implements _Lecture {
             const DeepCollectionEquality().equals(other.id, id) &&
             (identical(other.subject, subject) || other.subject == subject) &&
             (identical(other.user, user) || other.user == user) &&
-            (identical(other.scheduleId, scheduleId) ||
-                other.scheduleId == scheduleId) &&
+            (identical(other.schedule, schedule) ||
+                other.schedule == schedule) &&
             (identical(other.startTime, startTime) ||
                 other.startTime == startTime) &&
             (identical(other.endTime, endTime) || other.endTime == endTime) &&
@@ -383,7 +396,7 @@ class _$LectureImpl implements _Lecture {
     const DeepCollectionEquality().hash(id),
     subject,
     user,
-    scheduleId,
+    schedule,
     startTime,
     endTime,
     hall,
@@ -411,7 +424,7 @@ abstract class _Lecture implements Lecture {
     @JsonKey(name: 'id') final dynamic id,
     @JsonKey(name: 'subject') required final Subject subject,
     @JsonKey(name: 'user') required final UserModel user,
-    @JsonKey(name: 'scheduleId') required final String scheduleId,
+    @JsonKey(name: 'schedule') required final Schedule schedule,
     @TimestampConverter()
     @JsonKey(name: 'startTime')
     required final Timestamp startTime,
@@ -440,8 +453,8 @@ abstract class _Lecture implements Lecture {
   @JsonKey(name: 'user')
   UserModel get user;
   @override
-  @JsonKey(name: 'scheduleId')
-  String get scheduleId;
+  @JsonKey(name: 'schedule')
+  Schedule get schedule;
   @override
   @TimestampConverter()
   @JsonKey(name: 'startTime')

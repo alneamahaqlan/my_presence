@@ -1,36 +1,37 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/extensions/context_extensions.dart';
 
+import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/extensions/string_extensions.dart';
 import '../../../../core/utils/enums/attendance_status.dart';
 import '../../../../core/utils/ui.dart';
 import '../../../../dependency_injection.dart';
-import '../../../attendance/data/models/attendance_model.dart';
-import '../../../attendance/presentation/bloc/attendance_bloc.dart';
 import '../../../auth/data/models/user_model.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../lecture/data/models/lecture_model.dart';
 import '../../../lecture/data/models/meet_model.dart';
-import '../bloc/member_bloc.dart';
-class AddAttendanceDialog extends StatefulWidget {
+import '../../../members/presentation/bloc/member_bloc.dart';
+import '../../data/models/attendance_create_body.dart';
+import '../bloc/attendance_bloc.dart';
+
+class AddAttendancePage extends StatefulWidget {
   final UserModel member;
   final Lecture lecture;
-  final DateTime? initialStartTime; // Add initialStartTime
+  final DateTime initialStartTime;
 
-  const AddAttendanceDialog({
+  const AddAttendancePage({
     super.key,
     required this.member,
     required this.lecture,
-    this.initialStartTime, // Initialize initialStartTime
+    required this.initialStartTime, // Initialize initialStartTime
   });
 
   @override
-  _AddAttendanceDialogState createState() => _AddAttendanceDialogState();
+  _AddAttendancePageState createState() => _AddAttendancePageState();
 }
 
-class _AddAttendanceDialogState extends State<AddAttendanceDialog> {
+class _AddAttendancePageState extends State<AddAttendancePage> {
   final _formKey = GlobalKey<FormState>();
   AttendanceStatus? _selectedStatus;
   Meet? _selectedMeet;
@@ -40,12 +41,11 @@ class _AddAttendanceDialogState extends State<AddAttendanceDialog> {
   void initState() {
     super.initState();
     // Set _selectedMeet based on initialStartTime
-    if (widget.initialStartTime != null) {
-      _selectedMeet = widget.lecture.meetings.firstWhere(
-        (meet) => meet.startTime.toDate() == widget.initialStartTime,
-      );
-      _arrivalDate = widget.initialStartTime;
-    }
+    // if (widget.initialStartTime != null) {
+    _selectedMeet = widget.lecture.meetings.firstWhere(
+      (meet) => meet.startTime.toDate() == widget.initialStartTime,
+    );
+    _arrivalDate = widget.initialStartTime;
   }
 
   @override
@@ -54,13 +54,17 @@ class _AddAttendanceDialogState extends State<AddAttendanceDialog> {
       listener: (context, state) {
         state.whenOrNull(
           success: (message) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(message)));
             context.read<MemberBloc>().add(LoadMembers());
             context.pop();
             context.pop();
           },
           error: (message) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(message)));
           },
         );
       },
@@ -89,18 +93,19 @@ class _AddAttendanceDialogState extends State<AddAttendanceDialog> {
                         _arrivalDate = newValue?.startTime.toDate();
                       });
                     },
-                    items: widget.lecture.meetings
-                        .where((meet) => meet.status == null)
-                        .map((meet) {
-                          return DropdownMenuItem<Meet>(
-                            value: meet,
-                            child: Text(
-                              '${meet.startTime.toDate().year}-${meet.startTime.toDate().month.toString().padLeft(2, '0')}-${meet.startTime.toDate().day.toString().padLeft(2, '0')}',
-                              style: const TextStyle(fontSize: 10),
-                            ),
-                          );
-                        })
-                        .toList(),
+                    items:
+                        widget.lecture.meetings
+                            .where((meet) => meet.status == null)
+                            .map((meet) {
+                              return DropdownMenuItem<Meet>(
+                                value: meet,
+                                child: Text(
+                                  '${meet.startTime.toDate().year}-${meet.startTime.toDate().month.toString().padLeft(2, '0')}-${meet.startTime.toDate().day.toString().padLeft(2, '0')}',
+                                  style: const TextStyle(fontSize: 10),
+                                ),
+                              );
+                            })
+                            .toList(),
                     decoration: InputDecoration(
                       labelText: 'اختر الاجتماع',
                       border: OutlineInputBorder(
@@ -171,14 +176,15 @@ class _AddAttendanceDialogState extends State<AddAttendanceDialog> {
                         }
                       });
                     },
-                    items: AttendanceStatus.values.map((AttendanceStatus status) {
-                      return DropdownMenuItem<AttendanceStatus>(
-                        value: status,
-                        child: Text(
-                          status.toString().split('.').last.trans(context),
-                        ),
-                      );
-                    }).toList(),
+                    items:
+                        AttendanceStatus.values.map((AttendanceStatus status) {
+                          return DropdownMenuItem<AttendanceStatus>(
+                            value: status,
+                            child: Text(
+                              status.toString().split('.').last.trans(context),
+                            ),
+                          );
+                        }).toList(),
                     decoration: InputDecoration(
                       labelText: 'حالة الحضور',
                       border: OutlineInputBorder(
@@ -224,56 +230,63 @@ class _AddAttendanceDialogState extends State<AddAttendanceDialog> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                             ),
-                            onPressed: isLoading
-                                ? null
-                                : () {
-                                    if (_formKey.currentState!.validate() &&
-                                        _selectedStatus != null &&
-                                        _selectedMeet != null) {
-                                      if (_selectedStatus ==
-                                              AttendanceStatus.absent ||
-                                          _selectedStatus ==
-                                              AttendanceStatus.excused) {
-                                        _arrivalDate = null;
-                                      }
-                                      final auth = getIt<AuthBloc>();
-                                      final byUser = auth.state.user!;
+                            onPressed:
+                                isLoading
+                                    ? null
+                                    : () {
+                                      if (_formKey.currentState!.validate() &&
+                                          _selectedStatus != null &&
+                                          _selectedMeet != null) {
+                                        if (_selectedStatus ==
+                                                AttendanceStatus.absent ||
+                                            _selectedStatus ==
+                                                AttendanceStatus.excused) {
+                                          _arrivalDate = null;
+                                        }
+                                        final auth = getIt<AuthBloc>();
+                                        final byUser = auth.state.user!;
 
-                                      final attendance = Attendance(
-                                        lecture: widget.lecture,
-                                        meet: _selectedMeet!.copyWith(
-                                          status: attendanceStatusToJson(
-                                            _selectedStatus!,
+                                        final attendanceCreateBody =
+                                            AttendanceCreateBody(
+                                              lecture: widget.lecture,
+                                              meet: _selectedMeet!.copyWith(
+                                                status: attendanceStatusToJson(
+                                                  _selectedStatus!,
+                                                ),
+                                                byUser: byUser,
+                                              ),
+                                              byUser: byUser,
+                                              arrivalDate:
+                                                  _arrivalDate != null
+                                                      ? Timestamp.fromDate(
+                                                        _arrivalDate!,
+                                                      )
+                                                      : null,
+                                              status: attendanceStatusToJson(
+                                                _selectedStatus!,
+                                              ),
+                                            );
+                                        context.read<AttendanceBloc>().add(
+                                          AddAttendance(
+                                            attendanceCreateBody:
+                                                attendanceCreateBody,
+                                            member: widget.member,
                                           ),
-                                          byUser: byUser,
-                                        ),
-                                        byUser: byUser,
-                                        arrivalDate: _arrivalDate != null
-                                            ? Timestamp.fromDate(_arrivalDate!)
-                                            : null,
-                                        status: attendanceStatusToJson(
-                                          _selectedStatus!,
-                                        ),
-                                      );
-                                      context.read<AttendanceBloc>().add(
-                                        AddAttendance(
-                                          attendance: attendance,
-                                          member: widget.member,
-                                        ),
-                                      );
-                                    }
-                                  },
-                            child: isLoading
-                                ? const CircularProgressIndicator(
-                                    color: Colors.white,
-                                  )
-                                : const Text(
-                                    'إضافة الحضور',
-                                    style: TextStyle(
-                                      fontSize: 16,
+                                        );
+                                      }
+                                    },
+                            child:
+                                isLoading
+                                    ? const CircularProgressIndicator(
                                       color: Colors.white,
+                                    )
+                                    : const Text(
+                                      'إضافة الحضور',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.white,
+                                      ),
                                     ),
-                                  ),
                           ),
                         ],
                       );

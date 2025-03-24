@@ -1,10 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:go_router/go_router.dart';
+
 import '../../../../core/models/status.dart';
-import '../../../../dependency_injection.dart';
-import '../../../department/data/models/department_model.dart';
 import '../../../lectureSchedule/data/models/schedule_model.dart';
+import '../../data/models/lecture_create_body.dart';
 import '../../data/models/lecture_model.dart';
 import '../../data/repositories/lecture_repository.dart';
 
@@ -13,35 +12,13 @@ part 'lecture_event.dart';
 part 'lecture_state.dart';
 
 class LectureBloc extends Bloc<LectureEvent, LectureState> {
-    final LectureRepository _repository;
+  final LectureRepository _repository;
 
- 
   LectureBloc(this._repository) : super(LectureState.initial()) {
     on<FetchLectures>(_onFetchLectures);
     on<AddLecture>(_onAddLecture);
     on<UpdateLecture>(_onUpdateLecture);
     on<DeleteLecture>(_onDeleteLecture);
-    on<SetSchedule>(_onSetSchedule);
-//     final router = getIt<GoRouter>();
-//     final schedule =
-//         (router.state.extra as Map<String, dynamic>?)?['schedule'] as Schedule;
-//     final department =
-//         (router.state.extra as Map<String, dynamic>?)?['department']
-//             as Department;
-
-//  add(
-//       SetSchedule(schedule: schedule, department: department),
-//     );
-  
-  }
-
-  Future<void> _onSetSchedule(
-    SetSchedule event,
-    Emitter<LectureState> emit,
-  ) async {
-    emit(
-      state.copyWith(schedule: event.schedule, department: event.department),
-    );
   }
 
   Future<void> _onFetchLectures(
@@ -51,8 +28,8 @@ class LectureBloc extends Bloc<LectureEvent, LectureState> {
     emit(state.copyWith(status: const Status.loading()));
 
     final result = await _repository.fetchLectures(
-      department: state.department!,
-      schedule: state.schedule!,
+      department: event.schedule.department,
+      schedule: event.schedule,
     );
 
     result.when(
@@ -78,16 +55,12 @@ class LectureBloc extends Bloc<LectureEvent, LectureState> {
   ) async {
     emit(state.copyWith(createStatus: const Status.loading()));
 
-    final result = await _repository.addLecture(
-      lecture: event.lecture,
-      department: state.department!,
-      schedule: state.schedule!,
-    );
+    final result = await _repository.addLecture(event.lectureCreateBody);
 
     result.when(
       success: (_) {
         emit(state.copyWith(createStatus: const Status.success()));
-        // add(const FetchLectures()); // Refresh the list
+       
       },
       failure: (error) {
         emit(
@@ -111,7 +84,7 @@ class LectureBloc extends Bloc<LectureEvent, LectureState> {
     result.when(
       success: (_) {
         emit(state.copyWith(status: const Status.success()));
-        add(const FetchLectures()); // Refresh the list
+        // Refresh the list
       },
       failure: (error) {
         emit(
@@ -135,7 +108,6 @@ class LectureBloc extends Bloc<LectureEvent, LectureState> {
     result.when(
       success: (_) {
         emit(state.copyWith(status: const Status.success()));
-        add(const FetchLectures()); // Refresh the list
       },
       failure: (error) {
         emit(

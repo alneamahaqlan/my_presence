@@ -10,7 +10,10 @@ _$DepartmentImpl _$$DepartmentImplFromJson(Map<String, dynamic> json) =>
     _$DepartmentImpl(
       id: json['id'],
       name: json['name'] as String,
-      faculty: Faculty.fromJson(json['faculty'] as Map<String, dynamic>),
+      faculty:
+          json['faculty'] == null
+              ? null
+              : Faculty.fromJson(json['faculty'] as Map<String, dynamic>),
       schedules:
           (json['schedules'] as List<dynamic>?)
               ?.map((e) => Schedule.fromJson(e as Map<String, dynamic>))

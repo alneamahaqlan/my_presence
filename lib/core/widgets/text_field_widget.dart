@@ -38,6 +38,7 @@ class TextFieldWidget extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return TextFormField(
+      
       onTap: onTap,
       readOnly: readOnly,
       validator: validator,

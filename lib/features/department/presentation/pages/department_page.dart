@@ -59,6 +59,7 @@ class DepartmentPage extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(12.0),
         onTap: () {
+          print(department.id);
           context.pushNamed(AppRoutes.lectureScheduleList, extra: department);
         },
         child: Padding(
@@ -67,14 +68,29 @@ class DepartmentPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Department Name
-              Text(
-                department.name,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).primaryColor,
+              ListTile(
+                title: Text(
+                  department.name,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+                subtitle: Text(
+                  department.faculty?.name ?? '',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(color: Colors.grey[700]),
                 ),
               ),
 
+              // Text(
+              //   department.name,
+              //   style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              //     fontWeight: FontWeight.bold,
+              //     color: Theme.of(context).primaryColor,
+              //   ),
+              // ),
               const SizedBox(height: 8.0),
 
               // Schedules Count
@@ -83,7 +99,7 @@ class DepartmentPage extends StatelessWidget {
                   const Icon(Icons.schedule, size: 16, color: Colors.grey),
                   const SizedBox(width: 6),
                   Text(
-                    '${department.schedules?.length ?? 0} مواعيد',
+                    '${department.schedules?.length ?? 0} جدول',
                     style: Theme.of(
                       context,
                     ).textTheme.bodyMedium?.copyWith(color: Colors.grey[700]),

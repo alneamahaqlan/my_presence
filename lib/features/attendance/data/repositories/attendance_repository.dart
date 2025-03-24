@@ -1,10 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:developer';
 
 import '../../../../core/error/api_error_handler.dart';
 import '../../../../core/models/api_result.dart';
 import '../../../../core/services/firestore_service.dart';
 import '../../../auth/data/models/user_model.dart';
-import '../models/attendance_model.dart';
+import '../models/attendance_create_body.dart';
 
 class AttendanceRepository {
   final FirestoreService _firestoreService;
@@ -22,66 +22,18 @@ class AttendanceRepository {
   /// - [ApiResult<String>]: Success with the document ID if the operation is successful,
   ///   or failure with an error message if an exception occurs.
   Future<ApiResult<String>> createAttendance({
-    required Attendance attendance,
+    required AttendanceCreateBody attendanceCreateBody,
     required UserModel member,
-    required UserModel byUser,
   }) async {
     try {
-      // Prepare the attendance data
-      final attendanceData = {
-        'arrivalDate': attendance.arrivalDate,
-        'status': attendance.status,
-        'byUser': {
-          'id': byUser.id,
-          'name': byUser.name,
-          'email': byUser.email,
-          'role': byUser.role.name,
-          'activityStatus': byUser.activityStatus.name,
-          'specialization': byUser.specialization,
-          'academicRank': byUser.academicRank,
-        },
-        'lecture': {
-          'id': attendance.lecture.id,
-          'startTime': attendance.lecture.startTime,
-          'endTime': attendance.lecture.endTime,
-          'hall': attendance.lecture.hall,
-          'scheduleId': attendance.lecture.scheduleId,
-          'subject': attendance.lecture.subject.toJson(),
-          'user': {
-            'id': attendance.lecture.user.id,
-            'name': attendance.lecture.user.name,
-            'email': attendance.lecture.user.email,
-            'role': attendance.lecture.user.role.name,
-            'activityStatus': attendance.lecture.user.activityStatus.name,
-            'specialization': attendance.lecture.user.specialization,
-            'academicRank': attendance.lecture.user.academicRank,
-          },
-        },
-        'meet': {
-          'id': attendance.meet.id,
-          'startTime': attendance.meet.startTime,
-          'endTime': attendance.meet.endTime,
-          'status': attendance.meet.status,
-          'byUser': {
-            'id': byUser.id,
-            'name': byUser.name,
-            'email': byUser.email,
-            'role': byUser.role.name,
-            'activityStatus': byUser.activityStatus.name,
-            'specialization': byUser.specialization,
-            'academicRank': byUser.academicRank,
-          },
-        },
-        'createdAt': Timestamp.now(),
-        'updatedAt': Timestamp.now(),
-      };
-
+      log('Creating attendance record for member: ${member.id}');
+      log('Attendance data: ${attendanceCreateBody.toJson()}');
       // Add the attendance record to Firestore
       final docRef = await _firestoreService.firestore
           .collection('users')
           .doc(member.id)
           .collection('attendances')
-          .add(attendanceData);
+          .add(attendanceCreateBody.toJson());
 
       // Return the document ID as a success result
       return ApiResult.success(docRef.id);

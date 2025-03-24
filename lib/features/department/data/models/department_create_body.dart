@@ -20,8 +20,12 @@ class DepartmentCreateBody {
 
   Map<String, dynamic> toJson() => {
     'name': name,
-    'faculty': faculty.toJson(),
-    'schedules': [],
+    'faculty':{
+      'id': faculty.id,
+      'name': faculty.name,
+      
+    },
+
     'createdAt': Timestamp.now(),
     'updatedAt': Timestamp.now(),
   };
