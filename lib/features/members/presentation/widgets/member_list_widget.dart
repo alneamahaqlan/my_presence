@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -13,7 +12,6 @@ import '../../../../core/models/status.dart';
 import '../../../../core/utils/ui.dart';
 import '../../../attendance/data/models/attendance_model.dart';
 import '../../../auth/data/models/user_model.dart';
-import '../../../lecture/data/models/lecture_model.dart';
 import '../bloc/member_bloc.dart';
 import 'member_card.dart';
 
@@ -81,7 +79,7 @@ class MemberListWidget extends StatelessWidget {
                   );
                   await pdfGenerator.generateAndPrintPdf();
                 },
-                child: Text('طباعة قائمة الحضور'),
+                child: Text('كشف المتابعه اليوميه لكليه'),
               ),
             ],
           );
@@ -184,7 +182,7 @@ class PdfGenerator {
             children: [
               _buildTitle(ttf, title),
               _buildDateSection(ttf, dateFormat),
-              _buildMemberLectureDaysTable(ttf, members),
+              _buildMemberLecturesTable(ttf, members),
               _buildFooter(ttf, footer),
             ],
           );
@@ -197,6 +195,58 @@ class PdfGenerator {
     );
   }
 
+  pw.Widget _buildMemberLecturesTable(pw.Font ttf, List<UserModel> members) {
+    final headers = [
+      'اسم العضو',
+      'المادة',
+      'رمز المادة',
+      'رقم المادة',
+      'الشعبة',
+      'القاعة',
+      'وقت البداية',
+      'وقت النهاية',
+    ];
+
+    final data =
+        members.expand((member) {
+          return member.lectures.map((lecture) {
+            return [
+              _buildText(member.name, ttf),
+              _buildText(lecture.subject.name, ttf),
+              _buildText(lecture.subject.code, ttf),
+              _buildText(lecture.subject.number, ttf),
+              _buildText(lecture.schedule.division, ttf),
+              _buildText(lecture.hall, ttf),
+              _buildText(
+                DateFormat(timeFormat, 'ar').format(lecture.startTime.toDate()),
+                ttf,
+              ),
+              _buildText(
+                DateFormat(timeFormat, 'ar').format(lecture.endTime.toDate()),
+                ttf,
+              ),
+            ];
+          });
+        }).toList();
+
+    return pw.TableHelper.fromTextArray(
+      headers: headers.map((header) => _buildText(header, ttf)).toList(),
+      data: data,
+      cellAlignment: pw.Alignment.center,
+      headerAlignment: pw.Alignment.center,
+      tableWidth: pw.TableWidth.max,
+      headerStyle: pw.TextStyle(
+        font: ttf,
+        fontSize: 12,
+        fontWeight: pw.FontWeight.bold,
+      ),
+      cellStyle: pw.TextStyle(font: ttf, fontSize: 10),
+      border: pw.TableBorder.all(),
+      tableDirection: pw.TextDirection.rtl,
+    );
+  }
+
+  // Keep all other helper methods the same (_loadFont, _buildTitle, etc.)
   Future<pw.Font> _loadFont(String fontPath) async {
     final fontData = await rootBundle.load(fontPath);
     return pw.Font.ttf(fontData.buffer.asByteData());
@@ -234,153 +284,6 @@ class PdfGenerator {
     );
   }
 
-  pw.Widget _buildMemberLectureDaysTable(pw.Font ttf, List<UserModel> members) {
-    final daysOfWeek = [
-      'السبت',
-      'الأحد',
-      'الاثنين',
-      'الثلاثاء',
-      'الأربعاء',
-      'الخميس',
-      'الجمعة',
-    ];
-
-    final now = DateTime.now();
-    final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
-    final endOfWeek = startOfWeek.add(Duration(days: 6));
-
-    final headers = [
-      'بواسطه',
-      'وقت الخروج',
-      'وقت الحضور',
-      'المادة',
-      'القاعه',
-      ...daysOfWeek.reversed,
-      'اسم العضو',
-    ];
-
-    final data =
-        members.map((member) {
-          final lectureDays = _getLectureDaysForCurrentWeek(
-            member.lectures,
-            startOfWeek,
-            endOfWeek,
-          );
-
-          final lecturesInCurrentWeek = member.lectures.where(
-            (lecture) => lecture.meetings.any(
-              (meet) =>
-                  meet.startTime.toDate().isAfter(
-                    startOfWeek.subtract(Duration(days: 1)),
-                  ) &&
-                  meet.startTime.toDate().isBefore(
-                    endOfWeek.add(Duration(days: 1)),
-                  ),
-            ),
-          );
-
-          final firstLecture =
-              lecturesInCurrentWeek.isNotEmpty
-                  ? lecturesInCurrentWeek.first
-                  : null;
-
-          final hall = firstLecture?.hall ?? '';
-          final subject = firstLecture?.subject.name ?? '';
-          final arrivalTime =
-              (firstLecture?.meetings != null &&
-                      firstLecture!.meetings.isNotEmpty)
-                  ? DateFormat(
-                    timeFormat,
-                    'ar',
-                  ).format(firstLecture.meetings.first.startTime.toDate())
-                  : '';
-          final departureTime =
-              (firstLecture?.meetings != null &&
-                      firstLecture!.meetings.isNotEmpty)
-                  ? DateFormat(
-                    timeFormat,
-                    'ar',
-                  ).format(firstLecture.meetings.first.endTime.toDate())
-                  : '';
-          final byUser =
-              (firstLecture?.meetings != null &&
-                      firstLecture!.meetings.isNotEmpty)
-                  ? firstLecture.meetings.first.byUser?.name ?? ''
-                  : '';
-
-          return [
-            _buildText(byUser, ttf),
-            _buildText(departureTime, ttf),
-            _buildText(arrivalTime, ttf),
-            _buildText(subject, ttf),
-            _buildText(hall, ttf),
-            ...daysOfWeek.reversed.map((day) {
-              final status = lectureDays[day] ?? 'unknown';
-              return _buildText(status, ttf);
-            }),
-            _buildText(member.name, ttf),
-          ];
-        }).toList();
-
-    return pw.TableHelper.fromTextArray(
-      data: data,
-      context: null,
-      cellAlignment: pw.Alignment.centerRight,
-      headerAlignment: pw.Alignment.centerRight,
-      headerStyle: pw.TextStyle(
-        fontWeight: pw.FontWeight.bold,
-        font: ttf,
-        fontSize: 12,
-      ),
-      cellStyle: pw.TextStyle(font: ttf, fontSize: 10),
-      headers: headers.map((header) => _buildText(header, ttf)).toList(),
-      border: pw.TableBorder.all(),
-    );
-  }
-
-  Map<String, String> _getLectureDaysForCurrentWeek(
-    List<Lecture> lectures,
-    DateTime startOfWeek,
-    DateTime endOfWeek,
-  ) {
-    final daysOfWeek = [
-      'السبت',
-      'الأحد',
-      'الاثنين',
-      'الثلاثاء',
-      'الأربعاء',
-      'الخميس',
-      'الجمعة',
-    ];
-    final Map<String, String> lectureDays = {};
-
-    for (var day in daysOfWeek) {
-      lectureDays[day] = '';
-    }
-
-    for (var lecture in lectures) {
-      for (var meet in lecture.meetings) {
-        final meetDate = meet.startTime.toDate();
-
-        if (meetDate.isAfter(startOfWeek.subtract(Duration(days: 1))) &&
-            meetDate.isBefore(endOfWeek.add(Duration(days: 1)))) {
-          final day = _getDayOfWeek(meet.startTime);
-
-          if (lectureDays.containsKey(day)) {
-            lectureDays[day] = meet.status ?? '';
-          }
-        }
-      }
-    }
-
-    return lectureDays;
-  }
-
-  String _getDayOfWeek(Timestamp timestamp) {
-    final date = timestamp.toDate();
-    return DateFormat('EEEE', 'ar').format(date);
-  }
-
   pw.Widget _buildFooter(pw.Font ttf, String footer) {
     return pw.Row(
       mainAxisAlignment: pw.MainAxisAlignment.end,
@@ -390,7 +293,7 @@ class PdfGenerator {
 
   pw.Text _buildText(String text, pw.Font ttf) {
     return pw.Text(
-      text.tr(),
+      text,
       style: pw.TextStyle(font: ttf),
       textDirection: pw.TextDirection.rtl,
       textAlign: pw.TextAlign.center,
