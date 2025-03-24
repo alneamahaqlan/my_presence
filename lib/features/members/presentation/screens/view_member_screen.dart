@@ -13,6 +13,7 @@ import '../../../attendance/presentation/bloc/attendance_bloc.dart';
 import '../../../attendance/presentation/pages/add_attendance_page.dart';
 import '../../../auth/data/models/user_model.dart';
 import '../../../department/data/models/department_model.dart';
+import '../../../faculty/data/models/faculty_model.dart';
 import '../../../lecture/data/models/lecture_model.dart';
 import '../../../lecture/presentation/widgets/lecture_meetings_widget.dart';
 import '../widgets/AddEvaluationDialog.dart';
@@ -31,6 +32,7 @@ class ViewMemberScreen extends StatefulWidget {
 class _ViewMemberScreenState extends State<ViewMemberScreen> {
   String? selectedDepartmentId;
   int? selectedLevel;
+  String? selectedFacultyId;
 
   String _getAcademicLevelText(int? level) {
     if (level == null) return "غير متوفر";
@@ -39,14 +41,34 @@ class _ViewMemberScreenState extends State<ViewMemberScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final faculties = widget.member.lectures
+        .map((lecture) => lecture.schedule.department.faculty)
+        .whereType<Faculty>()
+        .fold<List<Faculty>>([], (list, faculty) {
+          if (!list.any((f) => f.id == faculty.id)) {
+            list.add(faculty);
+          }
+          return list;
+        });
+
     final departments =
         widget.member.lectures
             .map((lecture) => lecture.schedule.department)
+            .where(
+              (department) =>
+                  selectedFacultyId == null ||
+                  department.faculty?.id == selectedFacultyId,
+            )
             .toSet()
             .toList();
 
     final levels =
         widget.member.lectures
+            .where(
+              (lecture) =>
+                  selectedFacultyId == null ||
+                  lecture.schedule.department.faculty?.id == selectedFacultyId,
+            )
             .map((lecture) => lecture.schedule.level)
             .toSet()
             .toList()
@@ -54,12 +76,15 @@ class _ViewMemberScreenState extends State<ViewMemberScreen> {
 
     final filteredLectures =
         widget.member.lectures.where((lecture) {
+          final facultyMatch =
+              selectedFacultyId == null ||
+              lecture.schedule.department.faculty?.id == selectedFacultyId;
           final departmentMatch =
               selectedDepartmentId == null ||
               lecture.schedule.department.id == selectedDepartmentId;
           final levelMatch =
               selectedLevel == null || lecture.schedule.level == selectedLevel;
-          return departmentMatch && levelMatch;
+          return facultyMatch && departmentMatch && levelMatch;
         }).toList();
 
     return Scaffold(
@@ -96,6 +121,30 @@ class _ViewMemberScreenState extends State<ViewMemberScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Filter Row
+              if (faculties.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16.0),
+                  child: DropDownWidget<Faculty>(
+                    hint: 'اختر الكلية',
+                    items: faculties.cast<Faculty>(),
+                    selectedValue:
+                        selectedFacultyId == null
+                            ? null
+                            : faculties.cast<Faculty?>().firstWhere(
+                              (f) => f?.id == selectedFacultyId,
+                              orElse: () => null,
+                            ),
+                    onChanged: (Faculty? faculty) {
+                      setState(() {
+                        selectedFacultyId = faculty?.id;
+                        selectedDepartmentId =
+                            null; // Reset department when faculty changes
+                      });
+                    },
+                    displayText: (Faculty faculty) => faculty.name,
+                  ),
+                ),
+
               Row(
                 children: [
                   if (departments.isNotEmpty)
@@ -431,6 +480,7 @@ class _ViewMemberScreenState extends State<ViewMemberScreen> {
   Future<void> _printMemberDetails(BuildContext context) async {
     final pdfGenerator = PdfGenerator(
       member: widget.member,
+      facultyId: selectedFacultyId,
       departmentId: selectedDepartmentId,
       level: selectedLevel,
     );

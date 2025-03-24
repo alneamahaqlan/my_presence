@@ -1,4 +1,3 @@
-// lib/features/reports/presentation/widgets/pdf_generator.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -12,6 +11,7 @@ import '../../../lecture/data/models/lecture_model.dart';
 
 class PdfGenerator {
   final UserModel member;
+  final String? facultyId;
   final String? departmentId;
   final int? level;
   final String fontPath;
@@ -20,6 +20,7 @@ class PdfGenerator {
 
   PdfGenerator({
     required this.member,
+    this.facultyId,
     this.departmentId,
     this.level,
     this.fontPath = "assets/fonts/Amiri-Regular.ttf",
@@ -31,19 +32,22 @@ class PdfGenerator {
     final pdf = pw.Document();
     final ttf = await _loadFont(fontPath);
 
-    final lectures = member.lectures.where((lecture) {
-      final departmentMatch = departmentId == null || 
-          lecture.schedule.department.id == departmentId;
-      final levelMatch = level == null || 
-          lecture.schedule.level == level;
-      return departmentMatch && levelMatch;
-    }).toList();
+    final lectures =
+        member.lectures.where((lecture) {
+          final facultyMatch =
+              facultyId == null ||
+              lecture.schedule.department.faculty?.id == facultyId;
+          final departmentMatch =
+              departmentId == null ||
+              lecture.schedule.department.id == departmentId;
+          final levelMatch = level == null || lecture.schedule.level == level;
+          return facultyMatch && departmentMatch && levelMatch;
+        }).toList();
 
     final totalUnits = lectures
         .map((e) => e.subject.units)
         .fold(0, (previousValue, element) => element + previousValue);
     final filteredMember = member.copyWith(lectures: lectures);
-
 
     pdf.addPage(
       pw.Page(
@@ -57,7 +61,6 @@ class PdfGenerator {
               _buildTitle(ttf, "جدول المحاظرات لعضو هيئة التدريس"),
               _buildDetailSection(ttf, filteredMember),
               pw.SizedBox(height: 50),
-              // _buildDivider(height: 50),
               _buildLectureTable(ttf, lectures),
               _buildDivider(),
               _buildFooter(ttf, "المجموع: $totalUnits وحدة"),
@@ -69,10 +72,6 @@ class PdfGenerator {
 
     return pdf;
   }
-
-
-
- 
 
   pw.Widget _buildDetailSection(pw.Font ttf, UserModel member) {
     return pw.Row(
@@ -103,6 +102,11 @@ class PdfGenerator {
               ttf,
             ),
             if (member.lectures.isNotEmpty) ...[
+              if (member.lectures.first.schedule.department.faculty != null)
+                _buildText(
+                  "الكلية: ${member.lectures.first.schedule.department.faculty!.name}",
+                  ttf,
+                ),
               _buildText(
                 "القسم: ${member.lectures.first.schedule.department.name}",
                 ttf,
@@ -211,7 +215,8 @@ class PdfGenerator {
       textAlign: pw.TextAlign.start,
     );
   }
-   pw.Widget _buildTitle(pw.Font ttf, String title) {
+
+  pw.Widget _buildTitle(pw.Font ttf, String title) {
     return pw.Center(
       child: pw.Text(
         title,
@@ -235,7 +240,8 @@ class PdfGenerator {
     final dayOfWeek = DaysOfWeek.fromDateTime(date);
     return dayOfWeek.toString();
   }
-    Future<pw.Font> _loadFont(String fontPath) async {
+
+  Future<pw.Font> _loadFont(String fontPath) async {
     final fontData = await rootBundle.load(fontPath);
     return pw.Font.ttf(fontData.buffer.asByteData());
   }
